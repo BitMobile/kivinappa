@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="CommentResume.css">
+	<s:Push Id="curComment" Value="$GetComment($param1)"></s:Push>
+	<s:Push Id="closeTask" Value="$param2"></s:Push>
+
+	<c:DockLayout>
+		
+		<c:DockLayout CssClass="footer">
+			<c:HorizontalLine CssClass="navy"/>
+			<c:DockLayout CssClass="btn_left_footer" OnEvent="Back" OnClickAction="$Workflow.DoBack()">
+				<c:TextView Text="#back#" />
+			</c:DockLayout>
+			
+			<s:If Test="$closeTask == 0">
+				<s:If Test="$curComment.Id != NULL">
+					<c:DockLayout CssClass="btn_right_footer" OnClickAction="$EditComment($commentMemo.Text, $curComment.Id)">
+						<c:TextView Text="#ready#" />
+					</c:DockLayout>	
+				</s:If>
+				<s:Else>
+					<c:DockLayout CssClass="btn_right_footer" OnClickAction="$GreateComment($commentMemo.Text, $param1)">
+						<c:TextView Text="#ready#" />
+					</c:DockLayout>
+				</s:Else>
+			</s:If>		
+		</c:DockLayout>
+		
+		<c:HorizontalLine />
+				
+		<c:VerticalLayout CssClass="memo_block_90sp">
+			<c:VerticalLayout>
+				<c:MemoEdit Id="commentMemo" Text="$curComment.Comment" CssClass="main_row"></c:MemoEdit>
+			</c:VerticalLayout>
+		</c:VerticalLayout>		
+				
+	</c:DockLayout>
+
+</c:Screen>

@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="TaskMaterialsList.css">
+	
+	<s:Push Id="currentObject" Value="@taskForSO"></s:Push>
+	
+	<c:DockLayout>
+
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$DoBack()">
+				<c:Image />
+				<c:TextView Text="#back#" />
+			</c:HorizontalLayout>
+			<c:Button Id="btnForward" Text="#forward#" CssClass="btn_forward" OnClickAction="$Workflow.DoAction(GoMaterials, $currentObject)" />
+			<c:HorizontalLayout>
+				<c:TextView Text="#applicationsForMaterials#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		
+		<c:DockLayout CssClass="footer">
+			<c:HorizontalLine CssClass="navy"/>
+			<c:DockLayout CssClass="btn_center_footer" OnClickAction="$ForNextWorkflowNew($currentObject)">
+				<c:TextView Text="#add#" />
+			</c:DockLayout>
+		</c:DockLayout>
+			
+		<c:ScrollView Id="scrlVw">
+			<s:Push Id="TasksMatCount" Value="$GetTasksMaterials($currentObject,1)"></s:Push>
+
+			<s:If Test="$TasksMatCount == 0">
+
+				<c:TextView Text="#unknown#" CssClass="TextNoData"/>
+
+			</s:If>
+			<s:Else>
+
+				<s:Push Id="TasksMat" Value="$GetTasksMaterials($currentObject,0)"></s:Push>
+
+				<s:Iterator Id="TaskMat" Value="$TasksMat">
+
+					<c:HorizontalLine />
+						
+						<s:If Test="$TaskMat.Posted == 0">
+							<s:Push Id="tasksTypeloc" Value="ExpectedTask"></s:Push>							
+						</s:If>						
+						<s:Else>
+							<s:If Test="$TaskMat.Ref == null">
+								<s:Push Id="tasksTypeloc" Value="ExpectedTask"></s:Push>
+							</s:If>
+							<s:Else>
+								<s:Push Id="tasksTypeloc" Value="ShippedTask"></s:Push>
+							</s:Else>																				
+						</s:Else>
+						
+					<c:HorizontalLayout Id="openTaskMat" CssClass="grid" OnClickAction="$ForNextWorkflow($TaskMat.Id,$tasksTypeloc)">
+						
+						<s:If Test="$TaskMat.Posted == 0">
+							<c:VerticalLayout CssClass="gray_mark_central"></c:VerticalLayout>														
+						</s:If>						
+						<s:Else>
+							<s:If Test="$TaskMat.Ref == null">
+								<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
+							</s:If>
+							<s:Else>
+								<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
+							</s:Else>																				
+						</s:Else>
+						
+						<c:VerticalLayout>
+							<c:TextView Text="$ConvertDate($TaskMat.Date)" CssClass="description_row"></c:TextView>							
+						</c:VerticalLayout>
+						<c:Image/>
+					</c:HorizontalLayout>
+
+				</s:Iterator>
+
+			</s:Else>
+		</c:ScrollView>
+	    <c:HorizontalLine/>
+    	
+		
+	</c:DockLayout>
+</c:Screen>

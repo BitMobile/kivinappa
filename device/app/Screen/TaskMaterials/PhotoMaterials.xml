@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="PhotoMaterials.css">
+	<s:Push Id="photoId" Value="$param1"></s:Push>
+	<s:Push Id="photoPath" Value="$param2"></s:Push>
+	
+	<c:DockLayout>
+		
+		<c:DockLayout CssClass="footer">
+			<c:HorizontalLine CssClass="navy"/>
+			<c:DockLayout CssClass="btn_center_footer" OnEvent="Back" OnClickAction="$Workflow.DoBack()">
+				<c:TextView Text="#ready#" />				
+			</c:DockLayout>
+		</c:DockLayout>
+		
+		<c:DockLayout >			
+			<c:Image Source = "$photoPath"  />
+		</c:DockLayout>
+		
+		<c:HorizontalLine />
+		
+		
+		
+				
+	</c:DockLayout>
+
+</c:Screen>

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack"
+	StyleSheet="Plans.css">
+
+	<c:VerticalLayout>
+
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout CssClass="btn_menu" OnEvent="Back" OnClickAction="$Workflow.DoRollback()">
+				<c:Image CssClass="menuIcon" />
+			</c:HorizontalLayout>
+
+			<c:HorizontalLayout CssClass="header_one_btn">
+				<c:TextView Text="#planning#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		<c:HorizontalLine CssClass="navy"/>
+
+		<s:Push Id="plans" Value="$GetPlans()"></s:Push>
+		<s:Push Id="cntPlans" Value="$GetCntPlans($plans)"></s:Push>
+		
+		<c:ScrollView Id="scrlVw" CssClass="ScrollPlans">
+						  		
+			<s:If Test="$cntPlans == 0">
+			
+				<c:TextView Text="#unknown#" CssClass="TextNoPlans" />
+				
+			</s:If>			
+			<s:Else>
+			
+				<s:Iterator Id="plan" Value="$plans">
+
+					<s:Push Id="date_y" Value="$GetDate_y($plan.Period)"></s:Push>
+					<s:Push Id="objectListCount" Value="$GetObjectListCount($plan.Id)"></s:Push>
+					<s:Push Id="datePlanNotNull" Value="$GetCount_DatePlanNotNull($plan.Id)"></s:Push>
+
+					<c:HorizontalLine />
+					
+					<c:HorizontalLayout Id="openplan" CssClass="grid" OnClickAction="$DoAction(OpenPlan, $plan.Id, $plan.Period)">
+																														
+						<s:If Test="$objectListCount == $datePlanNotNull">
+							<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
+						</s:If>
+						<s:Else>
+							<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
+						</s:Else>
+						
+						<c:VerticalLayout>
+							<c:TextView Text="План на {$date_y}" CssClass="main_row"></c:TextView>
+							<c:TextView Text="Распределено визитов {$datePlanNotNull} из {$objectListCount}" CssClass="description_row"></c:TextView>
+							<c:TextView Text="$plan.StatusPlan.Description"	CssClass="description_row"></c:TextView>
+						</c:VerticalLayout>
+						
+					</c:HorizontalLayout>
+
+				</s:Iterator>
+								
+			</s:Else>
+			
+		</c:ScrollView>
+
+	</c:VerticalLayout>
+
+</c:Screen>

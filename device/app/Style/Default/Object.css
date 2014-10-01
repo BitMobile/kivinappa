@@ -1,0 +1,89 @@
+ .description_daterow {
+    width: 100%;
+    height: 23%;
+    white-space: normal;
+    font: 80% Arial;
+    color: #e6891b;
+}
+ 
+                	    
+.img3 {
+    height: 70%;
+    margin-top: 4%;
+    margin-left: 30%;
+    background-image: url(green_button.png);
+}   
+
+                	    
+.img4 {
+    height: 40%;
+    margin-top: 15%;
+    margin-left: 30%;
+    background-image: url(icon_contacts_phone@2x.png);
+}   
+
+.smallvl2 {
+        width: 60%;
+        height: 100%;
+        padding-top: 11%;
+        padding-left: 7%;	    
+    }
+
+	
+
+.shadowLine {
+    width: 100%;
+    height: 2px;
+    background-image: url(shadow_line.png);
+}
+
+.btn_menu {
+    margin-right: 11%;
+    margin-left: 2%;
+}
+
+vl ScrollView TextNoData {
+	width: 100%;
+	height: 10%;
+	text-align: center;
+	color: #000000;
+	font: 30% arial;
+}
+	
+grid no_mark_indication {
+    height: 100%;
+    width: 6.1%;
+	background-color: #00ff00;
+}
+
+equipment_grid {
+    width: 100%;
+    height: 7.8sp;
+    dock-align: top;
+}
+
+    .equipment_grid TextView {
+        width: 70%;
+        height: 100%;
+        margin-left: 3.5%;
+        padding-top: 30%;
+        color: #b96f18;
+        dock-align: left;
+        font: 36% arial;
+    }
+
+    .equipment_grid img_down {
+        height: 35%;
+        margin-left: 15%;
+        margin-top: 35%;
+        background-image: url(arrow_down.png);
+        dock-align: left;
+    }
+    
+    .equipment_grid img_up {
+        height: 35%;
+        margin-left: 15%;
+        margin-top: 35%;
+        background-image: url(arrow_up.png);
+        dock-align: left;
+    }

@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="News.css">
+
+	<c:DockLayout>
+
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout CssClass="btn_menu" OnEvent="Back" OnClickAction="$Workflow.DoRollback()">
+				<c:Image CssClass="menuIcon" />
+			</c:HorizontalLayout>
+
+			<c:HorizontalLayout CssClass="header_one_btn">
+				<c:TextView Text="#news#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		<c:HorizontalLine CssClass="navy"/>
+		
+		<c:HorizontalLayout CssClass="swipe_info">
+			<c:Image CssClass="img_left"/>
+			<c:TextView Text="Смахните влево, чтобы     отметить прочтение" />				
+		</c:HorizontalLayout>
+
+		<c:ScrollView Id="scrlVw">
+								
+			<s:Push Id="newsList" Value="$GetDocs(1)"></s:Push>
+							
+			<s:If Test="$newsList == 0">
+
+				<c:TextView Text="#unknown#"/>
+
+			</s:If>
+			<s:Else>
+				<s:Push Id="newsList" Value="$GetDocs(0)"></s:Push>
+										
+				<s:Iterator Id="news" Value="$newsList">
+						
+
+					<c:HorizontalLine />
+					
+					<c:SwipeHorizontalLayout Id="swipe_layout" CssClass="swipe_layout" Index="0">
+						<c:HorizontalLayout CssClass="grid" OnClickAction="$DoAction(SelectNews, $news.Id)">
+							
+							<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+							
+							<c:VerticalLayout>
+								<c:TextView Text="$news.Date" CssClass="description_row"></c:TextView>
+								
+								<s:Push Id="rewiewCom" Value="$RewiewComment($news.NewsText)"></s:Push>
+								<s:If Test="$rewiewCom == 0">
+									<c:TextView Text="$news.NewsText" CssClass="main_row"/>
+								</s:If>
+								<s:Else>
+									<c:TextView Text="{$rewiewCom}#more#" CssClass="main_row"></c:TextView>
+								</s:Else>
+																													
+							</c:VerticalLayout>
+														
+						</c:HorizontalLayout>
+						
+						<c:HorizontalLayout CssClass="red_swipe" OnClickAction="$KillNews($news.Id, 1)">
+							<c:VerticalLayout >
+								<c:TextView Text="#reads#"></c:TextView>
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					</c:SwipeHorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+			
+			<c:HorizontalLayout CssClass="end_of_block" />
+
+		</c:ScrollView>
+
+	</c:DockLayout>
+
+</c:Screen>

@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="TasksHistory.css">
+	<s:Push Id="search" Value="$param1"/>
+	
+	<s:Push Id="beginDateParam" Value="$GetParam2($param2)"/>
+	<s:Push Id="endDateParam" Value="$GetParam3($param3)"/>			 	
+	
+	<c:VerticalLayout>
+
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout CssClass="btn_menu" OnEvent="Back"	OnClickAction="$Workflow.DoRollback()">
+				<c:Image CssClass="menuIcon" />
+			</c:HorizontalLayout>
+			
+			<c:HorizontalLayout CssClass="header_one_btn">
+				<c:TextView Text="#requestsS#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		<c:HorizontalLine CssClass="navy"/>
+			
+		<c:HorizontalLayout CssClass="gridDate" OnClickAction="$SetBeginDate($beginDate, $search, $beginDateParam, $endDateParam)">
+	        <c:VerticalLayout>
+	        	<c:DockLayout>
+	          		<c:TextView Id="beginDate" Text="$GetDate_ddMMyyyy($beginDateParam)" CssClass="main_row"></c:TextView>
+	          	</c:DockLayout>
+	        </c:VerticalLayout>
+	     </c:HorizontalLayout>
+	     
+	     <c:HorizontalLine/>
+		 
+		 <c:HorizontalLayout CssClass="gridDate" OnClickAction="$SetEndDate($endDate, $search, $beginDateParam, $endDateParam)">
+	     	<c:VerticalLayout>
+	     		<c:DockLayout>
+	          		<c:TextView Id="endDate" Text="$GetDate_ddMMyyyy($endDateParam)" CssClass="main_row"></c:TextView>
+	          	</c:DockLayout>
+	        </c:VerticalLayout>
+	      </c:HorizontalLayout>
+	      
+	      <c:HorizontalLine/>				
+				
+		<c:HorizontalLayout CssClass="search">
+			<c:DockLayout>
+				<c:Image />
+				<c:EditText Id="edtSearch" Text="$search" Placeholder="#search#"></c:EditText>
+			</c:DockLayout>
+			<c:Button Id="btnSearch" Text="#search#" OnClickAction="$DoRefresh($edtSearch.Text)"></c:Button>
+		</c:HorizontalLayout>
+		<c:HorizontalLayout CssClass="shadowLine"></c:HorizontalLayout>
+
+		<c:ScrollView Id="scrlVw">
+			
+			<s:Push Id="allrequests" Value="$GetAllActiveTaskDetails($param1, 1, $beginDateParam, $endDateParam)"></s:Push>
+							
+			<s:If Test="$allrequests == 0">
+
+				<c:TextView Text="#unknown#"/>
+
+			</s:If>
+			<s:Else>
+			
+				<s:Push Id="allrequests" Value="$GetAllActiveTaskDetails($param1, 0, $beginDateParam, $endDateParam)"></s:Push>
+														
+				<s:Iterator Id="allrequest" Value="$allrequests">
+						
+					<c:HorizontalLine />
+					<c:HorizontalLayout CssClass="grid" OnClickAction="$AddTaskIdAndDoAction($allrequest.tskId)">
+						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+						<c:VerticalLayout>
+							<c:TextView Text="$allrequest.objDes" CssClass="main_row"></c:TextView>
+							<c:TextView Text="{$allrequest.statDes}. {$allrequest.viewDes}" CssClass="description_row"></c:TextView>
+							
+							<c:TextView Text="$ConvertDate($allrequest.tskDate)" CssClass="description_daterow"></c:TextView>
+														
+						</c:VerticalLayout>
+						<c:Image />
+					</c:HorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+							
+			<c:HorizontalLayout CssClass="end_of_block" />
+
+
+
+		</c:ScrollView>
+		
+	</c:VerticalLayout>
+
+</c:Screen>

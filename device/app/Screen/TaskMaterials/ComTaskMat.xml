@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="ComTaskMat.css">
+	<s:Push Id="curComment" Value="$GetComment($param1)"></s:Push>
+
+	<c:DockLayout>
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout>
+				<c:TextView Text="#descriptionDw#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		
+		<c:HorizontalLine CssClass="navy"/>
+		
+		<c:DockLayout CssClass="footer">
+			<c:HorizontalLine CssClass="navy"/>
+			<c:DockLayout CssClass="btn_left_footer" OnClickAction="$Workflow.DoBack()">
+				<c:TextView Text="#back#" />
+			</c:DockLayout>
+			
+			<s:If Test="$curComment.Id != NULL">
+				<c:DockLayout CssClass="btn_right_footer" OnClickAction="$EditComment($commentMemo.Text, $curComment.Id)">
+					<c:TextView Text="#ready#" />
+				</c:DockLayout>	
+			</s:If>
+			<s:Else>
+				<c:DockLayout CssClass="btn_right_footer" OnClickAction="$GreateComment($commentMemo.Text, $param1)">
+					<c:TextView Text="#ready#" />
+				</c:DockLayout>
+			</s:Else>		
+		</c:DockLayout>
+		
+		<c:HorizontalLine />
+				
+		<c:VerticalLayout CssClass="memo_block_90sp">
+			<c:VerticalLayout>
+				<c:MemoEdit Id="commentMemo" Text="$curComment.Comment" CssClass="main_row"></c:MemoEdit>
+			</c:VerticalLayout>
+		</c:VerticalLayout>		
+				
+	</c:DockLayout>
+
+</c:Screen>

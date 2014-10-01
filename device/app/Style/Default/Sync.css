@@ -1,0 +1,37 @@
+
+.btn_forward {
+    margin-left: 0%;
+}
+
+.grid vl dl Button {
+    width: 45%;
+    margin-left: -45%;
+}
+
+.grid vl hl {
+    width: 100%;
+    height: 30%;
+    margin-top: -42%;
+}
+
+    .grid vl hl Indicator {
+        height: 100%;
+        color: #2d89cf;
+    }
+
+    .grid vl hl TextView {
+        width: 100%;
+        height: 80%; 
+        margin-top: 10%;       
+        margin-left: 2%;
+        font: 80% Arial-ItalicMT;
+        color: #2d89cf;
+    }
+
+.main_row {
+    margin-top: 20%;
+}
+
+.free_space {
+    background-color: #efeff4;
+}

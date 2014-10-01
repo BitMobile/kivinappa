@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="MovingMaterials.css">
+		
+  	<s:Push Id="s" Value="$SetListType()"></s:Push>
+  	
+  <c:DockLayout>
+
+    <c:DockLayout CssClass="top_navigator">
+      <c:HorizontalLayout CssClass="btn_menu" OnEvent="Back" OnClickAction="$Workflow.DoRollback()">
+        <c:Image CssClass="menuIcon"/>
+      </c:HorizontalLayout>
+      
+      <c:HorizontalLayout CssClass="header_one_btn">
+        <c:TextView Text="#movement#"/>
+      </c:HorizontalLayout>
+    </c:DockLayout>
+    
+    <c:DockLayout CssClass="footer">
+		<c:HorizontalLine CssClass="navy"/>
+		<c:DockLayout CssClass="btn_center_footer" OnClickAction="$MyDoAction(OpenMovement, null, 1)">
+			<c:TextView Text="#add#" />
+		</c:DockLayout>
+	</c:DockLayout>
+    
+    <c:HorizontalLine CssClass="navy"/>
+
+	<c:HorizontalLayout CssClass="small_grid">
+		<s:Push Id="InMovingCount" Value="$GetInMoving(1)"></s:Push>
+		<s:Push Id="InMovingDoneCount" Value="$GetInMovingDone(1)"></s:Push>
+		<s:Push Id="OutMovingCount" Value="$GetOutMoving(1)"></s:Push>
+		<s:Push Id="OutMovingDoneCount" Value="$GetOutMovingDone(1)"></s:Push>
+		
+		<s:Push Id="InCount" Value="$GetCount($InMovingCount, $InMovingDoneCount)"></s:Push>
+		<s:Push Id="OutCount" Value="$GetCount($OutMovingCount, $OutMovingDoneCount)"></s:Push>
+		
+		<s:If Test="$visitsType=='in'">	
+			<c:HorizontalLayout CssClass="mode_left_button_on">
+			  <c:HorizontalLayout Id="hlIn" CssClass="select_zone" OnClickAction="$ChangeListAndRefresh(In)">
+				<c:TextView Text="#incoming# ({$InMovingCount})"></c:TextView>
+			  </c:HorizontalLayout>
+			</c:HorizontalLayout>
+			<c:HorizontalLayout CssClass="mode_right_button_off">
+			  <c:HorizontalLayout Id="hlOut" CssClass="select_zone" OnClickAction="$ChangeListAndRefresh(Out)">
+				<c:TextView Text="#outgoing# ({$OutMovingCount})"></c:TextView>
+			  </c:HorizontalLayout>
+			</c:HorizontalLayout>
+		</s:If>
+		<s:Else>
+			<c:HorizontalLayout CssClass="mode_left_button_off">
+			  <c:HorizontalLayout Id="hlIn" CssClass="select_zone" OnClickAction="$ChangeListAndRefresh(in)">
+				<c:TextView Text="#incoming# ({$InMovingCount})"></c:TextView>
+			  </c:HorizontalLayout>
+			</c:HorizontalLayout>
+			<c:HorizontalLayout CssClass="mode_right_button_on">
+			  <c:HorizontalLayout Id="hlOut" CssClass="select_zone" OnClickAction="$ChangeListAndRefresh(Out)">
+				<c:TextView Text="#outgoing# ({$OutMovingCount})"></c:TextView>
+			  </c:HorizontalLayout>
+			</c:HorizontalLayout>
+		</s:Else>
+	</c:HorizontalLayout>
+		    
+	<c:HorizontalLine/>
+    
+    
+	<s:If Test="$visitsType=='in'">
+						
+		<c:HorizontalLayout CssClass="shadowLine"></c:HorizontalLayout>
+		<c:ScrollView Id="scrlVw">
+												
+			<c:HorizontalLayout CssClass="caption_grid">
+		        <c:TextView Text="#waiting#:"></c:TextView>
+		    </c:HorizontalLayout>
+	    	
+	    	<c:HorizontalLine/>
+			
+			<s:If Test="$InCount == 0">
+
+				<c:TextView Text="#unknown#"/>
+
+			</s:If>
+			<s:Else>
+				<s:Push Id="inMovingQ" Value="$GetInMoving(0)"></s:Push>
+										
+				<s:Iterator Id="inMoving" Value="$inMovingQ">
+					
+					<c:HorizontalLine />
+					<c:HorizontalLayout CssClass="grid" OnClickAction="$MyDoAction(OpenMovement, $inMoving.Id, 0)">
+											
+						<c:VerticalLayout>
+							<c:TextView Text="Отправитель: {$inMoving.Depart.Description}" CssClass="description_row"></c:TextView>
+							<c:TextView Text="{$GetDate_ddMMyy($inMoving.Date)}" CssClass="main_row"></c:TextView>
+						</c:VerticalLayout>
+						<c:Image />
+					</c:HorizontalLayout>
+
+				</s:Iterator>
+			
+			
+				<c:HorizontalLine />
+				
+				<c:HorizontalLayout CssClass="caption_grid">
+			        <c:TextView Text="#executedtask#:"></c:TextView>
+			    </c:HorizontalLayout>
+			    
+			    <c:HorizontalLine/>
+						
+			
+				<s:Push Id="inMovingDoneQ" Value="$GetInMovingDone(0)"></s:Push>
+										
+				<s:Iterator Id="inMovingDone" Value="$inMovingDoneQ">
+					
+					<c:HorizontalLine />
+					<c:HorizontalLayout CssClass="grid" OnClickAction="$MyDoAction(OpenMovement, $inMovingDone.Id, 0)">
+											
+						<c:VerticalLayout>
+							<c:TextView Text="Отправитель: {$inMovingDone.Depart.Description}" CssClass="description_row"></c:TextView>
+							<c:TextView Text="{$GetDate_ddMMyy($inMovingDone.Date)}  {$inMovingDone.Stat}" CssClass="main_row"></c:TextView>
+						</c:VerticalLayout>
+						<c:Image />
+					</c:HorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+			
+			<c:HorizontalLayout CssClass="end_of_block" />
+
+		</c:ScrollView>
+	</s:If>
+	<s:Else>
+		<s:Push Id="tasksType" Value="out"></s:Push>
+		
+		<c:HorizontalLayout CssClass="shadowLine"></c:HorizontalLayout>
+		<c:ScrollView>
+			
+			<c:HorizontalLayout CssClass="caption_grid">
+		        <c:TextView Text="#waiting#:"></c:TextView>
+		    </c:HorizontalLayout>
+	    	
+	    	<c:HorizontalLine/>
+												
+			<s:If Test="$OutCount == 0">
+
+				<c:TextView Text="#unknown#"/>
+
+			</s:If>
+			<s:Else>
+				<s:Push Id="outMovingQ" Value="$GetOutMoving(0)"></s:Push>
+										
+				<s:Iterator Id="outMoving" Value="$outMovingQ">
+					
+					<c:HorizontalLine />
+					<c:HorizontalLayout CssClass="grid" OnClickAction="$MyDoAction(OpenMovement, $outMoving.Id, 1)">
+						<c:VerticalLayout>
+							<c:TextView Text="Получатель: {$outMoving.Depart.Description}" CssClass="description_row"></c:TextView>
+							<c:TextView Text="{$GetDate_ddMMyy($outMoving.Date)}  {$outMoving.Stat}" CssClass="main_row"></c:TextView>
+						</c:VerticalLayout>
+						
+						<c:Image />
+					</c:HorizontalLayout>
+
+				</s:Iterator>			
+			
+				<c:HorizontalLine />
+				
+				<c:HorizontalLayout CssClass="caption_grid">
+			        <c:TextView Text="#executedtask#:"></c:TextView>
+			    </c:HorizontalLayout>
+			    
+			    <c:HorizontalLine/>
+		    		    
+			
+				<s:Push Id="outMovingDoneQ" Value="$GetOutMovingDone(0)"></s:Push>
+										
+				<s:Iterator Id="outMovingDone" Value="$outMovingDoneQ">
+					
+					<c:HorizontalLine />
+					<c:HorizontalLayout CssClass="grid" OnClickAction="$MyDoAction(OpenMovement, $outMovingDone.Id, 1)">
+						<c:VerticalLayout>
+							<c:TextView Text="Получатель: {$outMovingDone.Depart.Description}" CssClass="description_row"></c:TextView>
+							<c:TextView Text="{$GetDate_ddMMyy($outMovingDone.Date)}  {$outMovingDone.Stat}" CssClass="main_row"></c:TextView>
+						</c:VerticalLayout>
+						
+						<c:Image />
+					</c:HorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+			
+			<c:HorizontalLayout CssClass="end_of_block" />
+
+		</c:ScrollView>
+	
+		
+		
+	</s:Else>
+	
+  </c:DockLayout>
+
+</c:Screen>

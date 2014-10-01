@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Photos.css">
+	
+	<s:Push Id="curTsk" Value="$param1"></s:Push>
+	<s:Push Id="taskStatus_AVRId" Value="$GetTaskStatusAVRId($param1)"></s:Push>
+				
+	<c:DockLayout>	
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$DoBack()">
+				<c:Image />
+				<c:TextView Text="#back#" />
+			</c:HorizontalLayout>
+			<c:Button Id="btnForward" Text="#forward#" CssClass="btn_forward" OnClickAction="$Workflow.DoAction(GoResume, $curTsk, 1)"/>
+			<c:HorizontalLayout>
+				<c:TextView Text="#photoReport#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		<c:HorizontalLine CssClass="navy"/>
+		
+		<s:If Test="$taskStatus_AVRId.StatName == 'ВРаботе'">		
+			<c:DockLayout CssClass="footer">
+				<c:DockLayout CssClass="btn_left_footer" OnClickAction="$GetSKUShapshot($curTsk.Id, $taskStatus_AVRId.AVRId)">
+					<c:TextView Text="#photograph#" />
+				</c:DockLayout>
+				
+																								
+			</c:DockLayout>
+		</s:If>
+		
+		<c:HorizontalLayout CssClass="swipe_info">
+			<c:Image CssClass="img_left"/>
+			<c:TextView Text="Смахните влево, чтобы     удалить фотографию" />				
+		</c:HorizontalLayout>
+		
+		<c:ScrollView Id="scrlVw">
+						
+			<c:HorizontalLayout CssClass="caption_grid">
+		        <c:TextView Text="#photo#:"></c:TextView>
+		    </c:HorizontalLayout>
+		    
+		    <s:Push Id="photoCount" Value="$GetPhoto($taskStatus_AVRId.AVRId, 1)"></s:Push>
+		    								
+			<s:If Test="$photoCount == 0">
+			
+				<c:HorizontalLine />
+				<c:TextView Text="#unknown#" CssClass="TextNoData" />
+
+			</s:If>
+			<s:Else>
+			
+				<s:Push Id="photoes" Value="$GetPhoto($taskStatus_AVRId.AVRId, 0)"></s:Push>
+														
+				<s:Iterator Id="photo" Value="$photoes">
+					<c:HorizontalLine />
+						
+					<c:SwipeHorizontalLayout Id="swipe_layout4" CssClass="swipe_layout" Index="0">
+												
+						<c:HorizontalLayout CssClass="grid" OnClickAction="$Workflow.DoAction(OpenPhoto, $photo.Id, $photo.Path)">
+							<c:VerticalLayout CssClass="photo_mark"></c:VerticalLayout>
+							<c:VerticalLayout>
+								<c:TextView Text="$ConvertDate($photo.Date)" CssClass="description_row"/>
+								<c:TextView Text="$photo.Info" CssClass="main_row"></c:TextView>															
+							</c:VerticalLayout>
+							<c:Image />
+						</c:HorizontalLayout>
+						
+						<c:HorizontalLayout CssClass="red_swipe" OnClickAction="$KillPhoto($curTsk.Id, $photo.Id)">
+							<c:VerticalLayout>
+								<c:TextView Text="#del#"></c:TextView>
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					</c:SwipeHorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+			
+			
+						
+		</c:ScrollView>		
+		
+	</c:DockLayout>
+
+</c:Screen>

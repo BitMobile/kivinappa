@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Tasks.css">
+	<s:Push Id="search" Value="$param1"/>
+  	<s:Push Id="s" Value="$SetListType()"></s:Push>
+  	<s:Push Id="MyStartTracking" Value="$MyStartTracking()"></s:Push>
+  	
+  	<s:If Test="$visitsType=='planned'">
+		<s:Push Id="undonerequests" Value="$GetToDayUnDoneRequestsWithSearch($param1)"></s:Push>
+		
+		<s:Push Id="sv" Value="$GetCntResult($undonerequests)"></s:Push>
+		<s:Push Id="usv" Value="$GetAllActiveTask()"></s:Push>		
+	</s:If>
+	<s:Else>
+		<s:Push Id="allrequests" Value="$GetAllActiveTaskDetails($param1)"></s:Push>
+	
+		<s:Push Id="sv" Value="$GetTodaysActiveTask()"></s:Push>
+		<s:Push Id="usv" Value="$GetCntResult($allrequests)"></s:Push>
+	</s:Else>
+  	
+  	<c:VerticalLayout>
+
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout CssClass="btn_menu" OnEvent="Back"	OnClickAction="$Workflow.DoRollback()">
+				<c:Image CssClass="menuIcon" />
+			</c:HorizontalLayout>
+			
+			<s:If Test="$visitsType=='planned'">
+				<c:Image CssClass="img3"/>								
+				<c:Button Id="btnForward" Text="#map#" CssClass="btn_forward" OnClickAction="$GetTripWayPoints(null, $	param1, 1, 1)" />
+			</s:If>
+			<s:Else>
+				<c:Image CssClass="img3"/>								
+				<c:Button Id="btnForward" Text="#map#" CssClass="btn_forward" OnClickAction="$GetTripWayPoints(null, $param1, 1, 0)" />
+			</s:Else>
+			
+			<c:HorizontalLayout>
+				<c:TextView Text="#requestsS#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		
+		<c:HorizontalLayout CssClass="small_grid">
+						
+			<s:If Test="$visitsType=='planned'">
+				<c:HorizontalLayout CssClass="mode_left_button_on">
+					<c:HorizontalLayout Id="planned" CssClass="select_zone"	OnClickAction="$ChangeListAndRefresh(planned)">
+						<c:TextView Text="#today# ({$sv})"></c:TextView>
+					</c:HorizontalLayout>
+				</c:HorizontalLayout>
+				<c:HorizontalLayout CssClass="mode_right_button_off">
+					<c:HorizontalLayout Id="unPlanned" CssClass="select_zone" OnClickAction="$ChangeListAndRefresh(unplanned)">
+						<c:TextView Text="#all# ({$usv})"></c:TextView>
+					</c:HorizontalLayout>
+				</c:HorizontalLayout>
+			</s:If>
+			<s:Else>
+				<c:HorizontalLayout CssClass="mode_left_button_off">
+					<c:HorizontalLayout Id="planned" CssClass="select_zone"	OnClickAction="$ChangeListAndRefresh(planned)">
+						<c:TextView Text="#today# ({$sv})"></c:TextView>
+					</c:HorizontalLayout>
+				</c:HorizontalLayout>
+				<c:HorizontalLayout CssClass="mode_right_button_on">
+					<c:HorizontalLayout Id="unPlanned" CssClass="select_zone" OnClickAction="$ChangeListAndRefresh(unplanned)">
+						<c:TextView Text="#all# ({$usv})"></c:TextView>
+					</c:HorizontalLayout>
+				</c:HorizontalLayout>
+			</s:Else>
+		</c:HorizontalLayout>
+		<c:HorizontalLine />
+
+
+		<s:If Test="$visitsType=='planned'">
+			<c:HorizontalLayout CssClass="search">
+				<c:DockLayout>
+					<c:Image />
+					<c:EditText Id="edtSearch" Text="$search" Placeholder="#search#"></c:EditText>
+				</c:DockLayout>
+				<c:Button Id="btnSearch" Text="#search#" OnClickAction="$DoRefresh($edtSearch.Text)"></c:Button>
+			</c:HorizontalLayout>
+			<c:HorizontalLayout CssClass="shadowLine"></c:HorizontalLayout>
+			<c:ScrollView Id="scrlVw">
+																
+				<s:If Test="$sv == 0">
+	
+					<c:TextView Text="#unknown#"/>
+	
+				</s:If>
+				<s:Else>
+																
+					<s:Iterator Id="task" Value="$undonerequests">
+							
+	
+						<c:HorizontalLine />
+						<c:HorizontalLayout CssClass="grid" OnClickAction="$AddPeremAndDoAction($task.tskId)">
+							<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+							<c:VerticalLayout>
+								<c:TextView Text="$task.objDes" CssClass="main_row"></c:TextView>
+								<c:TextView Text="{$task.statDes}. {$task.viewDes}" CssClass="description_row"></c:TextView>
+																
+								<s:If Test="$task.viewDes == 'Внеплановые работы'">									
+									<s:If Test="$task.statDes == 'Новая'">
+										<c:TextView Text="{$ConvertDate($task.tskDate)} Осталось: {$GetTimeTo($task.tskDate)}ч." CssClass="description_daterow"></c:TextView>
+									</s:If>
+								</s:If>
+								<s:Else>
+									<c:TextView Text="$ConvertDate($task.tskDate)" CssClass="description_daterow"></c:TextView>
+								</s:Else>
+								
+							</c:VerticalLayout>
+							<c:Image />
+						</c:HorizontalLayout>
+	
+					</s:Iterator>
+				</s:Else>
+				
+				<c:HorizontalLayout CssClass="end_of_block" />
+
+			</c:ScrollView>
+		</s:If>
+		<s:Else>
+			
+			<c:HorizontalLayout CssClass="search">
+				<c:DockLayout>
+					<c:Image />
+					<c:EditText Id="edtSearch" Text="$search" Placeholder="#search#"></c:EditText>
+				</c:DockLayout>
+				<c:Button Id="btnSearch" Text="#search#" OnClickAction="$DoRefresh($edtSearch.Text)"></c:Button>
+			</c:HorizontalLayout>
+			<c:HorizontalLayout CssClass="shadowLine"></c:HorizontalLayout>
+
+			<c:ScrollView Id="scrlVw">
+															
+				<s:If Test="$usv == 0">
+	
+					<c:TextView Text="#unknown#"/>
+	
+				</s:If>
+				<s:Else>
+																			
+					<s:Iterator Id="allrequest" Value="$allrequests">
+							
+						<c:HorizontalLine />
+						<c:HorizontalLayout CssClass="grid" OnClickAction="$AddPeremAndDoAction($allrequest.tskId)">
+						
+							<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+							<c:VerticalLayout>
+								<c:TextView Text="$allrequest.objDes" CssClass="main_row"></c:TextView>
+								<c:TextView Text="{$allrequest.statDes}. {$allrequest.viewDes}" CssClass="description_row"></c:TextView>
+								
+								<s:If Test="$allrequest.viewDes == 'Внеплановые работы'">
+									<s:If Test="$allrequest.statDes == 'Новая'">									
+										<c:TextView Text="{$ConvertDate($allrequest.tskDate)} Осталось: {$GetTimeTo($allrequest.tskDate, $allrequest.timeReactionNorm, $allrequest.timeRepairNorm)}ч." CssClass="description_daterow"></c:TextView>
+									</s:If>
+								</s:If>
+								<s:Else>
+									<c:TextView Text="$ConvertDate($allrequest.tskDate)" CssClass="description_daterow"></c:TextView>
+								</s:Else>
+								
+							</c:VerticalLayout>
+							<c:Image />
+						</c:HorizontalLayout>
+	
+					</s:Iterator>
+				</s:Else>
+								
+				<c:HorizontalLayout CssClass="end_of_block" />
+
+			</c:ScrollView>
+		</s:Else>
+
+	</c:VerticalLayout>
+
+</c:Screen>

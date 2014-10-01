@@ -1,0 +1,116 @@
+
+.shadowLine {
+    width: 100%;
+    height: 2px;
+    background-image: url(shadow_line.png);
+}
+
+.btn_menu {
+    margin-right: 11%;
+    margin-left: 2%;
+}
+
+dl ScrollView TextNoData {
+	width: 100%;
+	height: 10%;
+	text-align: center;
+	color: #000000;
+	font: 30% arial;
+}
+	
+grid no_mark_indication {
+    height: 100%;
+    width: 6.1%;
+	background-color: #00ff00;
+}
+
+.main_row {
+    width: 100%;
+    height: 50%;
+    white-space: normal;
+    font: 40% Arial;
+    margin-top: 0%;
+}
+
+.grid vl {
+    width: 93.3%;
+    height: 100%;
+    padding-top: 13%;
+    padding-left: 2.7%;
+}
+
+.green_swipe {
+    height: 15.9sp;
+    width: 35%;
+    background-color: #4dd865;
+}
+	.green_swipe vl1 {
+        height: 100%;
+        width: 34%;
+        background-color: #ffffff;
+    }
+    	
+    	.green_swipe vl1 TextView {
+		    height: 15%;
+		    width: 100%;
+		    margin-top: 35%;
+		    text-align: center;
+		    color: #fff;
+		    font: 100% Arial;
+		}
+		
+		.green_swipe vl1 EditText2 {
+				width: 32%;
+                height: 100%;
+                dock-align: right;
+                margin-left: -32%;
+                margin-right: 3%;
+                margin-top: 0%;
+                border-style: solid;
+                border-width: 2px;
+                border-color: #43acfd;
+                border-radius: 5px;
+                color: #2d89cf;
+                text-align: center;
+                font: 65% arial;
+		}
+		
+		.green_swipe vl1 EditText {
+		    height: 25%;
+		    width: 90%;
+		    margin-top: 35%;
+		    border-style: solid;
+            border-width: 2px;
+            border-color: #43acfd;
+            border-radius: 5px;
+		    text-align: center;
+		    color: #2d89cf;
+		    font: 85% Arial;
+		}
+	
+	.green_swipe vl2 {
+        height: 100%;
+        width: 64%;
+    }
+	
+		.green_swipe vl2 TextView {
+		    height: 15%;
+		    width: 100%;
+		    margin-top: 35%;
+		    text-align: center;
+		    color: #fff;
+		    font: 100% Arial;
+		}
+		
+		.green_swipe vl2 EditText {
+		    height: 15%;
+		    width: 100%;
+		    margin-top: 35%;
+		    text-align: center;
+		    color: #000000;
+		    font: 100% Arial;
+		}
+		
+.swipe_layout {
+    height: 15.9sp;
+}

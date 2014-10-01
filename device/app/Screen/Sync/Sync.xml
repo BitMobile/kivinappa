@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Sync.css">
+  <c:VerticalLayout>
+
+    <c:DockLayout CssClass="top_navigator">
+      <c:HorizontalLayout CssClass="btn_menu" OnEvent="Back" OnClick="$DoRollback()">
+        <c:Image CssClass="menuIcon"/>
+      </c:HorizontalLayout>
+      <c:HorizontalLayout CssClass="btn_forward"/>
+      <c:HorizontalLayout>
+        <c:TextView Text="#sync#" />
+      </c:HorizontalLayout>
+    </c:DockLayout>
+    <c:HorizontalLine/>
+
+    <c:HorizontalLayout CssClass="caption_grid">
+      <c:TextView Text="#synchronizationData#:"/>
+    </c:HorizontalLayout>
+    <c:HorizontalLine/>
+    
+    <c:HorizontalLayout CssClass="caption_grid">
+      <c:Button Text="#synchronize#" OnClick="$ChangeStatusMoving()"/>      	
+    </c:HorizontalLayout>
+    <c:HorizontalLine/>
+
+    <c:HorizontalLayout CssClass="grid">
+      <c:VerticalLayout>
+        <c:DockLayout>
+          <c:TextView Text="#lastSync#"/>          
+        </c:DockLayout>
+
+        <c:TextView Id="dataSyncReport" Text="$lastDataSync" CssClass="main_row"/>
+
+        <c:HorizontalLayout Id="dataSyncLayout" Visible="false">
+          <c:Indicator Id="dataSyncIndicator"/>
+          <c:TextView Text="#sync#..."/>
+        </c:HorizontalLayout>
+      </c:VerticalLayout>
+    </c:HorizontalLayout>
+    <c:HorizontalLine/>
+
+    <c:HorizontalLayout CssClass="end_of_block"/>
+
+    <c:HorizontalLayout CssClass="caption_grid">
+      <c:TextView Text="#synchronizationPhoto#:"/>
+    </c:HorizontalLayout>
+    <c:HorizontalLine/>
+
+    <c:HorizontalLayout CssClass="caption_grid">
+      <c:Button Text="#synchronize#" OnClick="$SyncFtp()"/>      	
+    </c:HorizontalLayout>
+    <c:HorizontalLine/>
+    
+    <c:HorizontalLayout CssClass="grid">
+      <c:VerticalLayout>
+        <c:DockLayout>
+          <c:TextView Text="#lastSync#"/>                    
+        </c:DockLayout>
+
+        <c:TextView Id="ftpSyncReport" Text="$lastFtpSync" CssClass="main_row"/>
+
+        <c:HorizontalLayout Id="ftpSyncLayout" Visible="false">
+          <c:Indicator Id="ftpSyncIndicator"/>
+          <c:TextView Text="#sync#..."/>
+        </c:HorizontalLayout>
+      </c:VerticalLayout>
+    </c:HorizontalLayout>
+    <c:HorizontalLine/>
+
+    <c:HorizontalLayout CssClass="free_space"/>
+
+  </c:VerticalLayout>
+</c:Screen>

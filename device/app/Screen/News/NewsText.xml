@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="NewsText.css">
+	<s:Push Id="curComment" Value="$GetNewsText($param1)"></s:Push>
+	
+	<c:DockLayout>
+		
+		<c:DockLayout CssClass="footer">
+			<c:HorizontalLine CssClass="navy"/>
+			<c:DockLayout CssClass="btn_left_footer" OnEvent="Back" OnClickAction="$Workflow.DoBack()">
+				<c:TextView Text="#back#" />
+			</c:DockLayout>
+			
+			<c:DockLayout CssClass="btn_right_footer" OnClickAction="$KillNews($param1, 2)">
+				<c:TextView Text="#reads#" />
+			</c:DockLayout>																				
+		</c:DockLayout>
+		
+		<c:HorizontalLine />
+				
+		<c:VerticalLayout CssClass="memo_block_90sp">
+			<c:VerticalLayout>
+				<c:TextView Id="commentMemo" Text="$curComment" CssClass="main_row"></c:TextView>
+			</c:VerticalLayout>
+		</c:VerticalLayout>		
+				
+	</c:DockLayout>
+
+</c:Screen>

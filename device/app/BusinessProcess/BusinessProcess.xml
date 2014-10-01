@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<bp:BusinessProcess xmlns:bp="BitMobile.BusinessProcess">
+
+	
+
+
+
+	
+
+	<bp:Workflow Name="Settings">
+		<bp:Step Name="Settings" Screen="Settings.xml">
+		</bp:Step>
+	</bp:Workflow>	
+
+	<bp:Workflow Name="Sync">
+		<bp:Step Name="Sync" Screen="Sync\Sync.xml" Controller="Sync\Main.js" />
+	</bp:Workflow>
+
+</bp:BusinessProcess>

@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Moving.css">
+	<s:Push Id="curMovingPeremModul" Value="$MovingPeremModulGet($param1)"></s:Push> 
+	<s:Push Id="curMoving" Value="$GetMoving($curMovingPeremModul)"></s:Push>
+	<s:Push Id="movingDirect" Value="$param2"></s:Push>	
+	
+	<s:Push Id="StatusDescription" Value="$curMoving.Status"></s:Push> 
+						
+	<c:DockLayout>	
+		<c:DockLayout CssClass="top_navigator">
+			<s:If Test="$StatusDescription == 'Новая'">
+				<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$DelMovingAndDoBack($curMoving.Id)">
+					<c:Image />
+					<c:TextView Text="#back#" />
+				</c:HorizontalLayout>
+			</s:If>
+			<s:Else>
+				<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$DoBack()">
+					<c:Image />
+					<c:TextView Text="#back#" />
+				</c:HorizontalLayout>
+			</s:Else>
+			
+			<s:If Test="$StatusDescription == 'Новая'">
+				<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()" />
+			</s:If>
+			<s:Else>
+				<c:Button Id="btnForward" Text="" CssClass="btn_forward" />
+			</s:Else>
+			
+			<c:HorizontalLayout>
+				<c:TextView Text="#application#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		<c:HorizontalLine CssClass="navy"/>
+				
+		<s:If Test="$StatusDescription == 'Новая'">
+		
+			<c:DockLayout CssClass="footer">
+				<c:DockLayout CssClass="btn_left_footer" OnClickAction="$Workflow.DoAction(GoMovingListMaterials, null, $curMoving.Id)">
+					<c:TextView Text="#sku#" />
+				</c:DockLayout>																										
+			</c:DockLayout>
+			
+		</s:If>
+		<s:Else>
+			<s:If Test="$movingDirect == '0'">
+				<s:If Test="$StatusDescription == 'Отправлена'">
+					<c:DockLayout CssClass="footer">
+						<c:DockLayout CssClass="btn_left_footer" OnClickAction="$QuestAcceptRefuseMoving($curMoving.Id, 1)">
+							<c:TextView Text="#accept#" />
+						</c:DockLayout>
+						
+						<c:DockLayout CssClass="btn_right_footer" OnClickAction="$QuestAcceptRefuseMoving($curMoving.Id, 0)">
+							<c:TextView Text="#refuse#" />
+						</c:DockLayout>																										
+					</c:DockLayout>
+				</s:If>
+			</s:If>		
+		</s:Else>		
+		
+		<c:ScrollView Id="scrlVw">
+			
+				<c:HorizontalLayout CssClass="grid">					
+					<s:If Test="$movingDirect == 1">
+						
+						<s:If Test="$StatusDescription == 'Новая'">
+							<c:VerticalLayout OnClickAction="$StatusDoSelect($curMoving.Id)">
+								<c:TextView Text="Получатель: " CssClass="description_row"></c:TextView>
+								<c:TextView Text="{$curMoving.Sklad}" CssClass="main_row"></c:TextView>
+							</c:VerticalLayout>							
+						</s:If>														
+						<s:Else>
+							<c:VerticalLayout>
+								<c:TextView Text="Получатель: " CssClass="description_row"></c:TextView>
+								<c:TextView Text="{$curMoving.Sklad}" CssClass="main_row"></c:TextView>
+							</c:VerticalLayout>
+						</s:Else>
+							
+					</s:If>														
+					<s:Else>
+						<c:VerticalLayout>
+							<c:TextView Text="Отправитель: " CssClass="description_row"></c:TextView>
+							<c:TextView Text="{$curMoving.Sklad}" CssClass="main_row"></c:TextView>
+						</c:VerticalLayout>					
+					</s:Else>
+				</c:HorizontalLayout>
+				
+				<c:HorizontalLine />			
+				
+				<c:HorizontalLayout CssClass="grid">
+					<c:VerticalLayout>
+						<c:TextView Text="Статус: {$curMoving.Status}" CssClass="description_row"></c:TextView>
+						<c:TextView Text="Дата создания: {$GetDate_ddMMyy($curMoving.Date)}" CssClass="main_row"></c:TextView>
+					</c:VerticalLayout>
+				</c:HorizontalLayout>			
+								
+			<c:HorizontalLine />
+			
+			<c:HorizontalLayout CssClass="caption_grid">
+		        <c:TextView Text="#skuUP#:"></c:TextView>
+		    </c:HorizontalLayout>
+		    
+		    <s:Push Id="sKUCount" Value="$GetsKUs($curMoving.Id, 1)"></s:Push>
+		    								
+			<s:If Test="$sKUCount == 0">
+			
+				<c:HorizontalLine />
+				<c:TextView Text="#unknown#" CssClass="TextNoData" />
+
+			</s:If>
+			<s:Else>
+			
+				<s:Push Id="sKUs" Value="$GetsKUs($curMoving.Id, 0)"></s:Push>
+														
+				<s:Iterator Id="sKU" Value="$sKUs">
+					<c:HorizontalLine />
+						
+					<c:SwipeHorizontalLayout Id="swipe_layout2" CssClass="swipe_layout" Index="0">
+												
+						<c:HorizontalLayout CssClass="grid">
+							
+							<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+							
+							<c:VerticalLayout>								
+								<c:TextView Text="$sKU.Description" CssClass="main_row"></c:TextView>												
+								<c:TextView Text="{$sKU.Cnt} {$sKU.Un}" CssClass="description_row"></c:TextView>																							
+							</c:VerticalLayout>
+														
+						</c:HorizontalLayout>
+						
+						<s:If Test="$StatusDescription == 'Новая'">
+							<c:HorizontalLayout CssClass="red_swipe" OnClickAction="$KillSKU(sender, $curMoving.Id, $sKU.Id, $sKU.SKUId, $sKU.Cnt)">
+								<c:VerticalLayout>
+									<c:TextView Text="#del#"></c:TextView>
+								</c:VerticalLayout>
+							</c:HorizontalLayout>
+						</s:If>
+					</c:SwipeHorizontalLayout>
+
+				</s:Iterator>
+			
+				<c:HorizontalLayout CssClass="swipe_info">
+					<c:Image CssClass="img_left"/>
+					<c:TextView Text="Смахните влево, чтобы     удалить материал" />				
+				</c:HorizontalLayout>
+			
+			</s:Else>
+								
+		</c:ScrollView>
+		
+		<c:HorizontalLine />		
+		
+	</c:DockLayout>
+
+</c:Screen>

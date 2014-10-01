@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="AddMaterials.css">
+	<s:Push Id="search" Value="$param1"></s:Push>
+	<s:Push Id="curTskId" Value="$param2"></s:Push>
+	<s:Push Id="curAVRId" Value="$param3"></s:Push>
+	
+	<s:Push Id="sKUs" Value="$GetsKUsAll($curTsk.Id, $param1)"></s:Push>
+	<s:Push Id="sKUCount" Value="$GetCntSKU($sKUs)"></s:Push>
+		
+	<c:DockLayout>
+
+		<c:DockLayout CssClass="footer">
+			<c:HorizontalLine CssClass="navy"/>
+			<c:DockLayout CssClass="btn_center_footer" OnEvent="Back" OnClickAction="$DoBack()">
+				<c:TextView Text="#ready#" />
+			</c:DockLayout>
+		</c:DockLayout>
+		
+		<c:HorizontalLayout CssClass="swipe_info">
+			<c:Image CssClass="img_right"/>
+			<c:TextView Text="Смахните вправо, чтобы   добавить материал" />				
+		</c:HorizontalLayout>
+		
+		<c:HorizontalLayout CssClass="search">
+			<c:DockLayout>
+				<c:Image />
+				<c:EditText Id="edtSearch" Text="$search" Placeholder="#search#"></c:EditText>
+			</c:DockLayout>
+			<c:Button Id="btnSearch" Text="#search#" OnClickAction="$DoRefresh($edtSearch.Text, $curTskId, $curAVRId)"></c:Button>
+		</c:HorizontalLayout>
+		<c:HorizontalLayout CssClass="shadowLine"></c:HorizontalLayout>
+			
+		<c:ScrollView Id="scrlVw">
+			<c:HorizontalLayout CssClass="caption_grid">
+		        <c:TextView Text="#materialList#:"></c:TextView>
+		    </c:HorizontalLayout>
+		    		    								
+			<s:If Test="$sKUCount == 0">
+			
+				<c:HorizontalLine />
+				<c:TextView Text="#unknown#" CssClass="TextNoData" />
+
+			</s:If>
+			<s:Else>
+																	
+				<s:Iterator Id="sKU" Value="$sKUs" Status="statusCount">
+					<s:Push Id="index" Value="$statusCount.Index"></s:Push>
+					<c:HorizontalLine />
+						
+					<c:SwipeHorizontalLayout Id="swipe_layout" CssClass="swipe_layout" Index="1">
+												
+						<c:HorizontalLayout CssClass="green_swipe" >
+							<c:VerticalLayout CssClass="vl1">
+								<c:EditText Id="countAdd" Text="1" Keyboard = "Numeric"></c:EditText>								
+							</c:VerticalLayout>
+							<c:VerticalLayout CssClass="vl2" OnClick="$AddSKU($sKU.SKU, $countAdd.Text, $curTskId, $curAVRId, $edtSearch.Text)">
+								<c:TextView Text="#add#"></c:TextView>
+							</c:VerticalLayout>							
+						</c:HorizontalLayout>
+																		
+						<c:HorizontalLayout CssClass="grid">
+							<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+							
+							<c:VerticalLayout>
+								<c:TextView Text="$sKU.Description" CssClass="main_row"></c:TextView>								
+								
+								<s:if Test="1 == 1">
+									<c:TextView Id="addCount{$index}" Text="На складе: {$sKU.MyCount} {$sKU.Unit}" CssClass="description_row"></c:TextView>
+								</s:if>
+								<s:Else>									
+									<c:TextView Id="addCount{$index}" Text="На складе: {$sKU.MyCount} {$sKU.Unit}  Добавлено: {$sKU.TaskCount} {$sKU.Unit}" CssClass="description_row"></c:TextView>
+								</s:Else>							
+																							
+							</c:VerticalLayout>
+							
+						</c:HorizontalLayout>
+												
+					</c:SwipeHorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+		</c:ScrollView>
+		
+	    <c:HorizontalLine/>
+	    		
+	</c:DockLayout>
+	
+</c:Screen>

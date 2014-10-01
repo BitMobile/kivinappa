@@ -1,0 +1,31 @@
+.grid vl {
+    width: 83.3%;
+    height: 100%;
+    padding-top: 13%;
+    padding-left: 2.7%;
+}
+
+.shadowLine {
+    width: 100%;
+    height: 2px;
+    background-image: url(shadow_line.png);
+}
+
+.btn_menu {
+    margin-right: 11%;
+    margin-left: 2%;
+}
+
+vl ScrollStocks {
+    width: 100%;
+    height: 92sp;
+    background-color: #efeff4;
+}
+
+	vl ScrollPlans TextNoStocks {
+		width: 100%;
+		height: 10%;
+		text-align: center;
+		color: #000000;
+		font: 30% arial;
+	}

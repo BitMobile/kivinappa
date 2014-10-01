@@ -1,0 +1,17 @@
+﻿
+.topNavigator {
+    height: 10%;
+    background-color: #00008B;
+	dock-align:top;
+	}
+
+    .topNavigator TextView {
+        width: auto;
+        height: auto;
+        margin-top: 20%;    
+		margin-bottom: 20%;
+        text-align: center;
+        color: #ffffe0;
+        font: 60% arial;		
+    }
+

@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Stocks.css">
+
+  <c:DockLayout>
+
+    <c:DockLayout CssClass="top_navigator">
+      <c:HorizontalLayout CssClass="btn_menu" OnEvent="Back" OnClickAction="$Workflow.DoRollback()">
+        <c:Image CssClass="menuIcon"/>
+      </c:HorizontalLayout>
+      
+      <c:HorizontalLayout>
+        <c:TextView Text="#remainsOfStock#" CssClass="header_one_btn"/>
+      </c:HorizontalLayout>
+    </c:DockLayout>
+    
+    <c:DockLayout CssClass="footer">
+			<c:DockLayout CssClass="btn_left_footer" OnClickAction="$ForNextWorkflowNew()">
+				<c:TextView Text="#replenishStock#" />
+			</c:DockLayout>											
+	</c:DockLayout>
+
+    <c:HorizontalLine/>
+    
+    <c:HorizontalLine CssClass="navy"/>
+
+    <c:ScrollView Id="scrlVw">
+		<s:Push Id="collectioncount" Value="$GetStocksCount()"></s:Push>
+
+		<s:If Test="$collectioncount == 0">
+		
+			<c:TextView Text="#unknown#" CssClass="TextNoStocks"/>
+		
+		</s:If>
+		<s:Else>
+		
+			<s:Push Id="stocks" Value="$GetStocks()"></s:Push>
+			
+			<s:Iterator Id="stock" Value="$stocks">
+			
+				<c:HorizontalLine/>
+				<c:HorizontalLayout CssClass="grid">
+					<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+					<c:VerticalLayout>
+					  <c:TextView Text="$stock.Ref.Description" CssClass="main_row"></c:TextView>
+					  <c:TextView Text="Факт: {$stock.MyCount}  Учет: {$stock.Stock}  Лимит: {$stock.Lim}  {$stock.Description}." CssClass="description_row"/>					  
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+				
+			</s:Iterator>
+										
+		</s:Else>	
+	</c:ScrollView>
+	
+  </c:DockLayout>
+
+</c:Screen>

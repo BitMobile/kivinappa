@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack"
+	StyleSheet="CommentPlan.css">
+	<s:Push Id="currentPlan" Value="$GetCommentID($param1)"></s:Push>
+
+	<c:DockLayout>
+		
+		<c:DockLayout CssClass="footer">
+			<c:HorizontalLine CssClass="navy"/>
+			<c:DockLayout CssClass="btn_center_footer" OnEvent="Back" OnClickAction="$Workflow.DoBack()">
+				<c:TextView Text="#ready#" />
+			</c:DockLayout>
+		</c:DockLayout>
+		
+		<c:HorizontalLine />
+		
+		<c:VerticalLayout CssClass="memo_block_90sp">
+			<c:VerticalLayout>
+				<c:TextView Id="comment" Text="$myRow.DenialReason"></c:TextView>
+			</c:VerticalLayout>
+		</c:VerticalLayout>
+		
+				
+	</c:DockLayout>
+
+</c:Screen>

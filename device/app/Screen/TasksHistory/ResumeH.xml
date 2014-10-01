@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Resume.css">
+	
+	<s:Push Id="curTsk" Value="$GetTaskResume($param1)"></s:Push>
+	<s:Push Id="taskStatus_AVRId" Value="$GetTaskStatusAVRId($param1)"></s:Push>
+			
+	<c:DockLayout>
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$DoBack()">
+				<c:Image />
+				<c:TextView Text="#back#" />
+			</c:HorizontalLayout>
+			<s:If Test="$taskStatus_AVRId.StatName == 'ВРаботе'">
+				<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
+			</s:If>
+			<s:Else>
+				<c:Button Id="btnForward" Text="#close#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
+			</s:Else>
+			<c:HorizontalLayout>
+				<c:TextView Text="#resume#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		<c:HorizontalLine CssClass="navy"/>
+		
+		<c:ScrollView Id="scrlVw">
+		
+			<c:HorizontalLayout CssClass="grid" >
+		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout>
+					<c:TextView Text="Статус:" CssClass="description_row"/>
+					<c:TextView Id="statDesText" Text="$taskStatus_AVRId.StatDes" CssClass="main_row"/>			
+				</c:VerticalLayout>
+			</c:HorizontalLayout>
+		
+					
+			<c:HorizontalLine/>
+						
+			<c:HorizontalLayout CssClass="grid">
+		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout>
+					<c:TextView Text="Состав участников не" CssClass="description_row"/>
+					<c:TextView Text="соответствует составу бригады" CssClass="description_row"/>								
+				</c:VerticalLayout>
+				
+				<s:If Test="$curTsk.ValueBrigade == 0">
+						<c:VerticalLayout >
+							<c:Image />								
+						</c:VerticalLayout>	
+					</s:If>
+					<s:Else>		
+						<c:VerticalLayout >
+							<c:Image CssClass="img2"/>
+						</c:VerticalLayout>		
+					</s:Else>			
+												
+			</c:HorizontalLayout>
+		
+			
+			<c:HorizontalLine/>
+			
+			<c:HorizontalLayout CssClass="grid">
+		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout>
+					<c:TextView Text="Начало работ:" CssClass="description_row"/>
+					<c:TextView Text="$ConvertDate($curTsk.TimeStart)" CssClass="main_row"/>			
+				</c:VerticalLayout>				
+			</c:HorizontalLayout>
+			
+			<c:HorizontalLine/>
+			
+			<c:HorizontalLayout CssClass="grid">
+		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout>
+					<c:TextView Text="Окончание работ:" CssClass="description_row"/>
+					<c:TextView Text="$ConvertDate($curTsk.TimeFinish)" CssClass="main_row"/>			
+				</c:VerticalLayout>				
+			</c:HorizontalLayout>
+			
+			<c:HorizontalLine/>
+			
+			<c:HorizontalLayout CssClass="grid">
+		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout>
+					<c:TextView Text="Затраченое время:" CssClass="description_row"/>
+					<c:TextView Text="{$curTsk.TimeSpent} ч." CssClass="main_row"/>			
+				</c:VerticalLayout>				
+			</c:HorizontalLayout>
+			
+			<c:HorizontalLine/>
+			
+			<c:HorizontalLayout CssClass="grid">
+		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout>
+					<c:TextView Text="Нормативное время реагирования:" CssClass="description_row"/>
+					<c:TextView Text="{$curTsk.TimeReactionNorm} ч." CssClass="main_row"/>			
+				</c:VerticalLayout>				
+			</c:HorizontalLayout>
+			
+			<c:HorizontalLine/>
+			
+			<c:HorizontalLayout CssClass="grid">
+		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout>
+					<c:TextView Text="Фактическое время реагирования:" CssClass="description_row"/>
+					<c:TextView Text="{$TimeReaction($curTsk.Id)} ч." CssClass="main_row"/>			
+				</c:VerticalLayout>				
+			</c:HorizontalLayout>
+			
+			<c:HorizontalLine/>
+					
+			<c:HorizontalLayout CssClass="grid" OnClickAction="$DoAction(OpenComResumeH, $curTsk.Id, 1)">
+		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout>
+					<s:Push Id="rewiewCom" Value="$RewiewComment($curTsk.Comment)"></s:Push>
+					<c:TextView Text="Описание работ:" CssClass="description_row"/>
+					<s:If Test="$rewiewCom == 0">
+						<c:TextView Text="$curTsk.Comment" CssClass="main_row"/>
+					</s:If>
+					<s:Else>
+						<c:TextView Text="{$rewiewCom}#more#" CssClass="main_row"></c:TextView>
+					</s:Else>												
+				</c:VerticalLayout>				
+			</c:HorizontalLayout>		
+
+		</c:ScrollView>
+	</c:DockLayout>
+
+</c:Screen>

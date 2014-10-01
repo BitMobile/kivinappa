@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="TaskMaterials.css">
+	
+	<s:Push Id="curTsk" Value="$GetCurrentTask($curTaskMat)"></s:Push>
+	<s:Push Id="DeleteGlobalPerem" Value="$DeleteGlobalPerem()"></s:Push>
+			
+	<c:VerticalLayout>	
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$DoBack()">
+				<c:Image />
+				<c:TextView Text="#back#" />
+			</c:HorizontalLayout>
+			<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" />
+			<c:HorizontalLayout>
+				<c:TextView Text="#applicationForMaterials#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		<c:HorizontalLine CssClass="navy"/>
+
+		<c:ScrollView Id="scrlVw">
+			<c:SwipeHorizontalLayout Id="swipe_layout" CssClass="swipe_layout" Index="1">
+				
+				<s:If Test="$curTsk.TaskSONum == null">
+					<c:HorizontalLayout CssClass="green_swipe" >
+						<c:VerticalLayout>
+							<c:TextView Text="#upToTheLimits#"></c:TextView>
+						</c:VerticalLayout>
+					</c:HorizontalLayout>	
+				</s:If>
+				
+				<c:HorizontalLayout CssClass="grid">
+					<c:VerticalLayout>
+						
+						<s:If Test="$curTsk.TaskSONum == null">
+							<c:TextView Text="Основание: Пополнение склада" CssClass="description_row"></c:TextView>
+							<c:TextView Text="" CssClass="description_row"></c:TextView>
+						</s:If>
+						<s:Else>
+							<c:TextView Text="Основание: Заявка на СО" CssClass="description_row"></c:TextView>
+							<c:TextView Text="№ {$curTsk.TaskSONum}" CssClass="description_row"></c:TextView>
+						</s:Else>
+												
+						<c:TextView Text="Дата создания: {$GetDate_ddMMyy($curTsk.Date)}" CssClass="main_row"/>					
+					</c:VerticalLayout>
+				</c:HorizontalLayout>			
+			</c:SwipeHorizontalLayout>
+									
+						
+			<c:HorizontalLine />
+			
+			<c:HorizontalLayout CssClass="caption_grid">
+		        <c:TextView Text="#skuUP#:"></c:TextView>
+		    </c:HorizontalLayout>
+		    
+		    <s:Push Id="sKUCount" Value="$GetsKUs($curTsk.Id, 1)"></s:Push>
+		    								
+			<s:If Test="$sKUCount == 0">
+			
+				<c:HorizontalLine />
+				<c:TextView Text="#unknown#" CssClass="TextNoData" />
+
+			</s:If>
+			<s:Else>
+			
+				<s:Push Id="sKUs" Value="$GetsKUs($curTsk.Id, 0)"></s:Push>
+														
+				<s:Iterator Id="sKU" Value="$sKUs">
+					<c:HorizontalLine />
+						
+					<c:SwipeHorizontalLayout Id="swipe_layout2" CssClass="swipe_layout" Index="0">
+												
+						<c:HorizontalLayout CssClass="grid">
+							<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+							<c:VerticalLayout>
+								<c:TextView Text="$sKU.Description" CssClass="main_row"></c:TextView>
+								
+								<s:If Test="$curTsk.Posted == 1">
+									<s:If Test="$sKU.SSCnt == null"> 
+										<c:TextView Text="{$sKU.Cnt} {$sKU.Un}  Обеспечено: {$sKU.Cnt} {$sKU.Un}" CssClass="description_row"></c:TextView>
+									</s:If>
+									<s:Else>
+										<c:TextView Text="{$sKU.Cnt} {$sKU.Un}  Обеспечено: {$Minus($sKU.Cnt,$sKU.SSCnt)} {$sKU.Un}" CssClass="description_row"></c:TextView>
+									</s:Else>
+								</s:If>
+								<s:Else>
+									<c:TextView Text="{$sKU.Cnt} {$sKU.Un}  Обеспечено: {0} {$sKU.Un}" CssClass="description_row"></c:TextView>
+								</s:Else>							
+							</c:VerticalLayout>
+							<c:Image />
+						</c:HorizontalLayout>
+						
+						<c:HorizontalLayout CssClass="red_swipe" >
+							<c:VerticalLayout>
+								<c:TextView Text="#del#"></c:TextView>
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					</c:SwipeHorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+							
+						
+			<c:HorizontalLine />
+			
+			
+			<c:HorizontalLayout CssClass="caption_grid">
+		        <c:TextView Text="#descriptions#:"></c:TextView>
+		    </c:HorizontalLayout>
+		    
+		    <s:Push Id="dessCount" Value="$GetComm($curTsk.Id, 1)"></s:Push>
+		    								
+			<s:If Test="$dessCount == 0">
+			
+				<c:HorizontalLine />
+				<c:TextView Text="#unknown#" CssClass="TextNoData" />
+
+			</s:If>
+			<s:Else>
+			
+				<s:Push Id="dess" Value="$GetComm($curTsk.Id, 0)"></s:Push>
+														
+				<s:Iterator Id="des" Value="$dess">
+					<c:HorizontalLine />
+						
+					<c:SwipeHorizontalLayout Id="swipe_layout3" CssClass="swipe_layout" Index="0">
+												
+						<c:HorizontalLayout CssClass="grid">
+							<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+							<c:VerticalLayout>
+								<c:TextView Text="$des.Description" CssClass="main_row"></c:TextView>															
+							</c:VerticalLayout>
+							<c:Image />
+						</c:HorizontalLayout>
+						
+						<c:HorizontalLayout CssClass="red_swipe" >
+							<c:VerticalLayout>
+								<c:TextView Text="#del#"></c:TextView>
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					</c:SwipeHorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+							
+						
+			<c:HorizontalLine />
+			
+									
+			<c:HorizontalLayout CssClass="caption_grid">
+		        <c:TextView Text="#photo#:"></c:TextView>
+		    </c:HorizontalLayout>
+		    
+		    <s:Push Id="photoCount" Value="$GetPhoto($curTsk.Id, 1)"></s:Push>
+		    								
+			<s:If Test="$photoCount == 0">
+			
+				<c:HorizontalLine />
+				<c:TextView Text="#unknown#" CssClass="TextNoData" />
+
+			</s:If>
+			<s:Else>
+			
+				<s:Push Id="photoes" Value="$GetPhoto($curTsk.Id, 0)"></s:Push>
+														
+				<s:Iterator Id="photo" Value="$photoes">
+					<c:HorizontalLine />
+						
+					<c:SwipeHorizontalLayout Id="swipe_layout4" CssClass="swipe_layout" Index="0">
+												
+						<c:HorizontalLayout CssClass="grid">
+							<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+							<c:VerticalLayout>
+								<c:TextView Text="$photo.Description" CssClass="main_row"></c:TextView>															
+							</c:VerticalLayout>
+							<c:Image />
+						</c:HorizontalLayout>
+						
+						<c:HorizontalLayout CssClass="red_swipe" >
+							<c:VerticalLayout>
+								<c:TextView Text="#del#"></c:TextView>
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					</c:SwipeHorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+							
+			
+			
+		</c:ScrollView>		
+		
+	</c:VerticalLayout>
+
+</c:Screen>

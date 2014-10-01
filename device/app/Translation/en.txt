@@ -1,0 +1,245 @@
+﻿outlet_description	Outlet description
+forward		Forward
+back		Back
+summary		Summary
+caps_summary	SUMMARY
+new			New
+client		Client
+clients		Clients
+main		MAIN
+mainInfo	MAIN INFORMATION
+additionally	ADDITIONALLY
+ todo		ToDo
+stock		Stock
+schedule	Schedule
+order		Order
+visit		Visit
+visits		Visits
+incompletedVisits	INCOMPLETED VISITS
+completedVisits		COMPLETED VISITS
+info		About
+planVisit	Planned
+unplanned	Unplanned
+outlets		Outlets
+targets		Targets
+target		Target
+settings	Settings
+sync		Sync
+syncPhoto	Sync photo
+search		Search
+outlet		Outlet
+outlet_class	Outlet class
+outlet_type	Outlet type
+distributor	Distributor
+answer		Answer
+typeanswer	Insert answers..
+username	User name
+password	Password
+cancel		Cancel
+Ok		Ok
+discard		Discard
+apply		Apply
+parameters	Parameters
+parameter	Parameter
+select_answer	SELECT VALUE..
+save		Save
+no_questions	No questions
+empty_field	Field couldn't be cleaned
+questions	Questions
+questAnswers	Questionnairy
+commentary	Commentary
+insert_answer	INSERT VALUE..
+amount		Amount
+skuInOrder	ADDED SKUs
+sku			SKU
+distribution	Distribution
+quantity	Quantity
+price		Price
+edit		Edit
+insert_text	Insert text..
+totalamount	Total amount
+orderSum	Order amount
+price2		Price:
+orderHistory	ORDER HISTORY
+kpi			KPI
+tasks		Tasks
+task		Task
+todoDone	Tasks done
+execute		Execute
+retrieve	Retrieve
+newTasks	NEW TASKS
+executedtask	EXECUTED TASK
+waiting	Waiting
+description	Description
+result		Result
+plandate	Plan date
+date		Date
+distributor	Distributor
+outletType	Outlet type
+outletClass	Outlet class
+available	Available
+facing		Facing
+stock		Stock
+price		Price
+markUp		Mark Up
+outOfStock	Out Of Stock
+false		False
+true		True
+done		Done
+ready		Done
+pcs			pcs.
+orders		Orders
+newOrder	Create new order
+add			Add
+discount	Discount
+noNumber	No number
+showImage	Show image
+hideImage	Hide image
+markUp		MarkUp
+unit		Unit
+baseUnit	Base unit
+selectUnit	Select unit:
+logo		logoEn
+packUnit	Pack unit
+refreshScreen	Refresh screen
+no_tasks	No tasks
+documentSum	Document sum
+document	Document
+receivables	Receivables
+receivable	Receivable
+byDocs		DOCUMENTS
+encashment	Encashment
+sum			Sum
+encashmentSum	Encashment sum
+spreadOnDocuments	Spread on documents
+spread		Spread
+docNumber	Document number
+receivableAmount	RECEIVABLE AMOUNT
+encashmentAmount	Encashment amount
+nameSurname	Name, surname
+maximumAmount	Amount limit
+NoLimit		No limit
+deleteItem	Delete this item
+startTime	Start time
+newOutlet	Create new outlet
+messageNulls	There shouldn't be empty fields.
+countPrice	Count price
+address		Address
+description	Description
+coordinates	Coordinates
+set			Set
+coordinatesAreSet	Coordinates Are Set
+noCoordinates	Coordinates aren't set
+setVisitCoordinates		Retry to set coordinates?
+setCoords	Set coordinates
+setCoordinates	Set outlet coordinates by current location?
+location	Set outlet location
+locationSetFailed	Location set is failed. Repeat?
+saveChanges	Save changes?
+map			Map
+showOnMap	Show on map
+no_visitPlans	No visits to display 
+current		Current
+couldnt_be_cleaned	Field couldn't be cleaned
+priceList	Price list
+isntSelected	Isn't selected
+SKUWillRevised	SKU list has been revised
+features	Features
+noPriceLists	No Price Lists for this outlet
+emptyList	List is empty
+impossibleToDelete	Impossible to delete, order is already in base
+valueList	Value list
+deliveryDate	Delivery date
+enterDateTime	Enter date, time
+noImage	No image found
+of	of
+information	Information
+snapshot	Snapshot
+noSnapshot	No snapshot
+snapshotAttached	Snapshot attached
+clickToInsert	Click to insert
+itemAlreadyExist	This item already exists. Continue edit? ("No" - don't add new item to order)
+YES		Yes
+NO		No
+filter	Filter
+clearFilter		clearFilter
+groups	Groups
+brands	Brands
+brand	Brand
+impossibleToCreateVisit	Impossible to create plan visit until coordinates aren't set. Retry to get location?
+fillNoOrderReason	Reason for not taking the order should be filled.
+reasonForEmptyOrder	Reason for not taking the order
+fillInVisitReason	Reason of visit should be filled
+visitReason	Visit reason
+debt	Debt
+orderInfo	ORDER INFORMATION
+visitTotal	Visit total
+synchronizationData	SYNCHRONIZATION OF DATA
+synchronizationPhoto	SYNCHRONIZATION OF PHOTOS
+lastSync	Last synchronization
+synchronize	Synchronize
+vpVisits	visits
+vpPerformed	performed
+further	further
+scheduled	scheduled
+planned	planned
+vpUnplanned	unplanned
+amountOfOrdersForToday	amount of orders for today
+programmingCollectionForToday	programming collection for today
+accountsReceivables	accounts receivables
+unknown	unknown
+list	List
+RequestsForService	Requests for service
+planning	Planning
+remainsOfStock	Remains of stock
+applicationsForMaterials	Applications for materials
+applicationForMaterials	Application for materials
+applications	Applications
+application	Application
+all	All
+today	Today
+noApplicationToday	No applications for today
+expected2	Expected
+noPlans	No plans
+planVisits	Plan visits
+passportObject	Passport object
+movement	Movement
+SendForReview	For review
+requestsS	Requests for service
+requestForS	Request for service
+nameOfObject	Name of object
+shipped	Shipped
+upToTheLimits	Up to the limits
+skuUP	SKU
+del	Delete
+descriptions	DESCRIPTION
+photo	PHOTO
+photo2	Photo
+text	Text
+materialList	MATERIAL LIST
+more	...(more)
+taskBig	TASK
+problemDescription	Problem description:
+startTask	Get started with the application?
+Materials	Materials
+MaterialsListUP	MATERIALS LIST
+jobs	Editional jobs
+jobsListUp	JOBS LIST
+addFromGallery	From gallery
+photograph	Photograph
+photoReport	Photo report
+close	Close
+resume	Resume
+descriptionDw	Description
+tasksHistory	Tasks history
+startDate	Start date
+finishDate	Finish date
+news	News
+reads	Reads
+replenishStock	Replenish stock
+refillTheListOfMaterials	Refill the list of materials?
+incoming	Incoming
+outgoing	Outgoing
+accept	Accept
+refuse	Refuse
+at	в

@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Task.css">
+
+    <s:Push Id="curTsk" Value="$GetCurrentTask(@taskForSO)"></s:Push>
+    <s:Push Id="wayPoints" Value="$GetWayPoints($curTsk.Object)"></s:Push>
+				
+	<c:DockLayout>
+	
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$Workflow.DoRollback()">
+				<c:Image />
+				<c:TextView Text="#back#" />
+			</c:HorizontalLayout>
+			
+			<s:If Test="$curTsk.statDes == 'Новая'">
+					<c:Button Id="btnForward" Text="#forward#" CssClass="btn_forward" OnClickAction="$QuestStartTask(@taskForSO)" />
+			</s:If>
+			<s:Else>
+				<s:Push Id="CheckAVR" Value="$CheckAVR(@taskForSO)"></s:Push>
+				<c:Button Id="btnForward" Text="#forward#" CssClass="btn_forward" OnClickAction="$Workflow.DoAction(GoTaskMaterialsList, @taskForSO)" />
+			</s:Else>
+			
+			<c:HorizontalLayout>
+				<c:TextView Text="#requestForS#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		<c:HorizontalLine CssClass="navy"/>
+
+		<c:ScrollView Id="scrlVw">
+			<c:HorizontalLayout CssClass="caption_grid">
+		        <c:TextView Text="#main#:"></c:TextView>
+		    </c:HorizontalLayout>
+	    	
+	    	<c:HorizontalLine/>
+	    	
+		    <c:HorizontalLayout CssClass="grid">
+		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout OnClickAction="$DoAction(OpenCurObject, $curTsk.Object, 0)">
+					<c:TextView Text="#nameOfObject#" CssClass="description_row"/>
+					<c:TextView Text="$curTsk.Description" CssClass="main_row"/>			
+				</c:VerticalLayout>
+			</c:HorizontalLayout>
+			
+			<c:HorizontalLine/>
+			
+			<c:HorizontalLayout CssClass="grid">
+				<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout>
+					<c:TextView Text="Адрес" CssClass="description_row"/>
+					<c:TextView Text="$curTsk.Address" CssClass="main_row"/>			
+				</c:VerticalLayout>
+			</c:HorizontalLayout>
+			
+			<c:HorizontalLine/>
+			
+			<c:HorizontalLayout CssClass="grid" >
+				<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout CssClass="smallvl2">
+					<c:TextView Text="Координаты" CssClass="description_row"/>
+					<c:TextView Text="Широта: {$curTsk.Latitude}                    Долгота: {$curTsk.Longitude}" CssClass="main_row"/>								
+				</c:VerticalLayout>
+				
+				<s:If Test="$wayPoints == null">
+					<c:VerticalLayout OnClickAction="$NullCoordMess()">
+						<c:Image CssClass="img3"/>								
+					</c:VerticalLayout>
+				</s:If>				
+				<s:Else>
+					<c:VerticalLayout OnClickAction="$Workflow.DoAction(ShowMap, $wayPoints)">
+						<c:Image CssClass="img3"/>								
+					</c:VerticalLayout>
+				</s:Else>
+			</c:HorizontalLayout>
+			
+			<c:HorizontalLayout CssClass="caption_grid">
+		        <c:TextView Text="#taskBig#:"></c:TextView>
+		    </c:HorizontalLayout>
+	    	
+	    	<c:HorizontalLine/>
+	    	
+	    	<c:HorizontalLayout CssClass="grid">
+				<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout CssClass="smallvl2">
+					<c:TextView Text="$curTsk.Name" CssClass="description_row"/>
+					<c:TextView Text="$curTsk.Posit" CssClass="description_row"/>
+					<c:TextView Text="тел: {$curTsk.ContactTel}" CssClass="description_daterow"></c:TextView>		
+				</c:VerticalLayout>
+				
+				<c:VerticalLayout OnClickAction="$CallEmergency($curTsk.ContactTel)">
+					<c:Image CssClass="img4"/>								
+				</c:VerticalLayout>
+			</c:HorizontalLayout>
+			
+			<c:HorizontalLine/>
+	    	
+	    	<c:HorizontalLayout CssClass="grid">
+				<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout>
+					<c:TextView Text="#problemDescription#" CssClass="description_row"/>
+					<c:TextView Text="$curTsk.ProblemDescription" CssClass="main_row"/>								
+				</c:VerticalLayout>
+			</c:HorizontalLayout>
+
+		</c:ScrollView>
+	</c:DockLayout>
+
+</c:Screen>

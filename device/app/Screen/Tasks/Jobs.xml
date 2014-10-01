@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Jobs.css">
+	
+	<s:Push Id="curTsk" Value="$param1"></s:Push>
+	<s:Push Id="taskStatus_AVRId" Value="$GetTaskStatusAVRId($param1)"></s:Push>
+				
+	<c:DockLayout>	
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$DoBack()">
+				<c:Image />
+				<c:TextView Text="#back#" />
+			</c:HorizontalLayout>
+			<c:Button Id="btnForward" Text="#forward#" CssClass="btn_forward" OnClickAction="$Workflow.DoAction(GoPhotos, $curTsk)"/>
+			<c:HorizontalLayout>
+				<c:TextView Text="#jobs#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		<c:HorizontalLine CssClass="navy"/>
+		
+		<s:If Test="$taskStatus_AVRId.StatName == 'ВРаботе'">		
+			<c:DockLayout CssClass="footer">
+				<c:HorizontalLine CssClass="navy"/>
+				<c:DockLayout CssClass="btn_center_footer" OnClickAction="$Workflow.DoAction(AddJobs, null, $curTsk, $taskStatus_AVRId.AVRId)">
+					<c:TextView Text="#add#" />
+				</c:DockLayout>
+			</c:DockLayout>
+		</s:If>
+		
+		<c:HorizontalLayout CssClass="swipe_info">
+			<c:Image CssClass="img_left"/>
+			<c:TextView Text="Смахните влево, чтобы     удалить работу" />				
+		</c:HorizontalLayout>
+		
+		<c:ScrollView Id="scrlVw">
+						
+			<c:HorizontalLayout CssClass="caption_grid">
+		        <c:TextView Text="#jobsListUp#:"></c:TextView>
+		    </c:HorizontalLayout>
+		    
+		    <s:Push Id="materialsCount" Value="$GetJobs($curTsk.Id, 1)"></s:Push>
+		    								
+			<s:If Test="$materialsCount == 0">
+			
+				<c:HorizontalLine />
+				<c:TextView Text="#unknown#" CssClass="TextNoData" />
+
+			</s:If>
+			<s:Else>
+			
+				<s:Push Id="materials" Value="$GetJobs($curTsk.Id, 0)"></s:Push>
+														
+				<s:Iterator Id="material" Value="$materials">
+					<c:HorizontalLine />
+						
+					<c:SwipeHorizontalLayout Id="swipe_layout2" CssClass="swipe_layout" Index="0">
+												
+						<c:HorizontalLayout CssClass="grid">
+							
+							<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+							
+							<c:VerticalLayout>
+								
+								<c:TextView Text="$material.Description" CssClass="main_row"></c:TextView>
+								<c:TextView Text="{$material.Cnt} {$material.UnDescription}" CssClass="description_row"></c:TextView>
+																							
+							</c:VerticalLayout>
+														
+						</c:HorizontalLayout>
+						
+						<s:If Test="$taskStatus_AVRId.StatName == 'ВРаботе'">
+							<c:HorizontalLayout CssClass="red_swipe" OnClickAction="$KillJob($curTsk, $material.AVRMId, $material.sKUId, $material.Cnt)">
+								<c:VerticalLayout >
+									<c:TextView Text="#del#"></c:TextView>
+								</c:VerticalLayout>
+							</c:HorizontalLayout>
+						</s:If>
+					</c:SwipeHorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+						
+		</c:ScrollView>		
+		
+	</c:DockLayout>
+
+</c:Screen>

@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Object.css">
+	<s:Push Id="currentObject" Value="$param1"></s:Push>
+	<s:Push Id="object" Value="$GetPasspObject($currentObject)"></s:Push>
+	<s:Push Id="visibilityEquipment" Value="$param2"></s:Push>
+	<s:Push Id="wayPoints" Value="$GetTripWayPointsObj($currentObject)"></s:Push>	
+	
+  <c:VerticalLayout>
+	
+	<c:DockLayout CssClass="top_navigator">
+		<c:HorizontalLayout CssClass="btn_back" OnEvent="Back"	OnClickAction="$Workflow.DoBack()">
+			<c:Image />
+			<c:TextView Text="#back#" />
+		</c:HorizontalLayout>
+		
+		<c:HorizontalLayout CssClass="header_one_btn">
+			<c:TextView Text="#passportObject#" />
+		</c:HorizontalLayout>
+	</c:DockLayout>
+	
+    <c:ScrollView Id="scrlVw">
+    	<c:HorizontalLayout CssClass="caption_grid">
+	        <c:TextView Text="#main#:"></c:TextView>
+	    </c:HorizontalLayout>
+    	
+    	<c:HorizontalLine/>
+    	
+	    <c:HorizontalLayout CssClass="grid">
+	    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+			<c:VerticalLayout>
+				<c:TextView Text="#nameOfObject#" CssClass="description_row"/>
+				<c:TextView Text="$object.Description" CssClass="main_row"/>			
+			</c:VerticalLayout>
+		</c:HorizontalLayout>
+		
+		<c:HorizontalLine/>
+		
+		<c:HorizontalLayout CssClass="grid">
+			<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+			<c:VerticalLayout>
+				<c:TextView Text="Дата заключения договора" CssClass="description_row"/>
+				<s:if Test="$object.DateCont != NULL">
+					<c:TextView Text="$GetDate_ddMMyy($object.DateCont)" CssClass="main_row"/>
+				</s:if>			
+			</c:VerticalLayout>
+		</c:HorizontalLayout>
+		
+		<c:HorizontalLine/>
+		
+		<c:HorizontalLayout CssClass="grid">
+			<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+			<c:VerticalLayout>
+				<c:TextView Text="Адрес" CssClass="description_row"/>
+				<c:TextView Text="$object.Address" CssClass="main_row"/>			
+			</c:VerticalLayout>
+		</c:HorizontalLayout>
+		
+		<c:HorizontalLine/>
+		
+		<c:HorizontalLayout CssClass="grid">
+			<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+			<c:VerticalLayout CssClass="smallvl2">
+				<c:TextView Text="Координаты" CssClass="description_row"/>
+				<c:TextView Text="Широта: {$object.Latitude}                   Долгота: {$object.Longitude}" CssClass="main_row"/>							
+			</c:VerticalLayout>
+			
+			<s:If Test="$wayPoints == null">
+					<c:VerticalLayout OnClickAction="$NullCoordMess()">
+						<c:Image CssClass="img3"/>								
+					</c:VerticalLayout>
+				</s:If>				
+				<s:Else>
+					<c:VerticalLayout OnClickAction="$Workflow.DoAction(ShowMap, $wayPoints)">
+						<c:Image CssClass="img3"/>								
+					</c:VerticalLayout>
+				</s:Else>
+			
+		</c:HorizontalLayout>
+		
+		<c:HorizontalLine/>
+		
+		<c:DockLayout CssClass="parameter_grid" OnClickAction="$DoAction(JobsHistoryH, $currentObject)">
+	        <c:TextView Text="ИСТОРИЯ РАБОТ:"/>
+	        <c:Image />
+		</c:DockLayout>
+		
+		<c:HorizontalLine/>
+		
+		<c:HorizontalLayout CssClass="caption_grid">
+			  <c:TextView Text="КОНТАКТЫ:"/>
+		</c:HorizontalLayout>
+		
+		<s:Push Id="contacts" Value="$GetContacts($currentObject,1)"></s:Push>
+		
+		<s:If Test="$contacts == 0">
+			
+			<c:HorizontalLine />
+			<c:TextView Text="#unknown#" CssClass="TextNoData" />
+
+		</s:If>
+		
+		<s:Else>
+		
+		<s:Push Id="contacts" Value="$GetContacts($currentObject,0)"></s:Push>
+					
+		<s:Iterator Id="contact" Value="$contacts">
+			<c:HorizontalLine />
+			<c:HorizontalLayout CssClass="grid">				
+				<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout CssClass="smallvl2">
+					<c:TextView Text="$contact.Name" CssClass="main_row"></c:TextView>
+					<c:TextView Text="$contact.Position" CssClass="description_row"></c:TextView>
+					<c:TextView Text="тел: {$contact.ContactTel}" CssClass="description_daterow"></c:TextView>
+				</c:VerticalLayout>
+				
+				<c:VerticalLayout OnClickAction="$CallEmergency($contact.ContactTel)">
+					<c:Image CssClass="img4"/>								
+				</c:VerticalLayout>
+			</c:HorizontalLayout>			
+		</s:Iterator>
+		
+		</s:Else>
+		
+		<c:HorizontalLine/>
+		
+		<s:If Test="$visibilityEquipment == 0">
+		
+			<c:DockLayout CssClass="equipment_grid" OnClickAction="$OpenEquipment($currentObject)">
+		        <c:TextView Text="ОБОРУДОВАНИЕ:"/>
+		        <c:Image CssClass="img_down" />
+			</c:DockLayout>
+								
+		</s:If>
+		
+		<s:Else>
+		
+			<c:DockLayout CssClass="equipment_grid" OnClickAction="$CloseEquipment($currentObject)">
+		        <c:TextView Text="ОБОРУДОВАНИЕ:"/>
+		        <c:Image CssClass="img_up" />
+			</c:DockLayout>
+		
+			<s:Push Id="equipment" Value="$GetEquipment($currentObject,1)"></s:Push>
+			<s:If Test="$equipment == 0">
+				
+				<c:HorizontalLine />
+				<c:TextView Text="#unknown#" CssClass="TextNoData" />
+	
+			</s:If>
+			
+			<s:Else>
+			
+				<s:Push Id="equipment" Value="$GetEquipment($currentObject,0)"></s:Push>
+				
+				<s:Iterator Id="strEquipment" Value="$equipment">
+					<c:HorizontalLine />
+					<c:HorizontalLayout CssClass="grid">				
+						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+						<c:VerticalLayout>
+							<c:TextView Text="$strEquipment.Description" CssClass="description_row"></c:TextView>
+							<c:TextView Text="s/n {$strEquipment.SerialNumber}" CssClass="main_row"></c:TextView>					
+						</c:VerticalLayout>
+					</c:HorizontalLayout>			
+				</s:Iterator>
+			
+			</s:Else>
+			
+		</s:Else>
+						
+	</c:ScrollView>
+	    	
+  </c:VerticalLayout>
+
+</c:Screen>

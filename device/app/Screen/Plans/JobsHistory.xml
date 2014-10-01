@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="JobsHistory.css">
+	<s:Push Id="currentObject" Value="$param1"></s:Push>
+	
+	<c:DockLayout>
+
+		<c:DockLayout CssClass="footer">
+			<c:HorizontalLine CssClass="navy"/>
+			<c:DockLayout CssClass="btn_center_footer" OnEvent="Back" OnClickAction="$Workflow.DoBack()">
+				<c:TextView Text="Готово" />
+			</c:DockLayout>
+		</c:DockLayout>
+			
+		<c:ScrollView Id="scrlVw">
+			<s:Push Id="aVRsCount" Value="$GetAVRs($currentObject,1)"></s:Push>
+
+			<s:If Test="$aVRsCount == 0">
+
+				<c:TextView Text="#unknown#" CssClass="TextNoData"/>
+
+			</s:If>
+			<s:Else>
+
+				<s:Push Id="aVRs" Value="$GetAVRs($currentObject,0)"></s:Push>
+
+				<s:Iterator Id="aVR" Value="$aVRs">
+
+					<c:HorizontalLine />
+					
+					<c:HorizontalLayout Id="openAVR" CssClass="grid" OnClickAction="$DoAction(OpenAVR, $aVR.Id)">
+						<c:VerticalLayout>
+							<c:TextView Text="АВР №{$aVR.Number} от {$aVR.Date}" CssClass="description_row"></c:TextView>
+							<c:TextView Text="$aVR.ProblemDescription"	CssClass="main_row"></c:TextView>
+						</c:VerticalLayout>
+						<c:Image/>
+					</c:HorizontalLayout>
+
+				</s:Iterator>
+
+			</s:Else>
+		</c:ScrollView>
+	    <c:HorizontalLine/>
+    	
+		
+	</c:DockLayout>
+</c:Screen>

@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Main.css">
+
+	<s:Push Id="newsCnt" Value="$NewsCount()"></s:Push>
+
+	<s:Push Id="doneTask" Value="$DoneTask()"></s:Push>
+    <s:Push Id="newTask" Value="$NewTask()"></s:Push>
+    <s:Push Id="planTask" Value="$PlanTask()"></s:Push>
+    <s:Push Id="crashTask" Value="$CrashTask()"></s:Push>
+    
+    <s:Push Id="outMoving" Value="$OutMovingMain()"></s:Push>
+    <s:Push Id="inMoving" Value="$InMovingMain()"></s:Push>
+
+  <c:SwipeHorizontalLayout Id="swipe_layout" Index="0">
+    <c:VerticalLayout CssClass="menu">
+
+      <c:HorizontalLayout CssClass="header" OnEvent="Forward" OnClickAction="$CloseMenu()">
+        <c:Image CssClass="btn_summary"/>
+        <c:TextView CssClass="menu_text" Text="#summary#"></c:TextView>
+      </c:HorizontalLayout>
+      
+      <c:DockLayout OnClickAction="$DoAction(News)">
+        <c:HorizontalLayout>
+          <c:Image CssClass="btn_tasks"/>
+          <c:TextView CssClass="menu_text" Text="#news#  ({$newsCnt})"></c:TextView>
+        </c:HorizontalLayout>
+      </c:DockLayout>
+      <c:HorizontalLine/>
+      
+      <c:DockLayout OnClickAction="$DoAction(Tasks)">
+        <c:HorizontalLayout>
+          <c:Image CssClass="btn_tasks"/>			  
+		  <c:TextView CssClass="menu_text" Text="#requestsS#  ({$doneTask}/{$planTask})"></c:TextView>
+		</c:HorizontalLayout>
+      </c:DockLayout>
+      <c:HorizontalLine/>
+
+      <c:DockLayout OnClickAction="$DoAction(Plans)">
+        <c:HorizontalLayout>
+          <c:Image CssClass="btn_plans"/>
+          <c:TextView CssClass="menu_text" Text="#planning#"></c:TextView>
+        </c:HorizontalLayout>
+      </c:DockLayout>
+      <c:HorizontalLine/>
+	  
+	  <c:DockLayout OnClickAction="$DoAction(Stocks)">
+        <c:HorizontalLayout>
+          <c:Image CssClass="btn_tasks"/>
+          <c:TextView CssClass="menu_text" Text="#remainsOfStock#"></c:TextView>
+        </c:HorizontalLayout>
+      </c:DockLayout>
+      <c:HorizontalLine/>
+	  
+	  <c:DockLayout OnClickAction="$DoAction(TasksMaterials)">
+        <c:HorizontalLayout>
+          <c:Image CssClass="btn_tasks"/>
+          <c:TextView CssClass="menu_text" Text="#applicationsForMaterials#"></c:TextView>
+        </c:HorizontalLayout>
+      </c:DockLayout>
+      <c:HorizontalLine/>
+	  
+	  <c:DockLayout OnClickAction="$DoAction(MovingMaterials)">
+        <c:HorizontalLayout>
+          <c:Image CssClass="btn_tasks"/>
+          <c:TextView CssClass="menu_text" Text="#movement#  ({$outMoving}/{$inMoving})"></c:TextView>
+        </c:HorizontalLayout>
+      </c:DockLayout>
+      <c:HorizontalLine/>
+      
+      <c:DockLayout OnClickAction="$DoAction(TasksHistory)">
+        <c:HorizontalLayout>
+          <c:Image CssClass="btn_tasks"/>			  
+		  <c:TextView CssClass="menu_text" Text="#tasksHistory#"></c:TextView>
+		</c:HorizontalLayout>
+      </c:DockLayout>
+      <c:HorizontalLine/>
+
+      <c:DockLayout OnClickAction="$DoAction(Sync)">
+        <c:HorizontalLayout>
+          <c:Image CssClass="btn_sync"/>
+          <c:TextView CssClass="menu_text" Text="#sync#"></c:TextView>
+        </c:HorizontalLayout>
+      </c:DockLayout>
+      <c:HorizontalLine/>
+
+      <c:DockLayout>
+        <c:HorizontalLayout>
+          <c:Image CssClass="btn_info"/>
+          <c:TextView CssClass="menu_text" Text="#info#"></c:TextView>
+        </c:HorizontalLayout>
+        <c:TextView CssClass="menu_text" Text="ver. 1.6.10.50"></c:TextView>
+      </c:DockLayout>
+      <c:HorizontalLine/>      
+         
+         <c:VerticalLayout><c:Image CssClass="footer_logo"/></c:VerticalLayout>
+                         
+      
+
+    </c:VerticalLayout>
+    <c:VerticalLayout>
+
+      <c:DockLayout CssClass="top_navigator">
+        <c:HorizontalLayout CssClass="btn_menu" OnClickAction="$Facade.OpenMenu()">
+          <c:Image CssClass="menuIcon"/>
+        </c:HorizontalLayout>
+        <c:HorizontalLayout CssClass="btn_forward"/>
+        <c:HorizontalLayout>
+          <c:TextView Text="#summary#" />
+        </c:HorizontalLayout>
+      </c:DockLayout>
+      <c:HorizontalLine CssClass="navy"/>
+
+      
+      
+      
+      <c:VerticalLayout CssClass="blue">
+
+        <c:DockLayout>
+          <c:VerticalLayout CssClass="left">
+            <c:DockLayout CssClass="caption_big">
+              <c:TextView Text="$doneTask"/>
+              <c:TextView Text="заявок" CssClass="descr"/>
+              <c:TextView Text="выполнено" CssClass="descr"/>
+            </c:DockLayout>
+
+            <c:VerticalLayout CssClass="simple">
+              <c:HorizontalLayout>
+                <c:TextView Text="#further#" CssClass="descr"/>
+                <c:TextView Text="$newTask" CssClass="mark"/>
+                <c:TextView Text="заявок"/>
+              </c:HorizontalLayout>
+              <c:TextView Text="запланировано" CssClass="descr"/>
+            </c:VerticalLayout>
+          </c:VerticalLayout>
+
+          <c:VerticalLayout CssClass="right">
+            <c:DockLayout CssClass="grid">
+              <c:VerticalLayout>
+                <c:TextView Text="$planTask" CssClass="main_row"></c:TextView>
+                <c:TextView Text="#planned#" CssClass="description_row"/>
+                <c:TextView Text="заявок" CssClass="description_row"/>
+              </c:VerticalLayout>
+            </c:DockLayout>
+            <c:HorizontalLine/>
+            <c:DockLayout CssClass="grid">
+              <c:VerticalLayout>
+                <c:TextView Text="$crashTask" CssClass="main_row"></c:TextView>
+                <c:TextView Text="аварии" CssClass="description_row"/>
+                <c:TextView Text="" CssClass="description_row"/>
+              </c:VerticalLayout>
+            </c:DockLayout>
+          </c:VerticalLayout>
+
+        </c:DockLayout>
+
+        <c:DockLayout CssClass="short_panel">
+          <c:DockLayout CssClass="grid">
+            <c:VerticalLayout>
+              <c:TextView Text="Входящих перемещений: {$inMoving}" CssClass="description_row"></c:TextView>
+              <c:TextView Text="Исходящих перемещений: {$outMoving}" CssClass="description_row"/>
+            </c:VerticalLayout>
+          </c:DockLayout>
+        </c:DockLayout>
+
+        <c:DockLayout>
+          <c:DockLayout CssClass="grid">
+            <c:VerticalLayout>
+              <c:TextView Text="" CssClass="main_row"></c:TextView>
+              <c:TextView Text="" CssClass="description_row"/>
+            </c:VerticalLayout>
+          </c:DockLayout>
+          <c:HorizontalLine/>
+          <c:DockLayout CssClass="grid">
+            <c:VerticalLayout>
+              <c:TextView Text="" CssClass="main_row"></c:TextView>
+              <c:TextView Text="" CssClass="description_row"/>
+            </c:VerticalLayout>
+          </c:DockLayout>
+        </c:DockLayout>
+
+      </c:VerticalLayout>
+
+    </c:VerticalLayout>
+  </c:SwipeHorizontalLayout>
+
+</c:Screen>
