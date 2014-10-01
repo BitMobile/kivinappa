@@ -22,37 +22,7 @@ function SyncDataFinish() {
     Variables.Remove("lastDataSync");
     Variables.AddGlobal("lastDataSync", DateTime.Now.ToString("dd MMM yyyy HH:mm"));
     $.dataSyncReport.Text = $.lastDataSync;
-    
-    
-    //var peremNewsCount; 	//новости
-	//var peremDoneTask;		//выполненные заявки
-	//var peremNewTask;		//новые заявки
-	//var peremPlanTask;		//плановые заявки
-	//var peremCrashTask;		//аварийные заявки
-	//var peremInMovingMain;	//входящие перемещения
-	//var peremOutMovingMain;	//исходящие перемещения
-	
-	$.Remove("peremNewsCount");
-	$.AddGlobal("peremNewsCount", null);
-	
-	$.Remove("peremDoneTask");
-	$.AddGlobal("peremDoneTask", null);
-	
-	$.Remove("peremNewTask");
-	$.AddGlobal("peremNewTask", null);
-	
-	$.Remove("peremPlanTask");
-	$.AddGlobal("peremPlanTask", null);
-	
-	$.Remove("peremCrashTask");
-	$.AddGlobal("peremCrashTask", null);
-	
-	$.Remove("peremInMovingMain");
-	$.AddGlobal("peremInMovingMain", null);
-	
-	$.Remove("peremOutMovingMain");
-	$.AddGlobal("peremOutMovingMain", null);
-	
+    	
 	DrawDataReport()
 }
 
@@ -131,26 +101,3 @@ function DrawFtpReport() {
 	  $.ftpSyncReport.Visible = false;
 	 }
 }
-
-//-------------------- Change Status Moving ------------
-
-function ChangeStatusMoving(){
-	var qry = new Query("SELECT M.Id, M.Status AS StatusBeforeId, SA.Id AS StatusAfterId " +
-			"FROM Document_Moving M " +
-			"INNER JOIN Enum_MovingStatus SB ON SB.Id = M.Status AND SB.Name = @nStat " +
-			"LEFT JOIN Enum_MovingStatus SA ON SA.Name = @sStat");
-	qry.AddParameter("nStat", "Новая");
-	qry.AddParameter("sStat", "Отправлена");
-	var c = qry.Execute();
-	
-	while (c.Next()){ 
-		var obj = c.Id.GetObject();
-		obj.Status = c.StatusAfterId; 
-		obj.Save(false);		
-	}
-	SyncData();
-		
-}
-
-
-
