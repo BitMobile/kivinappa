@@ -1,9 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <bp:BusinessProcess xmlns:bp="BitMobile.BusinessProcess">
 
+	<bp:Workflow Name="Main" Controller="Main\Main.js">
+		<bp:Step Name="Menu" Screen="Main.xml">			
+			<bp:Action Name="Requests" NextWorkflow="Requests" />
+			<bp:Action Name="Sync" NextWorkflow="Sync" />
+			<bp:Action Name="Settings" NextWorkflow="Settings"></bp:Action>
+		</bp:Step>
+	</bp:Workflow>
+
+	<bp:Workflow Name="Requests">
+		<bp:Step Name="Requests" Screen="Requests\Requests.xml" Controller="Requests\Main.js">
+			<bp:Action Name="Request" NextWorkflow="Request" />
+		</bp:Step>		
+	</bp:Workflow>
 	
-
-
+	<bp:Workflow Name="Request">
+		<bp:Step Name="Request" Screen="Requests\Request.xml" Controller="Requests\Main.js">
+			
+		</bp:Step>		
+	</bp:Workflow>
 
 	
 

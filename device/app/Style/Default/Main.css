@@ -42,16 +42,9 @@ svl vl {
 
     .menu vl {
         width: 100%;
-        height: 100%;
-        
+        height: 100%;        
     }
-    
-	    .menu vl footer_logo {
-	        height: 100%;
-	        width: 0%;
-	        background-image: url(menu_land-logo.png);
-	    }
-
+    	    
     .menu hl {
         width: 100%;
     }

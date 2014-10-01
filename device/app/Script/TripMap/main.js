@@ -1,7 +1,5 @@
 ﻿function OnLoad() {    
-//	if (screenName == "TripMap.xml") {
     	PrepareTrip_Map();
-//    }
 }
 
 function PrepareTrip_Map() {

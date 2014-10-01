@@ -9,6 +9,22 @@
         <c:TextView CssClass="menu_text" Text="#summary#"></c:TextView>
       </c:HorizontalLayout>
       
+      <c:DockLayout OnClickAction="$DoAction(Requests)">
+        <c:HorizontalLayout>
+          <c:Image CssClass="btn_sync"/>
+          <c:TextView CssClass="menu_text" Text="#requestsS#"></c:TextView>
+        </c:HorizontalLayout>
+      </c:DockLayout>
+      <c:HorizontalLine/>
+      
+      <c:DockLayout OnClickAction="$DoAction(Sync)">
+        <c:HorizontalLayout>
+          <c:Image CssClass="btn_sync"/>
+          <c:TextView CssClass="menu_text" Text="#Техника#"></c:TextView>
+        </c:HorizontalLayout>
+      </c:DockLayout>
+      <c:HorizontalLine/>
+      
       <c:DockLayout OnClickAction="$DoAction(Sync)">
         <c:HorizontalLayout>
           <c:Image CssClass="btn_sync"/>
@@ -25,9 +41,6 @@
         <c:TextView CssClass="menu_text" Text="ver. 1.6.10.50"></c:TextView>
       </c:DockLayout>
       <c:HorizontalLine/>      
-         
-         <c:VerticalLayout><c:Image CssClass="footer_logo"/></c:VerticalLayout>
-                         
       
 
     </c:VerticalLayout>
