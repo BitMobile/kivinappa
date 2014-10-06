@@ -8,11 +8,14 @@ var requestsCP
 
 function GetRequests(searchText, beginDateParam, endDateParam){
 	
-	var q = new Query("SELECT RCV.Id, RCV.Number, RCV.Date, RCV.Status " +
+	var q = new Query("");
+	
+	var qtext = "SELECT RCV.Id, RCV.Number, RCV.Date, RCV.Status " +
 			"FROM Document_Requests RCV " +
 			"WHERE RCV.Date >= @DateStart " +
 			"AND RCV.Date < @DateEnd " +
 			"AND RCV.DeletionMark = 0";
+	
 	var qtextCount = qtext;
 		
 	if (searchText != "" && searchText != null) {
@@ -37,7 +40,7 @@ function GetRequestsCount(result){
 function GetParam2(param2){
 	
 	if(tasksbeginDateCP == null){
-		var fike	
+		var fike;	
 		if(param2 != null){
 			fike = param2;			
 		}else{

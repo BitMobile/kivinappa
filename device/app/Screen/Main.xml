@@ -17,7 +17,7 @@
       </c:DockLayout>
       <c:HorizontalLine/>
       
-      <c:DockLayout OnClickAction="$DoAction(Sync)">
+      <c:DockLayout OnClickAction="$DoAction(Technics)">
         <c:HorizontalLayout>
           <c:Image CssClass="btn_sync"/>
           <c:TextView CssClass="menu_text" Text="#Техника#"></c:TextView>

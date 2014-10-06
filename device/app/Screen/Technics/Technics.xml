@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Requests.css">
+	<s:Push Id="search" Value="$param1"/>
+	
+	<s:Push Id="beginDateParam" Value="$GetParam2($param2)"/>
+	<s:Push Id="endDateParam" Value="$GetParam3($param3)"/>
+	
+	<s:Push Id="requests" Value="$GetRequests($search, $beginDateParam, $endDateParam)"></s:Push>
+	<s:Push Id="requestsCount" Value="$GetRequestsCount($requests)"></s:Push>
+  	  	
+  	<c:VerticalLayout>
+		<c:DockLayout CssClass="top_navigator">
+			
+			<c:HorizontalLayout CssClass="btn_menu" OnEvent="Back"	OnClickAction="$Workflow.DoRollback()">
+				<c:Image CssClass="menuIcon" />
+			</c:HorizontalLayout>
+						
+			<c:HorizontalLayout>
+				<c:TextView Text="#requestsS#" />
+			</c:HorizontalLayout>
+			
+		</c:DockLayout>
+		
+		<c:HorizontalLine />
+
+		
+		<c:HorizontalLayout CssClass="search">
+			<c:DockLayout>
+				<c:Image />
+				<c:EditText Id="edtSearch" Text="$search" Placeholder="#search#"></c:EditText>
+			</c:DockLayout>
+			
+			<c:Button Id="btnSearch" Text="#search#" OnClickAction="$DoRefresh($edtSearch.Text)"></c:Button>			
+		</c:HorizontalLayout>
+		
+		<c:HorizontalLayout CssClass="shadowLine"></c:HorizontalLayout>
+		
+		<c:ScrollView Id="scrlVw">
+															
+			<s:If Test="$requestsCount == 0">
+
+				<c:TextView Text="#unknown#"/>
+
+			</s:If>
+			<s:Else>
+															
+				<s:Iterator Id="request" Value="$requests">						
+
+					<c:HorizontalLine />
+					
+					<c:HorizontalLayout CssClass="grid" OnClickAction="$AddPeremAndDoAction($requests.Id)">
+						
+						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+						
+						<c:VerticalLayout>
+							<c:TextView Text="{$requests.Number} {$GetDate_ddMMyy($requests.Date)}" CssClass="main_row"></c:TextView>
+							<c:TextView Text="$requests.EnumTechnicsStatus" CssClass="description_row"></c:TextView>						
+						</c:VerticalLayout>
+						
+						<c:Image />
+						
+					</c:HorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+			
+			<c:HorizontalLayout CssClass="end_of_block" />
+
+		</c:ScrollView>
+	</c:VerticalLayout>
+
+</c:Screen>
