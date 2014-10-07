@@ -5,8 +5,7 @@
 	<s:Push Id="beginDateParam" Value="$GetParam2($param2)"/>
 	<s:Push Id="endDateParam" Value="$GetParam3($param3)"/>
 	
-	<s:Push Id="technics" Value="$GetTechnics($search)"></s:Push>
-	<s:Push Id="technicsCount" Value="$GetTechnicsCount($technics)"></s:Push>
+	<s:Push Id="CurrentTechTasks" Value="$GetCurrentTechTasks(@TechnicsCP)"></s:Push>
   	  	
   	<c:VerticalLayout>
 		<c:DockLayout CssClass="top_navigator">

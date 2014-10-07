@@ -242,3 +242,5 @@ outgoing	Исходяшие
 accept	Принять
 refuse	Отказаться
 at	в
+technics	Техника
+technicsList	Список техники

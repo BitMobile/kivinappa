@@ -243,3 +243,5 @@ outgoing	Outgoing
 accept	Accept
 refuse	Refuse
 at	в
+technics	Technics
+technicsList	Technics List

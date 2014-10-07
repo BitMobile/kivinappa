@@ -17,14 +17,18 @@
 	</bp:Workflow>
 	
 	<bp:Workflow Name="Request">
-		<bp:Step Name="Request" Screen="Requests\Request.xml" Controller="Requests\Main.js">
-			
+		<bp:Step Name="Request" Screen="Requests\Request.xml" Controller="Requests\Main.js">	
 		</bp:Step>		
 	</bp:Workflow>
 
 	<bp:Workflow Name="Technics">
 		<bp:Step Name="Technics" Screen="Technics\Technics.xml" Controller="Technics\Main.js">
-		
+			<bp:Action Name="TechTasks" NextWorkflow="TechTasks" />
+		</bp:Step>		
+	</bp:Workflow>
+	
+	<bp:Workflow Name="TechTasks">
+		<bp:Step Name="TechTasks" Screen="Technics\TechTasks.xml" Controller="Technics\Main.js">	
 		</bp:Step>		
 	</bp:Workflow>
 	

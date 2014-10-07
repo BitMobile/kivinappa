@@ -20,7 +20,7 @@
       <c:DockLayout OnClickAction="$DoAction(Technics)">
         <c:HorizontalLayout>
           <c:Image CssClass="btn_sync"/>
-          <c:TextView CssClass="menu_text" Text="#Техника#"></c:TextView>
+          <c:TextView CssClass="menu_text" Text="#technics#"></c:TextView>
         </c:HorizontalLayout>
       </c:DockLayout>
       <c:HorizontalLine/>

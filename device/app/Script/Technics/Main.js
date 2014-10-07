@@ -2,38 +2,31 @@
 
 var tasksbeginDateCP;
 var tasksendDateCP;
-var requestsCP
+var TechnicsCP
 
-//-------------------------- Скрин Requests
+//-------------------------- Скрин Technics
 
-function GetRequests(searchText, beginDateParam, endDateParam){
+function GetTechnics(searchText){
 	
 	var q = new Query("");
 	
-	var qtext = "SELECT RCV.Id, RCV.Number, RCV.Date, RCV.EnumTechnicsStatus " +
-			"FROM Document_Request RCV " +
-			"WHERE RCV.Date >= @DateStart " +
-			"AND RCV.Date < @DateEnd " +
-			"AND RCV.DeletionMark = 0";
-	
-	var qtextCount = qtext;
+	var qtext = "SELECT TECH.Id, TECH.VehicleRegTag, TT.Description " +
+			"FROM Catalog_Technics TECH JOIN Catalog_TechnicsTypes TT " +
+			"ON TECH.TechnicsTypes = TT.Id";
 		
 	if (searchText != "" && searchText != null) {
-		var plus = " AND (Contains(RCV.Number, @st)) ";
+		var plus = " WHERE (Contains(TECH.VehicleRegTag, @st)) OR (Contains(TT.Description, @st))";
 		qtext = qtext + plus;
 		q.AddParameter("st", searchText);
 	}
 	
-	var textOrd = " ORDER BY RCV.Date";
-	
-	q.AddParameter("DateStart", beginDateParam);
-	q.AddParameter("DateEnd", endDateParam);
+	var textOrd = " ORDER BY TT.Description";
 	
 	q.Text = qtext + textOrd;
 	return q.Execute().Unload();		
 }
 
-function GetRequestsCount(result){
+function GetTechnicsCount(result){
 	return result.Count();
 }
 
@@ -82,12 +75,17 @@ function GetParam3(param3){
 	}
 }
 
-function AddPeremAndDoAction(requestsId){
-	requestsCP = requestsId; // запишем в переменную модуля ID
+function AddPeremAndDoAction(TechnicsID){
+	TechnicsCP = TechnicsID; // запишем в переменную модуля ID
 	//Dialog.Debug(taskId);
-	Workflow.Action("Request", []); 
+	Workflow.Action("TechTasks", []); 
 }
 
+//-------------------------- Скрин TechTasks
+
+function GetCurrentTechTasks(@TechnicsCP){
+	
+}
 
 //--------------------------ОБЩАЯ ФУНЦИЯ ДЛЯ ТЕСТОВ
 
