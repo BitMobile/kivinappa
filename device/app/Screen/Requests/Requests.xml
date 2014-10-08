@@ -8,20 +8,47 @@
 	<s:Push Id="requests" Value="$GetRequests($search, $beginDateParam, $endDateParam)"></s:Push>
 	<s:Push Id="requestsCount" Value="$GetRequestsCount($requests)"></s:Push>
   	  	
-  	<c:VerticalLayout>
+  	<c:DockLayout>
 		<c:DockLayout CssClass="top_navigator">
 			
 			<c:HorizontalLayout CssClass="btn_menu" OnEvent="Back"	OnClickAction="$Workflow.DoRollback()">
 				<c:Image CssClass="menuIcon" />
 			</c:HorizontalLayout>
 						
-			<c:HorizontalLayout>
+			<c:HorizontalLayout CssClass="header_one_btn">
 				<c:TextView Text="#requestsS#" />
 			</c:HorizontalLayout>
 			
 		</c:DockLayout>
 		
-		<c:HorizontalLine />
+		<c:DockLayout CssClass="footer">
+			<c:HorizontalLine CssClass="navy"/>
+			<c:DockLayout CssClass="btn_center_footer" OnClickAction="$DoAction(Request)">
+				<c:TextView Text="#add#" />
+			</c:DockLayout>
+		</c:DockLayout>
+		
+		<c:HorizontalLine CssClass="navy"/>
+			
+		<c:HorizontalLayout CssClass="gridDate" OnClickAction="$SetBeginDate($beginDate, $search, $beginDateParam, $endDateParam)">
+	        <c:VerticalLayout>
+	        	<c:DockLayout>
+	          		<c:TextView Id="beginDate" Text="$GetDate_ddMMyyyy($beginDateParam)" CssClass="main_row"></c:TextView>
+	          	</c:DockLayout>
+	        </c:VerticalLayout>
+	     </c:HorizontalLayout>
+	     
+	     <c:HorizontalLine/>
+		 
+		 <c:HorizontalLayout CssClass="gridDate" OnClickAction="$SetEndDate($endDate, $search, $beginDateParam, $endDateParam)">
+	     	<c:VerticalLayout>
+	     		<c:DockLayout>
+	          		<c:TextView Id="endDate" Text="$GetDate_ddMMyyyy($endDateParam)" CssClass="main_row"></c:TextView>
+	          	</c:DockLayout>
+	        </c:VerticalLayout>
+	      </c:HorizontalLayout>
+	      
+	      <c:HorizontalLine/>
 
 		
 		<c:HorizontalLayout CssClass="search">
@@ -50,7 +77,23 @@
 					
 					<c:HorizontalLayout CssClass="grid" OnClickAction="$AddPeremAndDoAction($requests.Id)">
 						
-						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+						<s:If Test="$request.StatusName == 'New'">
+							<c:VerticalLayout CssClass="gray_mark_central"></c:VerticalLayout>
+						</s:If>
+						<s:Else>
+							<s:If Test="$request.StatusName == 'AtApproval'">
+								<c:VerticalLayout CssClass="gray_mark_central"></c:VerticalLayout>
+							</s:If>
+							<s:Else>
+								<s:If Test="$request.StatusName == 'Approved'">
+									<c:VerticalLayout CssClass="gray_mark_central"></c:VerticalLayout>
+								</s:If>
+								<s:Else>
+									<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
+								</s:Else>
+							</s:Else>
+						</s:Else>
+						
 						
 						<c:VerticalLayout>
 							<c:TextView Text="{$requests.Number} {$GetDate_ddMMyy($requests.Date)}" CssClass="main_row"></c:TextView>
@@ -67,6 +110,6 @@
 			<c:HorizontalLayout CssClass="end_of_block" />
 
 		</c:ScrollView>
-	</c:VerticalLayout>
+	</c:DockLayout>
 
 </c:Screen>

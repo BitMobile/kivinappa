@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Request.css">
 
-    <s:Push Id="curTsk" Value="$GetCurrentTask(@taskForSO)"></s:Push>
-    <s:Push Id="wayPoints" Value="$GetWayPoints($curTsk.Object)"></s:Push>
-				
+    <s:Push Id="curRequest" Value="$GetCurRequest()"></s:Push>
+    <s:Push Id="tasks" Value="$GetTasks()"></s:Push>
+    <s:Push Id="cntTasks" Value="$GetCntTasks($tasks)"></s:Push>
+    				
 	<c:DockLayout>
 	
 		<c:DockLayout CssClass="top_navigator">
@@ -11,95 +12,92 @@
 				<c:Image />
 				<c:TextView Text="#back#" />
 			</c:HorizontalLayout>
-			
-			<s:If Test="$curTsk.statDes == 'Новая'">
-					<c:Button Id="btnForward" Text="#forward#" CssClass="btn_forward" OnClickAction="$QuestStartTask(@taskForSO)" />
-			</s:If>
-			<s:Else>
-				<s:Push Id="CheckAVR" Value="$CheckAVR(@taskForSO)"></s:Push>
-				<c:Button Id="btnForward" Text="#forward#" CssClass="btn_forward" OnClickAction="$Workflow.DoAction(GoTaskMaterialsList, @taskForSO)" />
-			</s:Else>
+												
+			<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
 			
 			<c:HorizontalLayout>
 				<c:TextView Text="#requestForS#" />
-			</c:HorizontalLayout>
+			</c:HorizontalLayout>			
 		</c:DockLayout>
+		
+		<c:DockLayout CssClass="footer">
+			<c:HorizontalLine CssClass="navy"/>
+			<c:DockLayout CssClass="btn_center_footer" OnClickAction="$DoAction(Task, null)">
+				<c:TextView Text="#add#" />
+			</c:DockLayout>
+		</c:DockLayout>
+		
 		<c:HorizontalLine CssClass="navy"/>
 
 		<c:ScrollView Id="scrlVw">
-			<c:HorizontalLayout CssClass="caption_grid">
-		        <c:TextView Text="#main#:"></c:TextView>
-		    </c:HorizontalLayout>
-	    	
-	    	<c:HorizontalLine/>
-	    	
-		    <c:HorizontalLayout CssClass="grid">
-		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
-				<c:VerticalLayout OnClickAction="$DoAction(OpenCurObject, $curTsk.Object, 0)">
-					<c:TextView Text="#nameOfObject#" CssClass="description_row"/>
-					<c:TextView Text="$curTsk.Description" CssClass="main_row"/>			
-				</c:VerticalLayout>
-			</c:HorizontalLayout>
-			
-			<c:HorizontalLine/>
-			
 			<c:HorizontalLayout CssClass="grid">
-				<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
 				<c:VerticalLayout>
-					<c:TextView Text="Адрес" CssClass="description_row"/>
-					<c:TextView Text="$curTsk.Address" CssClass="main_row"/>			
+					<c:TextView Text="{$curRequest.Number}" CssClass="main_row"></c:TextView>
+					<c:TextView Text="{$curRequest.Status}" CssClass="description_row"></c:TextView>
+					<c:TextView Text="{$ConvertDate($curRequest.Date)}" CssClass="description_daterow"></c:TextView>			
 				</c:VerticalLayout>
 			</c:HorizontalLayout>
+		    		
+			<c:HorizontalLine/>			
 			
-			<c:HorizontalLine/>
-			
-			<c:HorizontalLayout CssClass="grid" >
-				<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
-				<c:VerticalLayout CssClass="smallvl2">
-					<c:TextView Text="Координаты" CssClass="description_row"/>
-					<c:TextView Text="Широта: {$curTsk.Latitude}                    Долгота: {$curTsk.Longitude}" CssClass="main_row"/>								
-				</c:VerticalLayout>
-				
-				<s:If Test="$wayPoints == null">
-					<c:VerticalLayout OnClickAction="$NullCoordMess()">
-						<c:Image CssClass="img3"/>								
-					</c:VerticalLayout>
-				</s:If>				
-				<s:Else>
-					<c:VerticalLayout OnClickAction="$Workflow.DoAction(ShowMap, $wayPoints)">
-						<c:Image CssClass="img3"/>								
-					</c:VerticalLayout>
-				</s:Else>
-			</c:HorizontalLayout>
 			
 			<c:HorizontalLayout CssClass="caption_grid">
-		        <c:TextView Text="#taskBig#:"></c:TextView>
+		        <c:TextView Text="#assignments#:"></c:TextView>
 		    </c:HorizontalLayout>
 	    	
 	    	<c:HorizontalLine/>
 	    	
-	    	<c:HorizontalLayout CssClass="grid">
-				<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
-				<c:VerticalLayout CssClass="smallvl2">
-					<c:TextView Text="$curTsk.Name" CssClass="description_row"/>
-					<c:TextView Text="$curTsk.Posit" CssClass="description_row"/>
-					<c:TextView Text="тел: {$curTsk.ContactTel}" CssClass="description_daterow"></c:TextView>		
-				</c:VerticalLayout>
-				
-				<c:VerticalLayout OnClickAction="$CallEmergency($curTsk.ContactTel)">
-					<c:Image CssClass="img4"/>								
-				</c:VerticalLayout>
-			</c:HorizontalLayout>
+	    	<s:If Test="$cntTasks == 0">
 			
-			<c:HorizontalLine/>
-	    	
-	    	<c:HorizontalLayout CssClass="grid">
-				<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
-				<c:VerticalLayout>
-					<c:TextView Text="#problemDescription#" CssClass="description_row"/>
-					<c:TextView Text="$curTsk.ProblemDescription" CssClass="main_row"/>								
-				</c:VerticalLayout>
-			</c:HorizontalLayout>
+				<c:TextView Text="#unknown#" CssClass="TextNoPlans" />
+				
+				<c:HorizontalLine/>
+				
+			</s:If>			
+			<s:Else>
+			
+				<s:Iterator Id="task" Value="$tasks">
+
+					<!-- Id, ConstructionObject, TechnicsType, SKU, OperationMode, StartTime, StopTime, Note, Count -->
+					
+					<c:SwipeHorizontalLayout Id="swipe_layout" CssClass="swipe_layout" Index="0">
+												
+						<c:HorizontalLayout CssClass="grid" OnClickAction="$DoAction(Task, $task.Id)">
+							
+							<!--<s:If Test="$ == $">
+								<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
+							</s:If>
+							<s:Else>
+								<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
+							</s:Else>-->
+							<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
+							
+							<c:VerticalLayout>
+								
+								<c:TextView Text="{$GetTime($task.StartTime)}-{$GetTime($task.StopTime)} {$task.ConstructionObject}" CssClass="description_row"></c:TextView>
+								<c:TextView Text="{$task.TechnicsType} - {$task.SKU}" CssClass="main_row"></c:TextView>
+																							
+							</c:VerticalLayout>
+														
+						</c:HorizontalLayout>
+						
+						<s:If Test="$curRequest.StatusName == 'New'">
+							<c:HorizontalLayout CssClass="red_swipe" >
+								<c:VerticalLayout >
+									<c:TextView Text="#del#"></c:TextView>
+								</c:VerticalLayout>
+							</c:HorizontalLayout>
+						</s:If>
+												
+					</c:SwipeHorizontalLayout>
+					
+					<c:HorizontalLine/>
+					
+				</s:Iterator>
+								
+			</s:Else>
+						    	
 
 		</c:ScrollView>
 	</c:DockLayout>

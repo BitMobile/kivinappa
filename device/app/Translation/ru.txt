@@ -114,6 +114,7 @@ encashmentSum	Сумма инкассации
 spreadOnDocuments	Распределить на документы
 spread		Распределить
 docNumber	Номер документа
+RequestNumber	Номер заявки
 receivableAmount	СУММА ЗАДОЛЖЕННОСТИ
 encashmentAmount	Сумма инкассации
 nameSurname	ФИО
@@ -242,3 +243,5 @@ outgoing	Исходяшие
 accept	Принять
 refuse	Отказаться
 at	в
+status	Статус
+assignments	ЗАДАНИЯ
