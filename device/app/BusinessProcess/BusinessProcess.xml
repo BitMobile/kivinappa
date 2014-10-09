@@ -22,6 +22,8 @@
 		</bp:Step>
 		
 		<bp:Step Name="Task" Screen="Requests\Task.xml" Controller="Requests\Main.js">
+		</bp:Step>		
+	</bp:Workflow>
 
 	<bp:Workflow Name="Technics">
 		<bp:Step Name="Technics" Screen="Technics\Technics.xml" Controller="Technics\Main.js">
