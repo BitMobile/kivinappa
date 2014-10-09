@@ -20,19 +20,26 @@
 		<bp:Step Name="Request" Screen="Requests\Request.xml" Controller="Requests\Main.js">
 			<bp:Action Name="Task" NextStep="Task" />
 		</bp:Step>
-		
+	
 		<bp:Step Name="Task" Screen="Requests\Task.xml" Controller="Requests\Main.js">
 		</bp:Step>		
 	</bp:Workflow>
 
 	<bp:Workflow Name="Technics">
 		<bp:Step Name="Technics" Screen="Technics\Technics.xml" Controller="Technics\Main.js">
-			<bp:Action Name="TechTasks" NextWorkflow="TechTasks" />
+			<bp:Action Name="Waybills" NextWorkflow="Waybills" />
+			<bp:Action Name="Waybill" NextWorkflow="Waybill" />
 		</bp:Step>		
 	</bp:Workflow>
 	
-	<bp:Workflow Name="TechTasks">
-		<bp:Step Name="TechTasks" Screen="Technics\TechTasks.xml" Controller="Technics\Main.js">	
+	<bp:Workflow Name="Waybills">
+		<bp:Step Name="Waybills" Screen="Technics\Waybills.xml" Controller="Technics\Main.js">
+			<bp:Action Name="Waybill" NextWorkflow="Waybill" />
+		</bp:Step>		
+	</bp:Workflow>
+	
+	<bp:Workflow Name="Waybill">
+		<bp:Step Name="Waybill" Screen="Technics\Waybill.xml" Controller="Technics\Main.js">	
 		</bp:Step>		
 	</bp:Workflow>
 	

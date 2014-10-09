@@ -1,71 +1,106 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Requests.css">
-	<s:Push Id="search" Value="$param1"/>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Request.css">
+
+	<s:Push Id="CurWBId" Value="$param1"></s:Push>
+    <s:Push Id="curWaybill" Value="$GetCurWaybill($CurWBId)"></s:Push>
+    <s:Push Id="techTasks" Value="$GetTechTasks()"></s:Push>
+    <s:Push Id="cntTasks" Value="$GetCntTasks($tasks)"></s:Push>
+    				
+	<c:DockLayout>
 	
-	<s:Push Id="beginDateParam" Value="$GetParam2($param2)"/>
-	<s:Push Id="endDateParam" Value="$GetParam3($param3)"/>
-	
-	<s:Push Id="CurrentTechTasks" Value="$GetCurrentTechTasks(@TechnicsCP)"></s:Push>
-  	  	
-  	<c:VerticalLayout>
 		<c:DockLayout CssClass="top_navigator">
-			
-			<c:HorizontalLayout CssClass="btn_menu" OnEvent="Back"	OnClickAction="$Workflow.DoRollback()">
-				<c:Image CssClass="menuIcon" />
+			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$Workflow.DoRollback()">
+				<c:Image />
+				<c:TextView Text="#back#" />
 			</c:HorizontalLayout>
-						
-			<c:HorizontalLayout CssClass="header_one_btn">
-				<c:TextView Text="#technicsList#" />
-			</c:HorizontalLayout>
+												
+			<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
 			
+			<c:HorizontalLayout>
+				<c:TextView Text="##" />
+			</c:HorizontalLayout>			
 		</c:DockLayout>
 		
-		<c:HorizontalLine />
-
-		
-		<c:HorizontalLayout CssClass="search">
-			<c:DockLayout>
-				<c:Image />
-				<c:EditText Id="edtSearch" Text="$search" Placeholder="#search#"></c:EditText>
+		<c:DockLayout CssClass="footer">
+			<c:HorizontalLine CssClass="navy"/>
+			<c:DockLayout CssClass="btn_center_footer" OnClickAction="$DoAction(TechTask, null)">
+				<c:TextView Text="#add#" />
 			</c:DockLayout>
-			
-			<c:Button Id="btnSearch" Text="#search#" OnClickAction="$DoRefresh($edtSearch.Text)"></c:Button>			
-		</c:HorizontalLayout>
+		</c:DockLayout>
 		
-		<c:HorizontalLayout CssClass="shadowLine"></c:HorizontalLayout>
-		
+		<c:HorizontalLine CssClass="navy"/>
+
 		<c:ScrollView Id="scrlVw">
-															
-			<s:If Test="$technicsCount == 0">
-
-				<c:TextView Text="#unknown#"/>
-
-			</s:If>
-			<s:Else>
-															
-				<s:Iterator Id="tech" Value="$technics">						
-
-					<c:HorizontalLine />
-					
-					<c:HorizontalLayout CssClass="grid" OnClickAction="$AddPeremAndDoAction($technics.Id)">
-						
-						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
-						
-						<c:VerticalLayout>
-							<c:TextView Text="{$technics.Description}, {$technics.VehicleRegTag}" CssClass="main_row"></c:TextView>
-							<!--<c:TextView Text="$requests.EnumTechnicsStatus" CssClass="description_row"></c:TextView>-->						
-						</c:VerticalLayout>
-						
-						<c:Image />
-						
-					</c:HorizontalLayout>
-
-				</s:Iterator>
-			</s:Else>
+			<c:HorizontalLayout CssClass="grid">
+		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+				<c:VerticalLayout>
+					<c:TextView Text="{$curRequest.Number}" CssClass="main_row"></c:TextView>
+					<c:TextView Text="{$curRequest.Status}" CssClass="description_row"></c:TextView>
+					<c:TextView Text="{$ConvertDate($curRequest.Date)}" CssClass="description_daterow"></c:TextView>			
+				</c:VerticalLayout>
+			</c:HorizontalLayout>
+		    		
+			<c:HorizontalLine/>			
 			
-			<c:HorizontalLayout CssClass="end_of_block" />
+			
+			<c:HorizontalLayout CssClass="caption_grid">
+		        <c:TextView Text="#assignments#:"></c:TextView>
+		    </c:HorizontalLayout>
+	    	
+	    	<c:HorizontalLine/>
+	    	
+	    	<s:If Test="$cntTasks == 0">
+			
+				<c:TextView Text="#unknown#" CssClass="TextNoPlans" />
+				
+				<c:HorizontalLine/>
+				
+			</s:If>			
+			<s:Else>
+			
+				<s:Iterator Id="task" Value="$tasks">
+
+					<!-- Id, ConstructionObject, TechnicsType, SKU, OperationMode, StartTime, StopTime, Note, Count -->
+					
+					<c:SwipeHorizontalLayout Id="swipe_layout" CssClass="swipe_layout" Index="0">
+												
+						<c:HorizontalLayout CssClass="grid" OnClickAction="$DoAction(Task, $task.Id)">
+							
+							<!--<s:If Test="$ == $">
+								<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
+							</s:If>
+							<s:Else>
+								<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
+							</s:Else>-->
+							<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
+							
+							<c:VerticalLayout>
+								
+								<c:TextView Text="{$GetTime($task.StartTime)}-{$GetTime($task.StopTime)} {$task.ConstructionObject}" CssClass="description_row"></c:TextView>
+								<c:TextView Text="{$task.TechnicsType} - {$task.SKU}" CssClass="main_row"></c:TextView>
+																							
+							</c:VerticalLayout>
+														
+						</c:HorizontalLayout>
+						
+						<s:If Test="$curRequest.StatusName == 'New'">
+							<c:HorizontalLayout CssClass="red_swipe" >
+								<c:VerticalLayout >
+									<c:TextView Text="#del#"></c:TextView>
+								</c:VerticalLayout>
+							</c:HorizontalLayout>
+						</s:If>
+												
+					</c:SwipeHorizontalLayout>
+					
+					<c:HorizontalLine/>
+					
+				</s:Iterator>
+								
+			</s:Else>
+						    	
 
 		</c:ScrollView>
-	</c:VerticalLayout>
+	</c:DockLayout>
 
 </c:Screen>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Request.css">
+
+    <s:Push Id="cntWaybills" Value="$param1"></s:Push>
+    				
+	<c:DockLayout>
+	
+		<c:DockLayout CssClass="top_navigator">
+			
+			<c:HorizontalLayout CssClass="btn_menu" OnEvent="Back"	OnClickAction="$Workflow.DoRollback()">
+				<c:Image CssClass="menuIcon" />
+			</c:HorizontalLayout>
+						
+			<c:HorizontalLayout CssClass="header_one_btn">
+				<c:TextView Text="#waybills#" />
+			</c:HorizontalLayout>
+			
+		</c:DockLayout>
+	
+	<c:HorizontalLayout CssClass="shadowLine"></c:HorizontalLayout>
+		
+		<c:ScrollView Id="scrlVw">
+															
+			<s:If Test="$cntWaybills == 0">
+
+				<c:TextView Text="#unknown#"/>
+
+			</s:If>
+			<s:Else>
+															
+				<s:Iterator Id="Waybill" Value="@WaybillsCP">						
+
+					<c:HorizontalLine />
+					
+					<c:HorizontalLayout CssClass="grid" OnClickAction="$AddPeremAndDoAction($Waybill.Id)">
+						
+						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+						
+						<c:VerticalLayout>
+							<c:TextView Text="{$Waybill.Number}" CssClass="main_row"></c:TextView>
+							<!--<c:TextView Text="$requests.EnumTechnicsStatus" CssClass="description_row"></c:TextView>-->						
+						</c:VerticalLayout>
+						
+						<c:Image />
+						
+					</c:HorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+			
+			<c:HorizontalLayout CssClass="end_of_block" />
+
+		</c:ScrollView>	
+	
+	</c:DockLayout>
+
+</c:Screen>

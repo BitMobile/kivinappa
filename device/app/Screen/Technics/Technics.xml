@@ -2,8 +2,8 @@
 <c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Requests.css">
 	<s:Push Id="search" Value="$param1"/>
 	
-	<s:Push Id="beginDateParam" Value="$GetParam2($param2)"/>
-	<s:Push Id="endDateParam" Value="$GetParam3($param3)"/>
+	<!-- <s:Push Id="beginDateParam" Value="$GetParam2($param2)"/>
+	<s:Push Id="endDateParam" Value="$GetParam3($param3)"/>-->
 	
 	<s:Push Id="technics" Value="$GetTechnics($search)"></s:Push>
 	<s:Push Id="technicsCount" Value="$GetTechnicsCount($technics)"></s:Push>

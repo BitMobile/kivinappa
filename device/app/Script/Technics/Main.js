@@ -2,7 +2,8 @@
 
 var tasksbeginDateCP;
 var tasksendDateCP;
-var TechnicsCP
+var TechnicsCP;
+var WaybillsCP;
 
 //-------------------------- Скрин Technics
 
@@ -77,14 +78,33 @@ function GetParam3(param3){
 
 function AddPeremAndDoAction(TechnicsID){
 	TechnicsCP = TechnicsID; // запишем в переменную модуля ID
-	//Dialog.Debug(taskId);
-	Workflow.Action("TechTasks", []); 
+	
+	var q = new Query("SELECT WB.Id, WB.Number FROM Document_Waybill WB " +
+			"WHERE WB.PlannedStartDate <= DATETIME('now') AND WB.PlannedEndDate >= DATETIME('now') " +
+			"AND WB.Technics = @ThisTech");
+	q.AddParameter("ThisTech", TechnicsID);
+	
+	WaybillsCP = q.Execute().Unload();
+	
+	var WaybillsCnt = WaybillsCP.Count();
+	
+	if(WaybillsCnt == 1){
+		Workflow.Action("Waybill", []);	
+	}else{
+		Workflow.Action("Waybills", []);
+	}
+	
+	 
 }
 
-//-------------------------- Скрин TechTasks
-
-function GetCurrentTechTasks(TechnicsCP){
+//-------------------------- Скрин Waybill
+function GetCurWaybill(){
 	
+	var q = new Query("");
+	
+	//q.AddParameter("CurWaybillId", WaybillID);
+	return q.Execute();
+
 }
 
 //--------------------------ОБЩАЯ ФУНЦИЯ ДЛЯ ТЕСТОВ

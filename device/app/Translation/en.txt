@@ -248,3 +248,4 @@ status	Status
 assignments	ASSIGNMENTS
 technics	Technics
 technicsList	Technics List
+waybills	Waybills
