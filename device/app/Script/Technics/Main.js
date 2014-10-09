@@ -83,7 +83,7 @@ function AddPeremAndDoAction(TechnicsID){
 
 //-------------------------- Скрин TechTasks
 
-function GetCurrentTechTasks(@TechnicsCP){
+function GetCurrentTechTasks(TechnicsCP){
 	
 }
 
