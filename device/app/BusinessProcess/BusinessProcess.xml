@@ -21,8 +21,12 @@
 		</bp:Step>
 		
 		<bp:Step Name="Task" Screen="Requests\Task.xml" Controller="Requests\Main.js">
+			<bp:Action Name="ConstructionObjectsList" NextStep="ConstructionObjectsList" />
+		</bp:Step>	
+		
+		<bp:Step Name="ConstructionObjectsList" Screen="Requests\ConstructionObjectsList.xml" Controller="Requests\Main.js">
 			
-		</bp:Step>		
+		</bp:Step>	
 	</bp:Workflow>
 
 	

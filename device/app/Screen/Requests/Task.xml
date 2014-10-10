@@ -61,7 +61,7 @@
 			    		
 				<c:HorizontalLine/>	
 				
-				<c:HorizontalLayout CssClass="grid" OnClickAction="$MyDoSelect($task.Id, ConstructionObject, $ConstructionObjectText)">
+				<c:HorizontalLayout CssClass="grid" OnClickAction="$DoAction(ConstructionObjectsList, $task.Id)">
 			    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
 					<c:VerticalLayout>
 						<c:TextView Text="Объект" CssClass="description_row"></c:TextView>

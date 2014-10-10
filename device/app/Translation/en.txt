@@ -207,6 +207,7 @@ planVisits	Plan visits
 passportObject	Passport object
 movement	Movement
 SendForReview	For review
+forApproval	For approval
 requestsS	Requests for service
 requestForS	Request for service
 nameOfObject	Name of object
@@ -249,3 +250,4 @@ status	Status
 assignments	ASSIGNMENTS
 assignment	ASSIGNMENT
 note	NOTE
+constructionObjects	CONSTRUCTION OBJECTS

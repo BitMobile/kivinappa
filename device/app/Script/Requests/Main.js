@@ -185,6 +185,13 @@ function KillTask(taskId){
 	Workflow.Refresh([]);
 }
 
+function ForApproval(requestId){
+	var request = requestId.GetObject();
+	request.EnumTechnicsStatus = DB.Current.Constant.EnumTechnicsStatus.AtApproval;
+	request.Save();
+	
+	Workflow.Refresh([]);
+}
 
 //-------------------------- Скрин Task
 
@@ -390,6 +397,22 @@ function SetTimeNow(state, args) {
 	return
 }
 
+
+//-------------------------- Скрин ConstructionObjectsList
+
+function GetObjs(){
+	var q = new Query("SELECT Id, Description, Code FROM Catalog_ConstructionObjects WHERE DeletionMark = 0 ORDER BY Description");		
+	return q.Execute().Unload();
+}
+
+function GetObjsCount(result){
+	return result.Count();
+}
+
+function SetObj(objId){
+	ConstructionObjectCP = objId;
+	Workflow.Back();
+}
 
 
 

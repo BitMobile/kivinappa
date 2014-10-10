@@ -206,6 +206,7 @@ planVisits	План визитов
 passportObject	Паспорт объекта
 movement	Перемещения
 SendForReview	На рассмотрение
+forApproval	На утверждение
 requestsS	Заявки на СО
 requestForS	Заявкa на СО
 nameOfObject	Наименование объекта
@@ -248,3 +249,4 @@ status	Статус
 assignments	ЗАДАНИЯ
 assignment	ЗАДАНИЕ
 note	ПРИМЕЧАНИЕ
+constructionObjects	ОБЪЕКТЫ СТРОИТЕЛЬСТВА
