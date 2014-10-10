@@ -39,7 +39,8 @@
 	</bp:Workflow>
 	
 	<bp:Workflow Name="Waybill">
-		<bp:Step Name="Waybill" Screen="Technics\Waybill.xml" Controller="Technics\Main.js">	
+		<bp:Step Name="Waybill" Screen="Technics\Waybill.xml" Controller="Technics\Main.js">
+			<bp:Action Name="TechTask" NextWorkflow="TechTask" />		
 		</bp:Step>		
 	</bp:Workflow>
 	

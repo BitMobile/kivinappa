@@ -89,8 +89,14 @@ function AddPeremAndDoAction(TechnicsID){
 	var WaybillsCnt = WaybillsCP.Count();
 	
 	if(WaybillsCnt == 1){
+		
+		WaybillsCP.First();
+		
+		CurWaybillCP = WaybillsCP.Next().Id;
+		
 		Workflow.Action("Waybill", []);	
 	}else{
+		
 		Workflow.Action("Waybills", []);
 	}
 	
@@ -98,13 +104,23 @@ function AddPeremAndDoAction(TechnicsID){
 }
 
 //-------------------------- Скрин Waybill
-function GetCurWaybill(){
+function GetCurWaybillInfo(){
 	
-	var q = new Query("");
 	
-	//q.AddParameter("CurWaybillId", WaybillID);
-	return q.Execute();
 
+}
+
+function GetTechTasks(){
+
+	q = new Query("SELECT * FROM Document_Waybill_Tasks WBT WHERE WBT.Ref = @ThisWaybill");
+	
+	q.AddParameter("ThisWaybill", WaybillsCP);
+	
+	return q.Execute().Unload();
+}
+
+function GetCntTasks(TechTasks){
+	return TechTasks.Count();
 }
 
 //--------------------------ОБЩАЯ ФУНЦИЯ ДЛЯ ТЕСТОВ
