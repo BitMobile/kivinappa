@@ -114,6 +114,7 @@ encashmentSum	Encashment sum
 spreadOnDocuments	Spread on documents
 spread		Spread
 docNumber	Document number
+RequestNumber	Request number
 receivableAmount	RECEIVABLE AMOUNT
 encashmentAmount	Encashment amount
 nameSurname	Name, surname
@@ -243,3 +244,8 @@ outgoing	Outgoing
 accept	Accept
 refuse	Refuse
 at	в
+status	Status
+assignments	ASSIGNMENTS
+technics	Technics
+technicsList	Technics List
+waybills	Waybills

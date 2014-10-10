@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Request.css">
 
-    <s:Push Id="curRequest" Value="$GetCurRequest()"></s:Push>
-    <s:Push Id="tasks" Value="$GetTasks()"></s:Push>
-    <s:Push Id="cntTasks" Value="$GetCntTasks($tasks)"></s:Push>
+    <!-- <s:Push Id="curWaybill" Value="$GetCurWaybillInfo()"></s:Push> -->
+    <s:Push Id="techTasks" Value="$GetTechTasks()"></s:Push>
+    <s:Push Id="cntTasks" Value="$GetCntTasks($techTasks)"></s:Push>
     				
 	<c:DockLayout>
 	
@@ -16,13 +16,13 @@
 			<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
 			
 			<c:HorizontalLayout>
-				<c:TextView Text="#requestForS#" />
+				<c:TextView Text="#txt#" />
 			</c:HorizontalLayout>			
 		</c:DockLayout>
 		
 		<c:DockLayout CssClass="footer">
 			<c:HorizontalLine CssClass="navy"/>
-			<c:DockLayout CssClass="btn_center_footer" OnClickAction="$DoAction(Task, null)">
+			<c:DockLayout CssClass="btn_center_footer" OnClickAction="$DoAction(TechTask, null)">
 				<c:TextView Text="#add#" />
 			</c:DockLayout>
 		</c:DockLayout>
@@ -30,7 +30,7 @@
 		<c:HorizontalLine CssClass="navy"/>
 
 		<c:ScrollView Id="scrlVw">
-			<c:HorizontalLayout CssClass="grid">
+			<!-- <c:HorizontalLayout CssClass="grid">
 		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
 				<c:VerticalLayout>
 					<c:TextView Text="{$curRequest.Number}" CssClass="main_row"></c:TextView>
@@ -39,7 +39,7 @@
 				</c:VerticalLayout>
 			</c:HorizontalLayout>
 		    		
-			<c:HorizontalLine/>			
+			<c:HorizontalLine/>	-->		
 			
 			
 			<c:HorizontalLayout CssClass="caption_grid">
@@ -57,13 +57,13 @@
 			</s:If>			
 			<s:Else>
 			
-				<s:Iterator Id="task" Value="$tasks">
+				<s:Iterator Id="techTask" Value="$techTasks">
 
 					<!-- Id, ConstructionObject, TechnicsType, SKU, OperationMode, StartTime, StopTime, Note, Count -->
 					
 					<c:SwipeHorizontalLayout Id="swipe_layout" CssClass="swipe_layout" Index="0">
 												
-						<c:HorizontalLayout CssClass="grid" OnClickAction="$DoAction(Task, $task.Id)">
+						<c:HorizontalLayout CssClass="grid" OnClickAction="$DoAction(techTask, $techTask.Id)">
 							
 							<!--<s:If Test="$ == $">
 								<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
@@ -75,8 +75,8 @@
 							
 							<c:VerticalLayout>
 								
-								<c:TextView Text="{$GetTime($task.StartTime)}-{$GetTime($task.StopTime)} {$task.ConstructionObject}" CssClass="description_row"></c:TextView>
-								<c:TextView Text="{$task.TechnicsType} - {$task.SKU}" CssClass="main_row"></c:TextView>
+								<c:TextView Text="{}" CssClass="description_row"></c:TextView>
+								<!--<c:TextView Text="{$task.TechnicsType} - {$task.SKU}" CssClass="main_row"></c:TextView>-->
 																							
 							</c:VerticalLayout>
 														
