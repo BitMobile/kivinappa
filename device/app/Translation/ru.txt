@@ -151,6 +151,7 @@ impossibleToDelete	Невозможно удалить, заказ уже пер
 valueList	Список значений
 deliveryDate	Дата доставки
 enterDateTime	Введите дату и время
+enterTime	Введите время
 noImage	Изображение не найдено
 of	из
 information	Информация
@@ -245,3 +246,5 @@ refuse	Отказаться
 at	в
 status	Статус
 assignments	ЗАДАНИЯ
+assignment	ЗАДАНИЕ
+note	ПРИМЕЧАНИЕ

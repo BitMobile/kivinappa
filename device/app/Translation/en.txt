@@ -152,6 +152,7 @@ impossibleToDelete	Impossible to delete, order is already in base
 valueList	Value list
 deliveryDate	Delivery date
 enterDateTime	Enter date, time
+enterTime	Enter time
 noImage	No image found
 of	of
 information	Information
@@ -246,3 +247,5 @@ refuse	Refuse
 at	в
 status	Status
 assignments	ASSIGNMENTS
+assignment	ASSIGNMENT
+note	NOTE
