@@ -23,7 +23,7 @@
 															
 			<s:If Test="$cntWaybills == 0">
 
-				<c:TextView Text="#unknown#"/>
+				<c:TextView Text="#unknown#" CssClass="main_row"/>
 
 			</s:If>
 			<s:Else>
@@ -32,13 +32,14 @@
 
 					<c:HorizontalLine />
 					
-					<c:HorizontalLayout CssClass="grid" OnClickAction="$AddPeremAndDoAction($Waybill.Id)">
+					<c:HorizontalLayout CssClass="grid" OnClickAction="$OpenWaybillWf($Waybill.Id)">
 						
-						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+						<c:VerticalLayout CssClass="no_mark "></c:VerticalLayout>
 						
 						<c:VerticalLayout>
 							<c:TextView Text="{$Waybill.Number}" CssClass="main_row"></c:TextView>
-							<!--<c:TextView Text="$requests.EnumTechnicsStatus" CssClass="description_row"></c:TextView>-->						
+							<c:TextView Text="С: {$Waybill.PlannedStartDate}" CssClass="description_row"></c:TextView>	
+							<c:TextView Text="По: {$Waybill.PlannedEndDate}" CssClass="description_row"></c:TextView>				
 						</c:VerticalLayout>
 						
 						<c:Image />
@@ -53,5 +54,7 @@
 		</c:ScrollView>	
 	
 	</c:DockLayout>
+	
+	<s:Push Id="RestartIterator" Value="$restartItr(@WaybillsCP)"></s:Push>
 
 </c:Screen>

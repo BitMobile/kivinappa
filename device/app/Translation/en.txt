@@ -249,3 +249,4 @@ assignments	ASSIGNMENTS
 technics	Technics
 technicsList	Technics List
 waybills	Waybills
+waybill	Waybill

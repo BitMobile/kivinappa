@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Request.css">
 
-    <!-- <s:Push Id="curWaybill" Value="$GetCurWaybillInfo()"></s:Push> -->
+    <s:Push Id="curWaybillInfo" Value="$GetCurWaybillInfo()"></s:Push>
     <s:Push Id="techTasks" Value="$GetTechTasks()"></s:Push>
     <s:Push Id="cntTasks" Value="$GetCntTasks($techTasks)"></s:Push>
     				
@@ -16,7 +16,7 @@
 			<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
 			
 			<c:HorizontalLayout>
-				<c:TextView Text="#txt#" />
+				<c:TextView Text="#waybill#" />
 			</c:HorizontalLayout>			
 		</c:DockLayout>
 		
@@ -39,7 +39,25 @@
 				</c:VerticalLayout>
 			</c:HorizontalLayout>
 		    		
-			<c:HorizontalLine/>	-->		
+			<c:HorizontalLine/>	-->	
+			
+			<s:Iterator Id="WaybillInfo" Value="$curWaybillInfo">						
+
+					<c:HorizontalLine />
+					
+					<c:HorizontalLayout CssClass="grid">
+						
+						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+						
+						<c:VerticalLayout>
+							<c:TextView Text="{$WaybillInfo.Role}: {$WaybillInfo.PhisicalPersons}" CssClass="main_row"></c:TextView>			
+						</c:VerticalLayout>
+						
+						<c:Image />
+						
+					</c:HorizontalLayout>
+
+			</s:Iterator>	
 			
 			
 			<c:HorizontalLayout CssClass="caption_grid">
@@ -75,20 +93,20 @@
 							
 							<c:VerticalLayout>
 								
-								<c:TextView Text="{}" CssClass="description_row"></c:TextView>
-								<!--<c:TextView Text="{$task.TechnicsType} - {$task.SKU}" CssClass="main_row"></c:TextView>-->
+								<c:TextView Text="{$techTask.Id}" CssClass="description_row"></c:TextView>
+								<c:TextView Text="{$techTask.Id}" CssClass="main_row"></c:TextView>
 																							
 							</c:VerticalLayout>
 														
 						</c:HorizontalLayout>
 						
-						<s:If Test="$curRequest.StatusName == 'New'">
+						<!-- <s:If Test="$curRequest.StatusName == 'New'">
 							<c:HorizontalLayout CssClass="red_swipe" >
 								<c:VerticalLayout >
 									<c:TextView Text="#del#"></c:TextView>
 								</c:VerticalLayout>
 							</c:HorizontalLayout>
-						</s:If>
+						</s:If>-->
 												
 					</c:SwipeHorizontalLayout>
 					

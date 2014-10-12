@@ -248,3 +248,4 @@ assignments	ЗАДАНИЯ
 technics	Техника
 technicsList	Список техники
 waybills	Путевые листы
+waybill	Путевой лист

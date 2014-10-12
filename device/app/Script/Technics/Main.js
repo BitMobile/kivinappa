@@ -3,6 +3,7 @@
 var tasksbeginDateCP;
 var tasksendDateCP;
 var TechnicsCP;
+var CurWaybillCP;
 var WaybillsCP;
 
 //-------------------------- Скрин Technics
@@ -79,8 +80,8 @@ function GetParam3(param3){
 function AddPeremAndDoAction(TechnicsID){
 	TechnicsCP = TechnicsID; // запишем в переменную модуля ID
 	
-	var q = new Query("SELECT WB.Id, WB.Number FROM Document_Waybill WB " +
-			"WHERE WB.PlannedStartDate <= DATETIME('now') AND WB.PlannedEndDate >= DATETIME('now') " +
+	var q = new Query("SELECT WB.Id, WB.Number, WB.PlannedStartDate, WB.PlannedEndDate  FROM Document_Waybill WB " +
+			"WHERE DATE(WB.PlannedStartDate) <= DATE('now') AND DATE(WB.PlannedEndDate) >= DATE('now') " +
 			"AND WB.Technics = @ThisTech");
 	q.AddParameter("ThisTech", TechnicsID);
 	
@@ -91,8 +92,9 @@ function AddPeremAndDoAction(TechnicsID){
 	if(WaybillsCnt == 1){
 		
 		WaybillsCP.First();
+		WaybillsCP.Next();
 		
-		CurWaybillCP = WaybillsCP.Next().Id;
+		CurWaybillCP = WaybillsCP.Id;
 		
 		Workflow.Action("Waybill", []);	
 	}else{
@@ -106,7 +108,11 @@ function AddPeremAndDoAction(TechnicsID){
 //-------------------------- Скрин Waybill
 function GetCurWaybillInfo(){
 	
+	q = new Query("SELECT * FROM Document_Waybill_Responsibles WBT WHERE WBT.Ref = @ThisWaybill");
 	
+	q.AddParameter("ThisWaybill", CurWaybillCP);
+	
+	return q.Execute().Unload();
 
 }
 
@@ -114,13 +120,29 @@ function GetTechTasks(){
 
 	q = new Query("SELECT * FROM Document_Waybill_Tasks WBT WHERE WBT.Ref = @ThisWaybill");
 	
-	q.AddParameter("ThisWaybill", WaybillsCP);
+	q.AddParameter("ThisWaybill", CurWaybillCP);
 	
 	return q.Execute().Unload();
 }
 
 function GetCntTasks(TechTasks){
+	var z = TechTasks.Count();
+	if(z>1){
+		
+	}else{
+		
+	}
 	return TechTasks.Count();
+}
+
+function OpenWaybillWf(WaybillID){
+	CurWaybillCP = WaybillID;
+	Workflow.Action("Waybill", []);
+}
+
+//--------------------------ОБЩАЯ ФУНЦИЯ ДЛЯ ИТЕРАТОРОВ
+function restartItr(Itr){
+	Itr.First();
 }
 
 //--------------------------ОБЩАЯ ФУНЦИЯ ДЛЯ ТЕСТОВ
