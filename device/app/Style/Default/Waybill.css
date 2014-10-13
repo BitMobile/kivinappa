@@ -4,26 +4,163 @@
     background-color: #ffffff;
 }
 
-.grid {
-    height: 15%;
-    width: auto;
-    background-color: #f8f8f8;
+    .gridDate line {
+        width: 100%;
+        height: 1px;
+        background-color: #c8c7cc;
+    }
+
+    .gridDate img {
+        height: 15.4%;
+        margin-top: 16%;
+        margin-left: 2.5%;
+        background-image: url(arrow.png);
+    }
+
+    .gridDate vl {
+        width: 100%;
+        height: 100%;
+        padding-top: 11%;
+        padding-left: 5%;
+    }
+
+        .gridDate vl MemoEdit {
+            height: 60%;
+            width: 90%;
+            font: 30% Arial;
+        }
+
+        .gridDate vl EditText {
+            height: 60%;
+            width: 90%;
+            font: 30% Arial;
+            color: #2d89cf;
+        }
+
+        .gridDate vl dl {
+            height: 95%;
+            width: 100%;
+        }
+
+            .gridDate vl dl TextView {
+                width: 100%;
+                height: 100%;
+                margin-top: 17%;
+                white-space: normal;
+                font: 50% Arial;
+                color: #8e8e93;
+                dock-align: left;
+                
+            }
+
+            .gridDate vl dl Button {
+                width: 32%;
+                height: 100%;
+                dock-align: right;
+                margin-left: -32%;
+                margin-right: 3%;
+                margin-top: 0%;
+                border-style: solid;
+                border-width: 2px;
+                border-color: #43acfd;
+                border-radius: 5px;
+                color: #2d89cf;
+                text-align: center;
+                font: 65% arial;
+            }
+
+.grid vl {
+    width: 83.3%;
+    height: 100%;
+    padding-top: 13%;
+    padding-left: 2.7%;
 }
 
-    .grid img {
-        dock-align: right;
+.shadowLine {
+    width: 100%;
+    height: 2px;
+    background-image: url(shadow_line.png);
+}
+
+.btn_menu {
+    margin-right: 11%;
+    margin-left: 2%;
+}
+
+vl ScrollTasks {
+    width: 100%;
+    height: 35sp;
+    background-color: #efeff4;
+}
+
+	vl ScrollTasks TextNoTasks {
+		width: 100%;
+		height: 20%;
+		text-align: center;
+		color: #000000;
+		font: 30% arial;
+	}
+	
+.description_daterow {
+    width: 100%;
+    height: 23%;
+    white-space: normal;
+    font: 80% Arial;
+    color: #e6891b;
+}
+
+grid gray_mark_central; {
+    background-image: url(gray_mark.png);
+    height: 0%;
+    width: 4.1%;
+    margin-left: 2%;
+    margin-right: 0%;
+	vertical-align: central;
+}
+
+grid yellow_mark_central; {
+    background-image: url(yellow_mark.png);
+    height: 0%;
+    width: 4.1%;
+    margin-left: 2%;
+    margin-right: 0%;
+	vertical-align: central;
+}
+
+grid green_mark_central {
+    background-image: url(green_mark.png);
+    height: 0%;
+    width: 4.1%;
+    margin-left: 2%;
+    margin-right: 0%;
+	vertical-align: central;
+}
+
+.small_grid {
+    height: 7.6%;
+    selected-color: #bacdce;
+    dock-align: top;
+}
+
+    .small_grid hl select_zone {
+        width: 90%;
+        height: 90%;
+        margin-top: 5%;
+        margin-left: 5%;
     }
 
-    .grid vl main_row {
-        font: 95% Arial-BoldMT;
-        color: #43acfd;
-        white-space: nowrap;
-    }
-
-    .grid vl description_row {
-        height: 23%;
-        font: 80% arial;
-        color: #000;
-        margin-top: 10%;
-        margin-bottom: 0%;
-    }
+        .small_grid hl select_zone TextView {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            padding-top: 20%;
+            font: 50% arial;
+        }
+        
+.main_row2 {
+    width: 100%;
+    height: 100%;
+    margin-top: 25%;
+    white-space: normal;
+    font: 50% Arial;
+}

@@ -5,7 +5,8 @@ var tasksendDateCP;
 var TechnicsCP;
 var CurWaybillCP;
 var WaybillsCP;
-var TechnicsInfoCP;
+var TechnicsDescriptionCP;
+var TechnicsVRTCP;
 
 //-------------------------- Скрин Technics
 
@@ -80,7 +81,8 @@ function GetParam3(param3){
 
 function AddPeremAndDoAction(TechnicsID, TechDescription, TechVRT){
 	TechnicsCP = TechnicsID; // запишем в переменную модуля ID
-	TechnicsInfoCP = [TechDescription, TechVRT];
+	TechnicsDescriptionCP = TechDescription;
+	TechnicsVRTCP = TechVRT;
 	
 	var q = new Query("SELECT WB.Id, WB.Number, WB.PlannedStartDate, WB.PlannedEndDate  FROM Document_Waybill WB " +
 			"WHERE DATE(WB.PlannedStartDate) <= DATE('now') AND DATE(WB.PlannedEndDate) >= DATE('now') " +
