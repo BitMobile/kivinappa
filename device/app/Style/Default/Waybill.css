@@ -1,0 +1,29 @@
+.gridDate {
+    height: 7.9sp;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.grid {
+    height: 15%;
+    width: auto;
+    background-color: #f8f8f8;
+}
+
+    .grid img {
+        dock-align: right;
+    }
+
+    .grid vl main_row {
+        font: 95% Arial-BoldMT;
+        color: #43acfd;
+        white-space: nowrap;
+    }
+
+    .grid vl description_row {
+        height: 23%;
+        font: 80% arial;
+        color: #000;
+        margin-top: 10%;
+        margin-bottom: 0%;
+    }

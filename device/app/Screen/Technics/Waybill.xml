@@ -28,18 +28,26 @@
 		</c:DockLayout>
 		
 		<c:HorizontalLine CssClass="navy"/>
+		
+		<!-- <c:VerticalLayout>
+							<c:TextView Text="{@TechnicsInfoCP.description}: {@TechnicsInfoCP.vehicleregtag}" CssClass="main_row"></c:TextView>			
+		</c:VerticalLayout>-->
 
 		<c:ScrollView Id="scrlVw">
-			<!-- <c:HorizontalLayout CssClass="grid">
-		    	<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
-				<c:VerticalLayout>
-					<c:TextView Text="{$curRequest.Number}" CssClass="main_row"></c:TextView>
-					<c:TextView Text="{$curRequest.Status}" CssClass="description_row"></c:TextView>
-					<c:TextView Text="{$ConvertDate($curRequest.Date)}" CssClass="description_daterow"></c:TextView>			
-				</c:VerticalLayout>
+	
+			<!-- <c:VerticalLayout>
+							<c:TextView Text="{@TechnicsInfoCP.description}: {@TechnicsInfoCP.vehicleregtag}" CssClass="main_row"></c:TextView>			
+			</c:VerticalLayout>-->
+			
+			<c:HorizontalLayout CssClass="grid">
+						
+						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+						
+						<c:VerticalLayout>
+							<c:TextView Text="Ntcn {@TechnicsInfoCP[0]}: {@TechnicsInfoCP[1]}" CssClass="main_row"></c:TextView>			
+						</c:VerticalLayout>
+						
 			</c:HorizontalLayout>
-		    		
-			<c:HorizontalLine/>	-->	
 			
 			<s:Iterator Id="WaybillInfo" Value="$curWaybillInfo">						
 
@@ -50,15 +58,12 @@
 						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
 						
 						<c:VerticalLayout>
-							<c:TextView Text="{$WaybillInfo.Role}: {$WaybillInfo.PhisicalPersons}" CssClass="main_row"></c:TextView>			
+							<c:TextView Text="{$WaybillInfo.Role}: {$WaybillInfo.PhysicalPersons}" CssClass="main_row"></c:TextView>			
 						</c:VerticalLayout>
-						
-						<c:Image />
 						
 					</c:HorizontalLayout>
 
-			</s:Iterator>	
-			
+			</s:Iterator>			
 			
 			<c:HorizontalLayout CssClass="caption_grid">
 		        <c:TextView Text="#assignments#:"></c:TextView>
@@ -93,8 +98,8 @@
 							
 							<c:VerticalLayout>
 								
-								<c:TextView Text="{$techTask.Id}" CssClass="description_row"></c:TextView>
-								<c:TextView Text="{$techTask.Id}" CssClass="main_row"></c:TextView>
+								<c:TextView Text="{$techTask.StartTime} - {$techTask.StopTime} {$techTask.CODescription} {$techTask.Requestioner}" CssClass="description_row"></c:TextView>
+								<c:TextView Text="заменить на вид работ" CssClass="main_row"></c:TextView>
 																							
 							</c:VerticalLayout>
 														
@@ -116,8 +121,13 @@
 								
 			</s:Else>
 						    	
+		<c:HorizontalLayout CssClass="swipe_info">
+			<c:Image CssClass="img_right"/>
+			<c:TextView Text="Смахните вправо, чтобы     начать или завершить задание" />				
+		</c:HorizontalLayout>
 
 		</c:ScrollView>
+		
 	</c:DockLayout>
 
 </c:Screen>

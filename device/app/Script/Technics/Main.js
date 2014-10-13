@@ -5,6 +5,7 @@ var tasksendDateCP;
 var TechnicsCP;
 var CurWaybillCP;
 var WaybillsCP;
+var TechnicsInfoCP;
 
 //-------------------------- Скрин Technics
 
@@ -77,8 +78,9 @@ function GetParam3(param3){
 	}
 }
 
-function AddPeremAndDoAction(TechnicsID){
+function AddPeremAndDoAction(TechnicsID, TechDescription, TechVRT){
 	TechnicsCP = TechnicsID; // запишем в переменную модуля ID
+	TechnicsInfoCP = [TechDescription, TechVRT];
 	
 	var q = new Query("SELECT WB.Id, WB.Number, WB.PlannedStartDate, WB.PlannedEndDate  FROM Document_Waybill WB " +
 			"WHERE DATE(WB.PlannedStartDate) <= DATE('now') AND DATE(WB.PlannedEndDate) >= DATE('now') " +
@@ -108,7 +110,9 @@ function AddPeremAndDoAction(TechnicsID){
 //-------------------------- Скрин Waybill
 function GetCurWaybillInfo(){
 	
-	q = new Query("SELECT * FROM Document_Waybill_Responsibles WBT WHERE WBT.Ref = @ThisWaybill");
+	q = new Query("SELECT WBR.Role, PP.Description AS PhysicalPersons " +
+			"FROM Document_Waybill_Responsibles WBR LEFT JOIN Catalog_PhysicalPersons PP ON WBR.PhysicalPersons = PP.Id " +
+			"WHERE WBR.Ref = @ThisWaybill");
 	
 	q.AddParameter("ThisWaybill", CurWaybillCP);
 	
@@ -118,7 +122,10 @@ function GetCurWaybillInfo(){
 
 function GetTechTasks(){
 
-	q = new Query("SELECT * FROM Document_Waybill_Tasks WBT WHERE WBT.Ref = @ThisWaybill");
+	q = new Query("SELECT WBT.Id, WBT.Requestioner, strftime('%H:%M', WBT.StartTime) AS StartTime, " +
+			"strftime('%H:%M', WBT.StopTime) AS StopTime, CO.Description AS CODescription " +
+			"FROM Document_Waybill_Tasks WBT LEFT JOIN Catalog_ConstructionObjects CO ON WBT.ConstructionObject = CO.Id " +
+			"WHERE WBT.Ref = @ThisWaybill");
 	
 	q.AddParameter("ThisWaybill", CurWaybillCP);
 	

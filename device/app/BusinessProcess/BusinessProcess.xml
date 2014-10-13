@@ -26,12 +26,14 @@
 		</bp:Step>	
 		
 		<bp:Step Name="ConstructionObjectsList" Screen="Requests\ConstructionObjectsList.xml" Controller="Requests\Main.js">
-		</bp:Step>
-		
-		<bp:Step Name="Technics" Screen="Technics\Technics.xml" Controller="Technics\Main.js">
-			<bp:Action Name="Waybills" NextWorkflow="Waybills" />
-			<bp:Action Name="Waybill" NextWorkflow="Waybill" />
 		</bp:Step>		
+	</bp:Workflow>
+	
+	<bp:Workflow Name="Technics">
+		<bp:Step Name="Technics" Screen="Technics\Technics.xml" Controller="Technics\Main.js">
+				<bp:Action Name="Waybills" NextWorkflow="Waybills" />
+				<bp:Action Name="Waybill" NextWorkflow="Waybill" />
+		</bp:Step>
 	</bp:Workflow>
 	
 	<bp:Workflow Name="Waybills">
@@ -42,10 +44,20 @@
 	
 	<bp:Workflow Name="Waybill">
 		<bp:Step Name="Waybill" Screen="Technics\Waybill.xml" Controller="Technics\Main.js">
-			<bp:Action Name="TechTask" NextWorkflow="TechTask" />		
+			<bp:Action Name="TechTask" NextWorkflow="TechTask" />
+			<bp:Action Name="GSM" NextWorkflow="GSM" />		
 		</bp:Step>		
 	</bp:Workflow>
 	
+	<bp:Workflow Name="GSM">
+		<bp:Step Name="GSM" Screen="Technics\GSM.xml" Controller="Technics\Main.js">		
+		</bp:Step>		
+	</bp:Workflow>
+	
+	<bp:Workflow Name="TechTask">
+		<bp:Step Name="TechTask" Screen="Technics\TechTask.xml" Controller="Technics\Main.js">		
+		</bp:Step>		
+	</bp:Workflow>	
 
 	<bp:Workflow Name="Settings">
 		<bp:Step Name="Settings" Screen="Settings.xml">

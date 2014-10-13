@@ -7,8 +7,9 @@
 	
 		<c:DockLayout CssClass="top_navigator">
 			
-			<c:HorizontalLayout CssClass="btn_menu" OnEvent="Back"	OnClickAction="$Workflow.DoRollback()">
-				<c:Image CssClass="menuIcon" />
+			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$Workflow.DoRollback()">
+				<c:Image />
+				<c:TextView Text="#back#" />
 			</c:HorizontalLayout>
 						
 			<c:HorizontalLayout CssClass="header_one_btn">

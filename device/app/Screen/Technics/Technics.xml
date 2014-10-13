@@ -48,7 +48,7 @@
 
 					<c:HorizontalLine />
 					
-					<c:HorizontalLayout CssClass="grid" OnClickAction="$AddPeremAndDoAction($technics.Id)">
+					<c:HorizontalLayout CssClass="grid" OnClickAction="$AddPeremAndDoAction($technics.Id, $technics.Description, $technics.VehicleRegTag)">
 						
 						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
 						
