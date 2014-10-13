@@ -248,10 +248,13 @@ refuse	Refuse
 at	в
 status	Status
 assignments	ASSIGNMENTS
-assignment	ASSIGNMENT
-note	NOTE
-constructionObjects	CONSTRUCTION OBJECTS
+<<<<<<< HEAD
 technics	Technics
 technicsList	Technics List
 waybills	Waybills
 waybill	Waybill
+=======
+assignment	ASSIGNMENT
+note	NOTE
+constructionObjects	CONSTRUCTION OBJECTS
+>>>>>>> origin/Develop_AVMurach

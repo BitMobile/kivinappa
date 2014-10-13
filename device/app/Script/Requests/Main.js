@@ -5,6 +5,13 @@ var tasksendDateCP;
 var requestsCP
 var userIdCP
 
+//-------------------------- Переменные контроллера для экрана Task
+var TechnicsTypeCP 
+var SKUCP 
+var ConstructionObjectCP 
+
+
+
 function OnLoad() {    
 	userIdCP = $.common.UserId;
 }
@@ -30,7 +37,7 @@ function GetRequests(searchText, beginDateParam, endDateParam){
 		q.AddParameter("st", searchText);
 	}
 	
-	var textOrd = " ORDER BY RCV.Date";
+	var textOrd = " ORDER BY RCV.Date DESC";
 	
 	q.AddParameter("DateStart", BegOfDay(beginDateParam));
 	q.AddParameter("DateEnd", EndOfDay(endDateParam));
@@ -156,8 +163,8 @@ function GetCurRequest(){
 }
 
 function GetTasks(){
-	var q = new Query("SELECT T.Id, OperationMode, T.StartTime, T.StopTime, T.Note, T.Count AS Cnt, " +
-			"O.Description AS ConstructionObject, TT.Description AS TechnicsType, SKU.Description AS SKU " +
+	var q = new Query("SELECT T.Id, T.OperationMode, T.StartTime, T.StopTime, T.Note, T.Count AS Cnt, " +
+			"O.Id AS ConstructionObjectId, O.Description AS ConstructionObject, TT.Id AS TechnicsTypeId, TT.Description AS TechnicsType, SKU.Id AS SKUId, SKU.Description AS SKU " +
 			"FROM Document_Request_Task T " +
 			"LEFT JOIN Catalog_ConstructionObjects O ON O.Id = T.ConstructionObject " +
 			"LEFT JOIN Catalog_TechnicsTypes TT ON TT.Id = T.TechnicsType " +
@@ -173,6 +180,18 @@ function GetCntTasks(result){
 	return result.Count();
 }
 
+function KillTask(taskId){
+	DB.Delete(taskId);	
+	Workflow.Refresh([]);
+}
+
+function ForApproval(requestId){
+	var request = requestId.GetObject();
+	request.EnumTechnicsStatus = DB.Current.Constant.EnumTechnicsStatus.AtApproval;
+	request.Save();
+	
+	Workflow.Refresh([]);
+}
 
 //-------------------------- Скрин Task
 
@@ -182,12 +201,13 @@ function GetCurTask(curTaskId){
 		var T = DB.Create("Document.Request_Task");
 		T.Posted = 0;
 		T.Ref = requestsCP;
+		T.Count = 1;
 		T.Save();
 		
 		curTaskId = T.Id;
 	}	
-	var q = new Query("SELECT T.Id, OperationMode, T.StartTime, T.StopTime, T.Note, T.Count AS Cnt, " +
-			"O.Description AS ConstructionObject, TT.Description AS TechnicsType, SKU.Description AS SKU " +
+	var q = new Query("SELECT T.Id, T.OperationMode, T.StartTime, T.StopTime, T.Note, T.Count AS Cnt, " +
+			"O.Id AS ConstructionObjectId, O.Description AS ConstructionObject, TT.Id AS TechnicsTypeId, TT.Description AS TechnicsType, SKU.Id AS SKUId, SKU.Description AS SKU " +
 			"FROM Document_Request_Task T " +
 			"LEFT JOIN Catalog_ConstructionObjects O ON O.Id = T.ConstructionObject " +
 			"LEFT JOIN Catalog_TechnicsTypes TT ON TT.Id = T.TechnicsType " +
@@ -199,14 +219,114 @@ function GetCurTask(curTaskId){
 
 }
 
-function SaveTask(){
+function RecAtributeCP(ConstructionObjectId, TechnicsTypeId, SKUId){
+	//Dialog.Debug(TechnicsTypeId);
+	TechnicsTypeCP = TechnicsTypeId;
+	SKUCP = SKUId;
+	ConstructionObjectCP = ConstructionObjectId;
+}
+
+function SaveTask(taskId){
+	var task = taskId.GetObject();
 	
+//	if(Variables[cntText].Text == "-"){
+//		task.Count = 0;
+//	}else{
+		//task.Count = Variables[cntText].Text;
+//	}	 
+	var atribNull = null;
+	
+	if(TechnicsTypeCP == null){
+		atribNull = 1;
+	}else{
+		task.TechnicsType = TechnicsTypeCP;
+	}
+	
+	if(Variables["cntText"].Text == null){
+		atribNull = 1;
+	}else{
+		if(IsBlankString(Variables["cntText"].Text)){
+			atribNull = 1;
+		}else{
+			task.Count = Variables["cntText"].Text;
+		}
+	}
+	
+	if(SKUCP == null){
+		atribNull = 1;
+	}else{	
+		task.SKU = SKUCP;
+	}	
+	
+	if(ConstructionObjectCP == null){
+		atribNull = 1;
+	}else{
+		task.ConstructionObject = ConstructionObjectCP;
+	}
+	
+	if(Variables["StartTimeText"].Text == null){
+		atribNull = 1;
+	}else{
+		if(TrimAll(Variables["StartTimeText"].Text) == "-"){
+			atribNull = 1;
+		}else{
+			task.StartTime = Variables["StartTimeText"].Text;
+		}
+	}
+	
+	if(Variables["StopTimeText"].Text == null){
+		atribNull = 1;
+	}else{
+		if(TrimAll(Variables["StopTimeText"].Text) == "-"){
+			atribNull = 1;
+		}else{
+			task.StopTime = Variables["StopTimeText"].Text;
+		}
+	}
+	
+	if(Variables["operationModeText"].Text == null){
+		atribNull = 1;
+	}else{
+		if(IsBlankString(Variables["operationModeText"].Text)){
+			atribNull = 1;
+		}else{
+			task.OperationMode = Variables["operationModeText"].Text;
+		}
+	}
+	
+	if(Variables["commentMemo"].Text == null){
+		var fds = 1;// просто так
+	}else{
+		task.Note = Variables["commentMemo"].Text;
+	}
+
+	
+	if(atribNull != null){
+		Dialog.Message("Не все поля заполнены");
+	}else{
+		task.Save();
+		Workflow.Back();
+	}    
+}
+
+function CanselTask(taskId, tasknull){
+	if(tasknull == null){
+		DB.Delete(taskId);
+	}
+	
+	Workflow.Back();
 }
 
 function MyDoSelect(entity, attribute, control) {
     var tableName = entity[attribute].Metadata().TableName;
+        
     var query = new Query();
-    query.Text = "SELECT Id, Description FROM " + tableName + " ORDER BY Description";
+        
+    if(tableName == "Catalog_SKU"){
+    	query.Text = "SELECT Id, Description FROM " + tableName + " WHERE Service == 1 ORDER BY Description";
+    }else{
+    	query.Text = "SELECT Id, Description FROM " + tableName + " ORDER BY Description";
+    } 
     
     Dialog.Select("#select_answer#", query.Execute(), TechnicsTypeDoSelectCallback1, [entity, attribute, control]);
             
@@ -221,13 +341,79 @@ function TechnicsTypeDoSelectCallback1(key, args) {
     
     control.Text = key.Description;
     
-    var task = entity.GetObject();
+//    var TechnicsTypeCP 
+//    var SKUCP 
+//    var ConstructionObjectCP 
     
-    task[attribute] = key;
-    task.Save();
+    if(attribute == "TechnicsType"){
+    	TechnicsTypeCP = key;
+    }
+    if(attribute == "SKU"){
+    	SKUCP = key;
+    }
+    if(attribute == "ConstructionObject"){
+    	ConstructionObjectCP = key;
+    }
+    
+//    var task = entity.GetObject();
+//    
+//    task[attribute] = key;
+//    task.Save();
     
     return;
 }
+
+function SetTime(timeText, timeValueText, entity, attribute) {
+			
+	var caption = Translate["#enterDateTime#"];
+	
+	var timeValue = Variables[timeValueText].Text;
+	//Console.WriteLine(timeValue);
+	
+	if(timeValue == null){
+		Dialog.Time(caption, SetTimeNow, [timeText, entity, attribute]);
+	}else{
+		if(TrimAll(timeValue) == "-"){
+			Dialog.Time(caption, SetTimeNow, [timeText, entity, attribute]);
+		}else{
+			Dialog.Time(caption, timeValue, SetTimeNow, [timeText, entity, attribute]);
+		}
+	}
+}
+
+function SetTimeNow(state, args) {
+	var timeText = state[0];
+	var entity = state[1];
+	var attribute = state[2];
+	
+//	var obj = entity.GetObject();
+//    
+//	obj[attribute] = args.Result;
+//	obj.Save();
+	
+	//Dialog.Debug(key);
+	timeText.Text = String.Format("{0:HH:mm}", args.Result);
+	
+	return
+}
+
+
+//-------------------------- Скрин ConstructionObjectsList
+
+function GetObjs(){
+	var q = new Query("SELECT Id, Description, Code FROM Catalog_ConstructionObjects WHERE DeletionMark = 0 ORDER BY Description");		
+	return q.Execute().Unload();
+}
+
+function GetObjsCount(result){
+	return result.Count();
+}
+
+function SetObj(objId){
+	ConstructionObjectCP = objId;
+	Workflow.Back();
+}
+
 
 
 //--------------------------ОБЩАЯ ФУНЦИЯ ДЛЯ ТЕСТОВ

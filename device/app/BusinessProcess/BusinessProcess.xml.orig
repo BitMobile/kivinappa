@@ -20,14 +20,21 @@
 		<bp:Step Name="Request" Screen="Requests\Request.xml" Controller="Requests\Main.js">
 			<bp:Action Name="Task" NextStep="Task" />
 		</bp:Step>
-		
+	
 		<bp:Step Name="Task" Screen="Requests\Task.xml" Controller="Requests\Main.js">
+<<<<<<< HEAD
+		</bp:Step>		
+=======
 			<bp:Action Name="ConstructionObjectsList" NextStep="ConstructionObjectsList" />
 		</bp:Step>	
 		
 		<bp:Step Name="ConstructionObjectsList" Screen="Requests\ConstructionObjectsList.xml" Controller="Requests\Main.js">
-		</bp:Step>
-		
+			
+		</bp:Step>	
+>>>>>>> origin/Develop_AVMurach
+	</bp:Workflow>
+
+	<bp:Workflow Name="Technics">
 		<bp:Step Name="Technics" Screen="Technics\Technics.xml" Controller="Technics\Main.js">
 			<bp:Action Name="Waybills" NextWorkflow="Waybills" />
 			<bp:Action Name="Waybill" NextWorkflow="Waybill" />
@@ -37,7 +44,7 @@
 	<bp:Workflow Name="Waybills">
 		<bp:Step Name="Waybills" Screen="Technics\Waybills.xml" Controller="Technics\Main.js">
 			<bp:Action Name="Waybill" NextWorkflow="Waybill" />
-		</bp:Step>	
+		</bp:Step>		
 	</bp:Workflow>
 	
 	<bp:Workflow Name="Waybill">

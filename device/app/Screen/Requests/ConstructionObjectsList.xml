@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="ConstructionObjectsList.css">
+
+    <s:Push Id="taskId" Value="$param1"></s:Push>
+    
+    <s:Push Id="objs" Value="$GetObjs()"></s:Push>
+	<s:Push Id="objsCount" Value="$GetObjsCount($objs)"></s:Push>
+                            				
+		
+	<c:DockLayout>
+	
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back"	OnClickAction="$Workflow.DoBack()">
+				<c:Image />
+				<c:TextView Text="#back#" />
+			</c:HorizontalLayout>
+			
+			<c:HorizontalLayout CssClass="header_one_btn">
+				<c:TextView Text="#constructionObjects#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		<c:HorizontalLine CssClass="navy"/>	
+	
+		<c:ScrollView Id="scrlVw">
+					
+			<c:HorizontalLine/>
+			
+			<s:If Test="$objsCount == 0">
+			
+				<c:TextView Text="#unknown#" CssClass="TextNoPlans" />
+				
+				<c:HorizontalLine/>
+				
+			</s:If>			
+			<s:Else>
+			
+				<s:Iterator Id="obj" Value="$objs">						
+
+					<c:HorizontalLine />
+					
+					<c:HorizontalLayout CssClass="grid">
+						
+						<c:VerticalLayout CssClass="date_object" OnClickAction="$SetObj($obj.Id)">
+							<c:TextView Text="+" CssClass="placeholder_row"></c:TextView>							
+						</c:VerticalLayout>						
+						
+						<c:VerticalLayout>
+							<c:TextView Text="$obj.Description" CssClass="description_row"></c:TextView>
+							<!-- <c:TextView Text="$obj.Code" CssClass="main_row"></c:TextView> -->						
+						</c:VerticalLayout>
+																		
+					</c:HorizontalLayout>
+
+				</s:Iterator>
+								
+			</s:Else>			
+					
+		</c:ScrollView>
+	</c:DockLayout>	
+
+</c:Screen>
