@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="ConstructionObjectsList.css">
 
-    <s:Push Id="taskId" Value="$param1"></s:Push>
-    
-    <s:Push Id="objs" Value="$GetObjs()"></s:Push>
+	<s:Push Id="search" Value="$param1"/>
+	
+    <s:Push Id="objs" Value="$GetObjs($search)"></s:Push>
 	<s:Push Id="objsCount" Value="$GetObjsCount($objs)"></s:Push>
                             				
 		
@@ -20,6 +20,17 @@
 			</c:HorizontalLayout>
 		</c:DockLayout>
 		<c:HorizontalLine CssClass="navy"/>	
+		
+		<c:HorizontalLayout CssClass="search">
+			<c:DockLayout>
+				<c:Image />
+				<c:EditText Id="edtSearch" Text="$search" Placeholder="#search#"></c:EditText>
+			</c:DockLayout>
+			
+			<c:Button Id="btnSearch" Text="#search#" OnClickAction="$DoRefresh($edtSearch.Text)"></c:Button>			
+		</c:HorizontalLayout>
+		
+		<c:HorizontalLayout CssClass="shadowLine"></c:HorizontalLayout>
 	
 		<c:ScrollView Id="scrlVw">
 					
@@ -40,7 +51,7 @@
 					
 					<c:HorizontalLayout CssClass="grid">
 						
-						<c:VerticalLayout CssClass="date_object" OnClickAction="$SetObj($obj.Id)">
+						<c:VerticalLayout CssClass="date_object" OnClickAction="$SetObj($obj.Id, $obj.Description)">
 							<c:TextView Text="+" CssClass="placeholder_row"></c:TextView>							
 						</c:VerticalLayout>						
 						
