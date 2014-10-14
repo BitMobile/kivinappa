@@ -113,7 +113,7 @@
 								
 			</s:Else>
 						    	
-		<c:HorizontalLayout CssClass="swipe_info">
+		 <c:HorizontalLayout CssClass="swipe_info">
 			<c:Image CssClass="img_right"/>
 			<c:TextView Text="Смахните вправо, чтобы     начать или завершить задание" />				
 		</c:HorizontalLayout>

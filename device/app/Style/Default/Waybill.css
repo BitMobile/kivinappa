@@ -164,3 +164,7 @@ grid green_mark_central {
     white-space: normal;
     font: 50% Arial;
 }
+
+.swipe_layout {
+    height: 15.9sp;
+}
