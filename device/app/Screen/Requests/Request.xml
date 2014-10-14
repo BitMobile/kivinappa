@@ -25,7 +25,7 @@
 		<s:If Test="$curRequest.StatusName == 'New'">		
 			<c:DockLayout CssClass="footer">
 				<c:HorizontalLine CssClass="navy"/>
-				<c:DockLayout CssClass="btn_left_footer" OnClickAction="$DoAction(Task, null, $curRequest.StatusName)">
+				<c:DockLayout CssClass="btn_left_footer" OnClickAction="$RecPeremCPAndDoAction(null, $curRequest.StatusName)">
 					<c:TextView Text="#add#" />
 				</c:DockLayout>
 				
@@ -71,7 +71,7 @@
 					
 					<c:SwipeHorizontalLayout Id="swipe_layout" CssClass="swipe_layout" Index="0">
 												
-						<c:HorizontalLayout CssClass="grid" OnClickAction="$DoAction(Task, $task.Id, $curRequest.StatusName)">
+						<c:HorizontalLayout CssClass="grid" OnClickAction="$RecPeremCPAndDoAction($task.Id, $curRequest.StatusName)">
 							
 							<!--<s:If Test="$ == $">
 								<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>

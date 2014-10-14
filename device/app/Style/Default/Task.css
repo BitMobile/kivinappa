@@ -32,6 +32,7 @@
     height: 100%;
     padding-top: 13%;
     padding-left: 2.7%;
+    selected-color: #e6891b;
 }
 
 .shadowLine {
@@ -97,6 +98,7 @@ grid half_vl {
         height: 100%;
         padding-top: 11%;
         padding-left: 5%;
+        selected-color: #e6891b;
     }
     
 grid half60_vl {
@@ -104,6 +106,7 @@ grid half60_vl {
         height: 100%;
         padding-top: 11%;
         padding-left: 5%;
+        selected-color: #e6891b;
     }
     
 grid half30_vl {
@@ -111,6 +114,7 @@ grid half30_vl {
         height: 100%;
         padding-top: 11%;
         padding-left: 5%;
+        selected-color: #e6891b;
     }
     
 grid verticalLine {
