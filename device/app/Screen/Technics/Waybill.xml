@@ -55,7 +55,15 @@
 						
 					</c:HorizontalLayout>
 
-			</s:Iterator>			
+			</s:Iterator>
+			
+			<c:DockLayout CssClass="footer">
+				<c:HorizontalLine />
+				<c:DockLayout CssClass="btn_center_footer">
+					<c:TextView Text="#gsm#" OnClickAction="$OpenGSM"/>
+				</c:DockLayout>
+				<c:HorizontalLine />
+			</c:DockLayout>			
 			
 			<c:HorizontalLayout CssClass="caption_grid">
 		        <c:TextView Text="#assignments#:"></c:TextView>

@@ -149,6 +149,32 @@ function OpenWaybillWf(WaybillID){
 	Workflow.Action("Waybill", []);
 }
 
+function OpenGSM(){
+	
+	var q = new Query("SELECT TG.Id FROM Catalog_Technics_GSM TG LEFT JOIN Catalog_SKU CG ON TG.SKU = CG.Id " +
+			"WHERE TG.Ref = @ThisTech");
+	q.AddParameter("ThisTech", TechnicsCP);
+	
+	WaybillsCP = q.Execute().Unload();
+	
+	var WaybillsCnt = WaybillsCP.Count();
+	
+	if(WaybillsCnt == 1){
+		
+		WaybillsCP.First();
+		WaybillsCP.Next();
+		
+		CurWaybillCP = WaybillsCP.Id;
+		
+		Workflow.Action("Waybill", []);	
+	}else{
+		
+		Workflow.Action("Waybills", []);
+	}
+	
+	 
+}
+
 //--------------------------ОБЩАЯ ФУНЦИЯ ДЛЯ ИТЕРАТОРОВ
 function restartItr(Itr){
 	Itr.First();

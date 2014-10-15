@@ -45,12 +45,19 @@
 	<bp:Workflow Name="Waybill">
 		<bp:Step Name="Waybill" Screen="Technics\Waybill.xml" Controller="Technics\Main.js">
 			<bp:Action Name="TechTask" NextWorkflow="TechTask" />
+			<bp:Action Name="GSMs" NextWorkflow="GSMs" />
 			<bp:Action Name="GSM" NextWorkflow="GSM" />		
 		</bp:Step>		
 	</bp:Workflow>
 	
+	<bp:Workflow Name="GSMs">
+		<bp:Step Name="GSMs" Screen="Technics\GSMs.xml" Controller="Technics\Main.js">
+		<bp:Action Name="GSM" NextWorkflow="GSM" />		
+		</bp:Step>		
+	</bp:Workflow>
+	
 	<bp:Workflow Name="GSM">
-		<bp:Step Name="GSM" Screen="Technics\GSM.xml" Controller="Technics\Main.js">		
+		<bp:Step Name="GSM" Screen="Technics\GSMs.xml" Controller="Technics\Main.js">		
 		</bp:Step>		
 	</bp:Workflow>
 	

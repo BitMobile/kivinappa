@@ -168,3 +168,70 @@ grid green_mark_central {
 .swipe_layout {
     height: 15.9sp;
 }
+
+.footer {
+	height: 7.6sp;
+    dock-align: bottom;
+	background-color: #ffffff;
+}
+
+	.footer img {
+        height: 15.4%;
+        margin-top: 16%;
+        margin-left: 2.5%;
+        background-image: url(arrow.png);
+    }
+
+
+	.btn_left_footer
+		{
+		width: 40%;
+		height: 100%;
+		dock-align: left;
+		}
+		
+			.btn_left_footer TextView {
+		            width: 100%;
+		            height: 100%;
+		            margin-left: 0%;
+		            padding-top: 25%;
+		            text-align: center;
+		            color: #b96f18;
+		            font: 38% Arial;
+		        }
+	
+	.btn_right_footer
+		{
+		width: 40%;
+		height: 100%;
+		dock-align: right;
+		}
+			
+			.btn_right_footer TextView {
+		            width: 100%;
+		            height: 100%;
+		            margin-left: 0%;
+		            padding-top: 25%;
+		            text-align: center;
+		            color: #b96f18;
+		            font: 38% Arial;
+		        }
+		       
+	.btn_center_footer
+		{
+		width: 100%;
+		height: 100%;		
+		}
+			
+			.btn_center_footer TextView {
+		            width: 100%;
+		            height: 100%;
+		            margin-left: 0%;
+		            padding-top: 25%;
+		            text-align: center;
+		            color: #b96f18;
+		            font: 38% Arial;
+		        }
+
+
+

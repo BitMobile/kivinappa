@@ -255,3 +255,4 @@ technics	Technics
 technicsList	Technics List
 waybills	Waybills
 waybill	Waybill
+gsm	Fuel
