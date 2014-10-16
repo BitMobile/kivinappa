@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Request.css">
 
-    <s:Push Id="cntWaybills" Value="$param1"></s:Push>
+<s:Push Id="WaybillsCnt" Value="@WaybillsCntCP"></s:Push>
     				
 	<c:DockLayout>
 	
@@ -22,7 +22,7 @@
 		
 		<c:ScrollView Id="scrlVw">
 															
-			<s:If Test="$cntWaybills == 0">
+			<s:If Test="$WaybillsCnt == 0">
 
 				<c:TextView Text="#unknown#" CssClass="main_row"/>
 

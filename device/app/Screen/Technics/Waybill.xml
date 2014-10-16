@@ -59,8 +59,8 @@
 			
 			<c:DockLayout CssClass="footer">
 				<c:HorizontalLine />
-				<c:DockLayout CssClass="btn_center_footer">
-					<c:TextView Text="#gsm#" OnClickAction="$OpenGSM"/>
+				<c:DockLayout CssClass="btn_center_footer" OnClickAction="$OpenGSM()">
+					<c:TextView Text="#gsm#"/>
 				</c:DockLayout>
 				<c:HorizontalLine />
 			</c:DockLayout>			

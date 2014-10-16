@@ -57,7 +57,7 @@
 	</bp:Workflow>
 	
 	<bp:Workflow Name="GSM">
-		<bp:Step Name="GSM" Screen="Technics\GSMs.xml" Controller="Technics\Main.js">		
+		<bp:Step Name="GSM" Screen="Technics\GSM.xml" Controller="Technics\Main.js">		
 		</bp:Step>		
 	</bp:Workflow>
 	

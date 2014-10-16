@@ -5,8 +5,12 @@ var tasksendDateCP;
 var TechnicsCP;
 var CurWaybillCP;
 var WaybillsCP;
+var WaybillsCntCP;
 var TechnicsDescriptionCP;
 var TechnicsVRTCP;
+var GSMsCP;
+var GSMsCntCP;
+var CurGSMCP;
 
 //-------------------------- Скрин Technics
 
@@ -91,9 +95,9 @@ function AddPeremAndDoAction(TechnicsID, TechDescription, TechVRT){
 	
 	WaybillsCP = q.Execute().Unload();
 	
-	var WaybillsCnt = WaybillsCP.Count();
+	WaybillsCntCP = WaybillsCP.Count();
 	
-	if(WaybillsCnt == 1){
+	if(WaybillsCntCP == 1){
 		
 		WaybillsCP.First();
 		WaybillsCP.Next();
@@ -151,28 +155,35 @@ function OpenWaybillWf(WaybillID){
 
 function OpenGSM(){
 	
-	var q = new Query("SELECT TG.Id FROM Catalog_Technics_GSM TG LEFT JOIN Catalog_SKU CG ON TG.SKU = CG.Id " +
+	var q = new Query("SELECT TG.Id, CG.Description AS GSM FROM Catalog_Technics_GSM TG LEFT JOIN Catalog_SKU CG ON TG.SKU = CG.Id " +
 			"WHERE TG.Ref = @ThisTech");
 	q.AddParameter("ThisTech", TechnicsCP);
 	
-	WaybillsCP = q.Execute().Unload();
+	GSMsCP = q.Execute().Unload();
 	
-	var WaybillsCnt = WaybillsCP.Count();
+	GSMsCntCP = GSMsCP.Count();
 	
-	if(WaybillsCnt == 1){
+	if(GSMsCntCP == 1){
 		
-		WaybillsCP.First();
-		WaybillsCP.Next();
+		GSMsCP.First();
+		GSMsCP.Next();
 		
-		CurWaybillCP = WaybillsCP.Id;
+		CurGSMCP = GSMsCP.Id;
 		
-		Workflow.Action("Waybill", []);	
+		Workflow.Action("GSM", []);	
 	}else{
 		
-		Workflow.Action("Waybills", []);
+		Workflow.Action("GSMs", []);
 	}
 	
 	 
+}
+
+//-------------------------- Скрин GSMs
+
+function OpenGSMWf(GSMID){
+	CurGSMCP = GSMID;
+	Workflow.Action("GSM", []);
 }
 
 //--------------------------ОБЩАЯ ФУНЦИЯ ДЛЯ ИТЕРАТОРОВ
