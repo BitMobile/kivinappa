@@ -13,7 +13,7 @@
 			</c:HorizontalLayout>
 						
 			<c:HorizontalLayout CssClass="header_one_btn">
-				<c:TextView Text="#GSMs#" />
+				<c:TextView Text="#gsmList#" />
 			</c:HorizontalLayout>
 			
 		</c:DockLayout>

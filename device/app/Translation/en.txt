@@ -256,3 +256,5 @@ technicsList	Technics List
 waybills	Waybills
 waybill	Waybill
 gsm	Fuel
+gsmList	Fuel List
+fillup	Fill-up

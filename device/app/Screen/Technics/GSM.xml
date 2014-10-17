@@ -16,13 +16,13 @@
 			<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
 			
 			<c:HorizontalLayout>
-				<c:TextView Text="#waybill#" />
+				<c:TextView Text="#gsm#" />
 			</c:HorizontalLayout>			
 		</c:DockLayout>
 		
 		<c:DockLayout CssClass="footer">
 			<c:HorizontalLine CssClass="navy"/>
-			<c:DockLayout CssClass="btn_center_footer" OnClickAction="$DoAction(TechTask, null)">
+			<c:DockLayout CssClass="btn_center_footer" OnClickAction="$DoAction(Fill, null)">
 				<c:TextView Text="#add#" />
 			</c:DockLayout>
 		</c:DockLayout>
@@ -31,47 +31,23 @@
 
 		<c:ScrollView Id="scrlVw">
 			
-			<c:HorizontalLayout CssClass="small_grid">
+			<c:HorizontalLayout CssClass="grid">
 						
 						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
 						
 						<c:VerticalLayout>
-							<c:TextView Text="{@TechnicsDescriptionCP}, {@TechnicsVRTCP}" CssClass="main_row2"></c:TextView>
+							<c:TextView Text="" CssClass="main_row2"></c:TextView>
 						</c:VerticalLayout>
 						
 			</c:HorizontalLayout>
-			
-			<s:Iterator Id="WaybillInfo" Value="$curWaybillInfo">						
-
-					<c:HorizontalLine />
-					
-					<c:HorizontalLayout CssClass="small_grid">
 						
-						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
-						
-						<c:VerticalLayout>
-							<c:TextView Text="{$WaybillInfo.Role}: {$WaybillInfo.PhysicalPersons}" CssClass="main_row2"></c:TextView>			
-						</c:VerticalLayout>
-						
-					</c:HorizontalLayout>
-
-			</s:Iterator>
-			
-			<c:DockLayout CssClass="footer">
-				<c:HorizontalLine />
-				<c:DockLayout CssClass="btn_center_footer" OnClickAction="$OpenGSM()">
-					<c:TextView Text="#gsm#"/>
-				</c:DockLayout>
-				<c:HorizontalLine />
-			</c:DockLayout>			
-			
 			<c:HorizontalLayout CssClass="caption_grid">
-		        <c:TextView Text="#assignments#:"></c:TextView>
+		        <c:TextView Text="#fillup#:"></c:TextView>
 		    </c:HorizontalLayout>
 	    	
 	    	<c:HorizontalLine/>
 	    	
-	    	<s:If Test="$cntTasks == 0">
+	    	<s:If Test="0 == 0">
 			
 				<c:TextView Text="#unknown#" CssClass="TextNoPlans" />
 				
