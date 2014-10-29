@@ -250,4 +250,4 @@ status	Status
 assignments	ASSIGNMENTS
 assignment	ASSIGNMENT
 note	NOTE
-constructionObjects	CONSTRUCTION OBJECTS
+constructionObjects	Construction objects

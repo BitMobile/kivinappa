@@ -249,4 +249,4 @@ status	Статус
 assignments	ЗАДАНИЯ
 assignment	ЗАДАНИЕ
 note	ПРИМЕЧАНИЕ
-constructionObjects	ОБЪЕКТЫ СТРОИТЕЛЬСТВА
+constructionObjects	Объекты строительства
