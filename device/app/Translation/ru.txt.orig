@@ -249,7 +249,10 @@ status	Статус
 assignments	ЗАДАНИЯ
 assignment	ЗАДАНИЕ
 note	ПРИМЕЧАНИЕ
+<<<<<<< HEAD
 constructionObjects	Объекты строительства
+=======
+constructionObjects	ОБЪЕКТЫ СТРОИТЕЛЬСТВА
 technics	Техника
 technicsList	Список техники
 waybills	Путевые листы
@@ -257,3 +260,4 @@ waybill	Путевой лист
 gsm	ГСМ
 gsmList	Список ГСМ
 fillup	Заправки
+>>>>>>> 39a09c9... sf
