@@ -4,6 +4,7 @@
 	<bp:Workflow Name="Main" Controller="Main\Main.js">
 		<bp:Step Name="Menu" Screen="Main.xml">			
 			<bp:Action Name="Requests" NextWorkflow="Requests" />
+			<bp:Action Name="Technics" NextWorkflow="Technics" />
 			<bp:Action Name="Sync" NextWorkflow="Sync" />
 			<bp:Action Name="Settings" NextWorkflow="Settings"></bp:Action>
 		</bp:Step>
@@ -25,11 +26,45 @@
 		</bp:Step>	
 		
 		<bp:Step Name="ConstructionObjectsList" Screen="Requests\ConstructionObjectsList.xml" Controller="Requests\Main.js">
-			
+		</bp:Step>		
+	</bp:Workflow>
+	
+	<bp:Workflow Name="Technics">
+		<bp:Step Name="Technics" Screen="Technics\Technics.xml" Controller="Technics\Main.js">
+				<bp:Action Name="Waybills" NextWorkflow="Waybills" />
+				<bp:Action Name="Waybill" NextWorkflow="Waybill" />
+		</bp:Step>
+	</bp:Workflow>
+	
+	<bp:Workflow Name="Waybills">
+		<bp:Step Name="Waybills" Screen="Technics\Waybills.xml" Controller="Technics\Main.js">
+			<bp:Action Name="Waybill" NextWorkflow="Waybill" />
 		</bp:Step>	
 	</bp:Workflow>
-
 	
+	<bp:Workflow Name="Waybill">
+		<bp:Step Name="Waybill" Screen="Technics\Waybill.xml" Controller="Technics\Main.js">
+			<bp:Action Name="TechTask" NextWorkflow="TechTask" />
+			<bp:Action Name="GSMs" NextWorkflow="GSMs" />
+			<bp:Action Name="GSM" NextWorkflow="GSM" />		
+		</bp:Step>		
+	</bp:Workflow>
+	
+	<bp:Workflow Name="GSMs">
+		<bp:Step Name="GSMs" Screen="Technics\GSMs.xml" Controller="Technics\Main.js">
+		<bp:Action Name="GSM" NextWorkflow="GSM" />		
+		</bp:Step>		
+	</bp:Workflow>
+	
+	<bp:Workflow Name="GSM">
+		<bp:Step Name="GSM" Screen="Technics\GSM.xml" Controller="Technics\Main.js">		
+		</bp:Step>		
+	</bp:Workflow>
+	
+	<bp:Workflow Name="TechTask">
+		<bp:Step Name="TechTask" Screen="Technics\TechTask.xml" Controller="Technics\Main.js">		
+		</bp:Step>		
+	</bp:Workflow>	
 
 	<bp:Workflow Name="Settings">
 		<bp:Step Name="Settings" Screen="Settings.xml">

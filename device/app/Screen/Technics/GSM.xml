@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Waybill.css">
+
+    <!-- <s:Push Id="curWaybillInfo" Value="$GetCurWaybillInfo()"></s:Push>
+    <s:Push Id="techTasks" Value="$GetTechTasks()"></s:Push>
+    <s:Push Id="cntTasks" Value="$GetCntTasks($techTasks)"></s:Push> -->
+    				
+	<c:DockLayout>
+	
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$Workflow.DoRollback()">
+				<c:Image />
+				<c:TextView Text="#back#" />
+			</c:HorizontalLayout>
+												
+			<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
+			
+			<c:HorizontalLayout>
+				<c:TextView Text="#gsm#" />
+			</c:HorizontalLayout>			
+		</c:DockLayout>
+		
+		<c:DockLayout CssClass="footer">
+			<c:HorizontalLine CssClass="navy"/>
+			<c:DockLayout CssClass="btn_center_footer" OnClickAction="$DoAction(Fill, null)">
+				<c:TextView Text="#add#" />
+			</c:DockLayout>
+		</c:DockLayout>
+		
+		<c:HorizontalLine CssClass="navy"/>
+
+		<c:ScrollView Id="scrlVw">
+			
+			<c:HorizontalLayout CssClass="grid">
+						
+						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+						
+						<c:VerticalLayout>
+							<c:TextView Text="" CssClass="main_row2"></c:TextView>
+						</c:VerticalLayout>
+						
+			</c:HorizontalLayout>
+						
+			<c:HorizontalLayout CssClass="caption_grid">
+		        <c:TextView Text="#fillup#:"></c:TextView>
+		    </c:HorizontalLayout>
+	    	
+	    	<c:HorizontalLine/>
+	    	
+	    	<s:If Test="0 == 0">
+			
+				<c:TextView Text="#unknown#" CssClass="TextNoPlans" />
+				
+				<c:HorizontalLine/>
+				
+			</s:If>			
+			<s:Else>
+			
+				<s:Iterator Id="techTask" Value="$techTasks">
+
+					<!-- Id, ConstructionObject, TechnicsType, SKU, OperationMode, StartTime, StopTime, Note, Count -->
+					
+					<c:SwipeHorizontalLayout Id="swipe_layout" CssClass="swipe_layout" Index="0">
+												
+						<c:HorizontalLayout CssClass="grid" OnClickAction="$DoAction(techTask, $techTask.Id)">
+							
+							<!--<s:If Test="$ == $">
+								<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
+							</s:If>
+							<s:Else>
+								<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
+							</s:Else>-->
+							<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
+							
+							<c:VerticalLayout>
+								
+								<c:TextView Text="{$techTask.StartTime} - {$techTask.StopTime} {$techTask.CODescription} {$techTask.Requestioner}" CssClass="description_row"></c:TextView>
+								<c:TextView Text="заменить на вид работ" CssClass="main_row"></c:TextView>
+																							
+							</c:VerticalLayout>
+														
+						</c:HorizontalLayout>
+						
+						<!-- <s:If Test="$curRequest.StatusName == 'New'">
+							<c:HorizontalLayout CssClass="red_swipe" >
+								<c:VerticalLayout >
+									<c:TextView Text="#del#"></c:TextView>
+								</c:VerticalLayout>
+							</c:HorizontalLayout>
+						</s:If>-->
+												
+					</c:SwipeHorizontalLayout>
+					
+					<c:HorizontalLine/>
+					
+				</s:Iterator>
+								
+			</s:Else>
+						    	
+		 <c:HorizontalLayout CssClass="swipe_info">
+			<c:Image CssClass="img_right"/>
+			<c:TextView Text="Смахните вправо, чтобы     начать или завершить задание" />				
+		</c:HorizontalLayout>
+
+		</c:ScrollView>
+		
+	</c:DockLayout>
+
+</c:Screen>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Request.css">
+
+<s:Push Id="GSMsCnt" Value="@GSMsCntCP"></s:Push>
+    				
+	<c:DockLayout>
+	
+		<c:DockLayout CssClass="top_navigator">
+			
+			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$Workflow.DoRollback()">
+				<c:Image />
+				<c:TextView Text="#back#" />
+			</c:HorizontalLayout>
+						
+			<c:HorizontalLayout CssClass="header_one_btn">
+				<c:TextView Text="#gsmList#" />
+			</c:HorizontalLayout>
+			
+		</c:DockLayout>
+	
+	<c:HorizontalLayout CssClass="shadowLine"></c:HorizontalLayout>
+		
+		<c:ScrollView Id="scrlVw">
+															
+			<s:If Test="$GSMsCnt == 0">
+
+				<c:TextView Text="#unknown#" CssClass="main_row"/>
+
+			</s:If>
+			<s:Else>
+															
+				<s:Iterator Id="GSMs" Value="@GSMsCP">						
+
+					<c:HorizontalLine />
+					
+					<c:HorizontalLayout CssClass="grid" OnClickAction="$OpenGSMWf($GSMs.Id)">
+						
+						<c:VerticalLayout CssClass="no_mark "></c:VerticalLayout>
+						
+						<c:VerticalLayout>
+							<c:TextView Text="{$GSMs.GSM}" CssClass="main_row"></c:TextView>			
+						</c:VerticalLayout>
+						
+						<c:Image />
+						
+					</c:HorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+			
+			<c:HorizontalLayout CssClass="end_of_block" />
+
+		</c:ScrollView>	
+	
+	</c:DockLayout>
+	
+	<s:Push Id="RestartIterator" Value="$restartItr(@GSMsCP)"></s:Push>
+
+</c:Screen>

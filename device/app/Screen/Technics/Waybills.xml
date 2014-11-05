@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Request.css">
+
+<s:Push Id="WaybillsCnt" Value="@WaybillsCntCP"></s:Push>
+    				
+	<c:DockLayout>
+	
+		<c:DockLayout CssClass="top_navigator">
+			
+			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$Workflow.DoRollback()">
+				<c:Image />
+				<c:TextView Text="#back#" />
+			</c:HorizontalLayout>
+						
+			<c:HorizontalLayout CssClass="header_one_btn">
+				<c:TextView Text="#waybills#" />
+			</c:HorizontalLayout>
+			
+		</c:DockLayout>
+	
+	<c:HorizontalLayout CssClass="shadowLine"></c:HorizontalLayout>
+		
+		<c:ScrollView Id="scrlVw">
+															
+			<s:If Test="$WaybillsCnt == 0">
+
+				<c:TextView Text="#unknown#" CssClass="main_row"/>
+
+			</s:If>
+			<s:Else>
+															
+				<s:Iterator Id="Waybill" Value="@WaybillsCP">						
+
+					<c:HorizontalLine />
+					
+					<c:HorizontalLayout CssClass="grid" OnClickAction="$OpenWaybillWf($Waybill.Id)">
+						
+						<c:VerticalLayout CssClass="no_mark "></c:VerticalLayout>
+						
+						<c:VerticalLayout>
+							<c:TextView Text="{$Waybill.Number}" CssClass="main_row"></c:TextView>
+							<c:TextView Text="С: {$Waybill.PlannedStartDate}" CssClass="description_row"></c:TextView>	
+							<c:TextView Text="По: {$Waybill.PlannedEndDate}" CssClass="description_row"></c:TextView>				
+						</c:VerticalLayout>
+						
+						<c:Image />
+						
+					</c:HorizontalLayout>
+
+				</s:Iterator>
+			</s:Else>
+			
+			<c:HorizontalLayout CssClass="end_of_block" />
+
+		</c:ScrollView>	
+	
+	</c:DockLayout>
+	
+	<s:Push Id="RestartIterator" Value="$restartItr(@WaybillsCP)"></s:Push>
+
+</c:Screen>
