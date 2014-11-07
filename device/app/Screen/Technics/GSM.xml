@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Waybill.css">
 
-    <!-- <s:Push Id="curWaybillInfo" Value="$GetCurWaybillInfo()"></s:Push>
-    <s:Push Id="techTasks" Value="$GetTechTasks()"></s:Push>
-    <s:Push Id="cntTasks" Value="$GetCntTasks($techTasks)"></s:Push> -->
+    <!-- <s:Push Id="curWaybillInfo" Value="$GetCurWaybillInfo()"></s:Push> -->
+    <s:Push Id="Fills" Value="$GetFills()"></s:Push>
+    <s:Push Id="cntFills" Value="$GetCntFills($Fills)"></s:Push>
     				
 	<c:DockLayout>
 	
@@ -47,7 +47,7 @@
 	    	
 	    	<c:HorizontalLine/>
 	    	
-	    	<s:If Test="0 == 0">
+	    	<s:If Test="$cntFills == 0">
 			
 				<c:TextView Text="#unknown#" CssClass="TextNoPlans" />
 				
@@ -56,38 +56,23 @@
 			</s:If>			
 			<s:Else>
 			
-				<s:Iterator Id="techTask" Value="$techTasks">
+				<s:Iterator Id="Fills" Value="$Fills">
 
-					<!-- Id, ConstructionObject, TechnicsType, SKU, OperationMode, StartTime, StopTime, Note, Count -->
+					<!-- Id, RowId, Date, Count -->
 					
 					<c:SwipeHorizontalLayout Id="swipe_layout" CssClass="swipe_layout" Index="0">
 												
 						<c:HorizontalLayout CssClass="grid" OnClickAction="$DoAction(techTask, $techTask.Id)">
 							
-							<!--<s:If Test="$ == $">
-								<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
-							</s:If>
-							<s:Else>
-								<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
-							</s:Else>-->
-							<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
-							
 							<c:VerticalLayout>
 								
-								<c:TextView Text="{$techTask.StartTime} - {$techTask.StopTime} {$techTask.CODescription} {$techTask.Requestioner}" CssClass="description_row"></c:TextView>
-								<c:TextView Text="заменить на вид работ" CssClass="main_row"></c:TextView>
+								<c:TextView Text="Заправка {$Fills.Date}" CssClass="description_row"></c:TextView>
+								<c:TextView Text="Количество топлива: {$Fills.Count}" CssClass="main_row"></c:TextView>
+								<c:TextView Text="Стоимость: " CssClass="main_row"></c:TextView>
 																							
 							</c:VerticalLayout>
 														
 						</c:HorizontalLayout>
-						
-						<!-- <s:If Test="$curRequest.StatusName == 'New'">
-							<c:HorizontalLayout CssClass="red_swipe" >
-								<c:VerticalLayout >
-									<c:TextView Text="#del#"></c:TextView>
-								</c:VerticalLayout>
-							</c:HorizontalLayout>
-						</s:If>-->
 												
 					</c:SwipeHorizontalLayout>
 					
@@ -99,7 +84,7 @@
 						    	
 		 <c:HorizontalLayout CssClass="swipe_info">
 			<c:Image CssClass="img_right"/>
-			<c:TextView Text="Смахните вправо, чтобы     начать или завершить задание" />				
+			<c:TextView Text="Смахните влево, чтобы     удалить заправку" />				
 		</c:HorizontalLayout>
 
 		</c:ScrollView>

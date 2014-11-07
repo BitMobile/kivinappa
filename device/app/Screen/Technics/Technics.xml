@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Requests.css">
 	<s:Push Id="search" Value="$param1"/>
-	
-	<!-- <s:Push Id="beginDateParam" Value="$GetParam2($param2)"/>
-	<s:Push Id="endDateParam" Value="$GetParam3($param3)"/>-->
-	
 	<s:Push Id="technics" Value="$GetTechnics($search)"></s:Push>
 	<s:Push Id="technicsCount" Value="$GetTechnicsCount($technics)"></s:Push>
   	  	
@@ -50,7 +46,13 @@
 					
 					<c:HorizontalLayout CssClass="grid" OnClickAction="$AddPeremAndDoAction($technics.Id, $technics.Description, $technics.VehicleRegTag)">
 						
-						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+						<!--<s:If Test="$ == $">
+								<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
+							</s:If>
+							<s:Else>
+								<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
+							</s:Else>-->
+						<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
 						
 						<c:VerticalLayout>
 							<c:TextView Text="{$technics.Description}, {$technics.VehicleRegTag}" CssClass="main_row"></c:TextView>

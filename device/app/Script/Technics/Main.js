@@ -155,7 +155,7 @@ function OpenWaybillWf(WaybillID){
 
 function OpenGSM(){
 	
-	var q = new Query("SELECT TG.Id, CG.Description AS GSM FROM Catalog_Technics_GSM TG LEFT JOIN Catalog_SKU CG ON TG.SKU = CG.Id " +
+	var q = new Query("SELECT TG.SKU, CG.Description AS GSM FROM Catalog_Technics_GSM TG LEFT JOIN Catalog_SKU CG ON TG.SKU = CG.Id " +
 			"WHERE TG.Ref = @ThisTech");
 	q.AddParameter("ThisTech", TechnicsCP);
 	
@@ -168,7 +168,7 @@ function OpenGSM(){
 		GSMsCP.First();
 		GSMsCP.Next();
 		
-		CurGSMCP = GSMsCP.Id;
+		CurGSMCP = GSMsCP.SKU;
 		
 		Workflow.Action("GSM", []);	
 	}else{
@@ -182,8 +182,31 @@ function OpenGSM(){
 //-------------------------- Скрин GSMs
 
 function OpenGSMWf(GSMID){
-	CurGSMCP = GSMID;
+	CurGSMCP = GSMID.SKU;
 	Workflow.Action("GSM", []);
+}
+
+//-------------------------- Скрин GSM
+
+function GetFills(){
+	
+	var q = new Query("SELECT F.Id AS Id, FT.Id AS RowId, F.Date, FT.Count AS  " +
+			"FROM Document_Fill_Technics FT LEFT JOIN Document_Fill F " +
+			"ON FT.Ref = F.Id " +
+			"WHERE FT.GSM = @ThisGSM AND FT.Waybill = @ThisWaybill AND FT.Tech = @ThisTech");
+	q.AddParameter("ThisGSM", CurGSMCP);
+	q.AddParameter("ThisWaybill", CurWaybillCP);
+	q.AddParameter("ThisTech", TechnicsCP);
+	
+	res = q.Execute().Unload();
+	resc = res.Count();
+	
+ 	return q.Execute().Unload();
+
+}
+
+function GetCntFills(Fills){
+	return Fills.Count();
 }
 
 //--------------------------ОБЩАЯ ФУНЦИЯ ДЛЯ ИТЕРАТОРОВ

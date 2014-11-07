@@ -24,7 +24,7 @@
 															
 			<s:If Test="$WaybillsCnt == 0">
 
-				<c:TextView Text="#unknown#" CssClass="main_row"/>
+				<c:TextView Text="#unknown#" CssClass="TextNoPlans"/>
 
 			</s:If>
 			<s:Else>
