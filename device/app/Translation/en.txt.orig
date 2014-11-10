@@ -254,6 +254,7 @@ note	NOTE
 constructionObjects	Construction objects
 =======
 constructionObjects	CONSTRUCTION OBJECTS
+>>>>>>> origin/Develop_Ivan
 technics	Technics
 technicsList	Technics List
 waybills	Waybills
@@ -261,4 +262,3 @@ waybill	Waybill
 gsm	Fuel
 gsmList	Fuel List
 fillup	Fill-up
->>>>>>> 39a09c9... sf
