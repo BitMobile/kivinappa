@@ -14,16 +14,16 @@ var CurGSMCP;
 
 
 //-------------------------- Переменные контроллера для экрана Task
-var sKUCP 
-var commentMemoCP 
-var startTimeTextCP 
-var stopTimeTextCP 
-var startTimeFactTextCP 
-var stopTimeFactTextCP 
+var sKUCP; 
+var commentMemoCP; 
+var startTimeTextCP; 
+var stopTimeTextCP; 
+var startTimeFactTextCP; 
+var stopTimeFactTextCP; 
 
 
-var userIdCP
-var forepersonCP
+var userIdCP;
+var forepersonCP;
 
 
 
@@ -227,24 +227,17 @@ function OpenGSM(){
 	 
 }
 
-
 //-------------------------- Скрин TechTask
-
-
-
 function GetTask(taskId){
 	
-		var q = new Query("SELECT T.Id, T.Adress, T.StartTime, T.StopTime, T.OperationTime, S.Id AS SKUId, S.Description AS SKU, " +
-				"T.TaskString, T.Comment, T.StartTimeFact, T.StopTimeFact FROM Document_Waybill_Tasks T " +
+	var q = new Query("SELECT T.Id, T.Adress, T.StartTime, T.StopTime, T.OperationTime, S.Id AS SKUId, S.Description AS SKU, " +
+			"T.TaskString, T.Comment, T.StartTimeFact, T.StopTimeFact FROM Document_Waybill_Tasks T " +
 			"LEFT JOIN Catalog_SKU S ON S.Id = T.Task " +
-				"WHERE Id == @taskId");
-		
-		q.AddParameter("taskId", taskId);
-		var qq = q.Execute();	
-		return qq;
-	}
+			"WHERE T.Id = @taskId");
+	
+	q.AddParameter("taskId", taskId);	
+	return q.Execute();
 }
-
 
 function SaveTask(taskId){
 	
@@ -254,7 +247,7 @@ function SaveTask(taskId){
 		// создание документа Task
 		var T = DB.Create("Document.Waybill_Tasks");
 		T.Ref = CurWaybillCP;
-		T.Requestioner = forepersonCP
+		T.Requestioner = forepersonCP;
 		T.Save();
 		
 		taskId = T.Id;
@@ -269,24 +262,24 @@ function SaveTask(taskId){
 	}		
 	
 //	if(startTimeTextCP == null){
-//		atribNull = 1;		
+//	atribNull = 1;		
+//}else{
+//	if(TrimAll(startTimeTextCP) == "-"){
+//		atribNull = 1;			
 //	}else{
-//		if(TrimAll(startTimeTextCP) == "-"){
-//			atribNull = 1;			
-//		}else{
-//			task.StartTime = startTimeTextCP;
-//		}
+//		task.StartTime = startTimeTextCP;
 //	}
-//	
-//	if(stopTimeTextCP == null){
-//		atribNull = 1;		
+//}
+//
+//if(stopTimeTextCP == null){
+//	atribNull = 1;		
+//}else{
+//	if(TrimAll(stopTimeTextCP) == "-"){
+//		atribNull = 1;			
 //	}else{
-//		if(TrimAll(stopTimeTextCP) == "-"){
-//			atribNull = 1;			
-//		}else{
-//			task.StopTime = stopTimeTextCP;
-//		}
+//		task.StopTime = stopTimeTextCP;
 //	}
+//}
 	
 	if(startTimeFactTextCP == null){
 		atribNull = 1;		
@@ -358,6 +351,7 @@ function SetTime(timeText, timeValueText, entity, attribute) {
 	}
 }
 
+
 function SetTimeNow(state, args) {
 	var timeText = state[0];
 	var entity = state[1];
@@ -380,7 +374,6 @@ function CommentMemoEdit(){
 	commentMemoCP = Variables["commentMemo"].Text;
 }
 
-
 //-------------------------- Скрин GSMs
 
 function OpenGSMWf(GSMID){
@@ -392,7 +385,7 @@ function OpenGSMWf(GSMID){
 
 function GetFills(){
 	
-	var q = new Query("SELECT F.Id AS Id, FT.Id AS RowId, F.Date, FT.Count AS  " +
+	var q = new Query("SELECT F.Id AS Id, FT.Id AS RowId, F.Date, FT.Count AS Cnt " +
 			"FROM Document_Fill_Technics FT LEFT JOIN Document_Fill F " +
 			"ON FT.Ref = F.Id " +
 			"WHERE FT.GSM = @ThisGSM AND FT.Waybill = @ThisWaybill AND FT.Tech = @ThisTech");
