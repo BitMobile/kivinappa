@@ -5,6 +5,7 @@
 	<s:Push Id="technicsCount" Value="$GetTechnicsCount($technics)"></s:Push>
   	  	
   	<c:VerticalLayout>
+		
 		<c:DockLayout CssClass="top_navigator">
 			
 			<c:HorizontalLayout CssClass="btn_menu" OnEvent="Back"	OnClickAction="$Workflow.DoRollback()">
@@ -21,6 +22,7 @@
 
 		
 		<c:HorizontalLayout CssClass="search">
+			
 			<c:DockLayout>
 				<c:Image />
 				<c:EditText Id="edtSearch" Text="$search" Placeholder="#search#"></c:EditText>
@@ -46,18 +48,43 @@
 					
 					<c:HorizontalLayout CssClass="grid" OnClickAction="$AddPeremAndDoAction($technics.Id, $technics.Description, $technics.VehicleRegTag)">
 						
-						<!--<s:If Test="$ == $">
+						<s:If Test="$technics.Status == 'В ремонте' || $technics.Status == 'Неисправно, запрещено к работе'">
+							
+							<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
+							
+							<c:VerticalLayout>
+								<c:TextView Text="{$technics.Description}, {$technics.VehicleRegTag}" CssClass="main_row"></c:TextView>
+								<c:TextView Text="#malfunction#" CssClass="description_row"></c:TextView>						
+							</c:VerticalLayout>
+						
+						</s:If>
+						<s:Else>
+							
+							<s:If Test="$technics.Info == 'PlannedNext'">
+								
 								<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
+								
+								<s:If Test="$IsNullOrEmpty($technics.StartTime)">
+									<c:VerticalLayout>
+										<c:TextView Text="{$technics.Description}, {$technics.VehicleRegTag}" CssClass="main_row"></c:TextView>
+										<c:TextView Text="#free#" CssClass="description_row"></c:TextView>						
+									</c:VerticalLayout>	
+								</s:If>
+								<s:Else>
+									<c:VerticalLayout>
+										<c:TextView Text="{$technics.Description}, {$technics.VehicleRegTag}" CssClass="main_row"></c:TextView>
+										<c:TextView Text="Свободен до {$technics.StartTime}" CssClass="description_row"></c:TextView>
+									</c:VerticalLayout>
+								</s:Else>
+							
 							</s:If>
 							<s:Else>
-								<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
-							</s:Else>-->
-						<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
+								
+								<c:VerticalLayout CssClass="gray_mark_central"></c:VerticalLayout>
+							
+							</s:Else>
 						
-						<c:VerticalLayout>
-							<c:TextView Text="{$technics.Description}, {$technics.VehicleRegTag}" CssClass="main_row"></c:TextView>
-							<!--<c:TextView Text="$requests.EnumTechnicsStatus" CssClass="description_row"></c:TextView>-->						
-						</c:VerticalLayout>
+						</s:Else>
 						
 						<c:Image />
 						

@@ -258,3 +258,5 @@ waybill	Waybill
 gsm	Fuel
 gsmList	Fuel List
 fillup	Fill-up
+malfunction	Malfunction
+free	Free

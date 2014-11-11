@@ -1,0 +1,32 @@
+grid no_mark_indication {
+    height: 100%;
+    width: 6.1%;
+	background-color: #00ff00;
+}
+
+grid gray_mark_central; {
+    background-image: url(gray_mark.png);
+    height: 0%;
+    width: 4.1%;
+    margin-left: 2%;
+    margin-right: 0%;
+	vertical-align: central;
+}
+
+grid yellow_mark_central; {
+    background-image: url(yellow_mark.png);
+    height: 0%;
+    width: 4.1%;
+    margin-left: 2%;
+    margin-right: 0%;
+	vertical-align: central;
+}
+
+grid green_mark_central {
+    background-image: url(green_mark.png);
+    height: 0%;
+    width: 4.1%;
+    margin-left: 2%;
+    margin-right: 0%;
+	vertical-align: central;
+}
