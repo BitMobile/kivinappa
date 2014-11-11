@@ -20,12 +20,24 @@ var stopTimeTextCP
 var operationModeTextCP 
 var commentMemoCP 
 
+var userIdCP
+var forepersonCP
+
 
 
 
 
 function OnLoad() {    
 	userIdCP = $.common.UserId;
+		
+	var q = new Query("SELECT Foreperson " +
+			"FROM Catalog_User " +
+			"WHERE Id == @userIdCP");
+	
+	q.AddParameter("userIdCP", "@ref[Catalog_User]:" + userIdCP);
+	
+	forepersonCP = q.ExecuteScalar();
+		 
 }
 
 //-------------------------- Скрин Requests
@@ -158,8 +170,10 @@ function GetCurRequest(){
 		// создание документа Request
 		var RQ = DB.Create("Document.Request");
 		RQ.Posted = 0;
+		RQ.DeletionMark = 0;
 		RQ.Date = DateTime.Now;
 		RQ.EnumTechnicsStatus = DB.Current.Constant.EnumTechnicsStatus.New;
+		RQ.Requester = forepersonCP;
 		//RQ.Requester = requester;
 				
 		RQ.Save();
@@ -352,6 +366,7 @@ function SaveTask(taskId){
 	if(atribNull != null){
 		Dialog.Message("Не все поля заполнены");
 	}else{
+		//Dialog.Debug(forepersonCP);
 		task.Save();
 		Workflow.Back();
 	}    
@@ -542,7 +557,125 @@ function GetTime(Period)
 }
 
 
+var validPhoneNum = "";
+function ValidatePhoneNum(control){
+//	+7 (222) 222-22-22
+//	123456789012345678
+	
+	var phoneNum = Variables["phoneNumText"].Text;
+	
+	var countryCode = "+7 ";
+	var leftParenthesis = "(";
+	var rightParenthesis = ") ";
+	var dash = "-";
+	var space = " ";
+	var areaCode = "";
+	var number = "";
+	
+		
+	if(StrLen(phoneNum) == 1){
+		validPhoneNum = countryCode + leftParenthesis + phoneNum;
+	}else{
+		if(StrLen(phoneNum) < 5){
+			validPhoneNum = "";
+		}else{	
+			if(StrLen(phoneNum) < 7){
+				validPhoneNum = phoneNum;
+			}else{
+				if(StrLen(phoneNum) == 7){
+					validPhoneNum = phoneNum + rightParenthesis;
+				}else{
+					if(StrLen(phoneNum) < 12){
+						validPhoneNum = phoneNum;
+					}else{
+						if(StrLen(phoneNum) == 12){
+							validPhoneNum = phoneNum + dash;					
+						}else{
+							if(StrLen(phoneNum) < 15){
+								validPhoneNum = phoneNum;
+							}else{
+								if(StrLen(phoneNum) == 15){
+									validPhoneNum = phoneNum + dash;					
+								}else{
+									if(StrLen(phoneNum) < 18){
+										validPhoneNum = phoneNum;
+									}else{
+										if(StrLen(phoneNum) == 18){
+											validPhoneNum = phoneNum + space;					
+										}else{
+											validPhoneNum = phoneNum;											
+										}
+									}
+								}
+							}							
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	
+	
+	
+//	control.Text = phoneNum + "э";
+	
+//	Dialog.Debug(validPhoneNum);
+	Workflow.Refresh([]);
+	
+}
 
+
+function ValidateTelNum(entity) {
+	// var res = StrReplace("Str",[^0-9],"");
+	var PhoneCountryCode = "";
+	var PhoneCityCode = "";
+	var PhoneNumber = "";
+	var PhoneInternalCode = "";
+	
+	var editTel = "";
+	var plusFind = 0;
+	var telFullCharCount = StrLen(telFull);
+	
+	for (var tChar = 1; tChar <= telFullCharCount; tChar++) {
+		var nextChar = Mid(telFull, tChar, 1);
+		if ((nextChar == "+" && plusFind == 0) || nextChar == "0"
+				|| nextChar == "1" || nextChar == "2" || nextChar == "3"
+				|| nextChar == "4" || nextChar == "5" || nextChar == "6"
+				|| nextChar == "7" || nextChar == "8" || nextChar == "9") {
+			editTel = editTel + nextChar;
+			if (nextChar == "+") {
+				plusFind = 1;
+			}
+		}
+	}
+	
+	// Dialog.Debug(plusFind);
+	
+	if (StrLen(editTel) >= 11 || (StrLen(editTel) >= 12 && plusFind == 1)) {
+		if (plusFind == 1) {
+			if (StrLen(editTel) >= 12){
+				PhoneCountryCode = Mid(editTel, 1, 2);
+				PhoneCityCode = Mid(editTel, 3, 3);
+				PhoneNumber = Mid(editTel, 6, 7);
+				PhoneInternalCode = Right(editTel, StrLen(editTel) - 12);
+			} else{
+				PhoneCountryCode = Mid(editTel, 1, 1);
+				PhoneCityCode = Mid(editTel, 2, 3);
+				PhoneNumber = Mid(editTel, 5, 7);
+				PhoneInternalCode = Right(editTel, StrLen(editTel) - 11);
+			}
+			
+		} else {
+			PhoneCountryCode = Mid(editTel, 1, 1);
+			PhoneCityCode = Mid(editTel, 2, 3);
+			PhoneNumber = Mid(editTel, 5, 7);
+			PhoneInternalCode = Right(editTel, StrLen(editTel) - 11);
+		}
+	} else {
+		PhoneNumber = editTel;
+	}
+}
 
 
 

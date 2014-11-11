@@ -114,7 +114,7 @@
 				</c:HorizontalLayout>
 			    								    		
 				<c:HorizontalLine/>
-						
+									
 			</c:ScrollView>
 		</c:DockLayout>
 	</s:If>
@@ -223,6 +223,17 @@
 				</c:HorizontalLayout>
 			    								    		
 				<c:HorizontalLine/>
+				
+				<c:HorizontalLayout CssClass="grid">
+			    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout>
+						<c:TextView Text="Валидация" CssClass="description_row"></c:TextView>
+						<c:EditText Id="phoneNumText" Placeholder="#Введите номер#" Text="@validPhoneNum" OnChange="$ValidatePhoneNum($phoneNumText)" Keyboard="numeric" CssClass="main_row"></c:EditText>								
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+				
+				<c:HorizontalLine/>
+									
 						
 			</c:ScrollView>
 		</c:DockLayout>	

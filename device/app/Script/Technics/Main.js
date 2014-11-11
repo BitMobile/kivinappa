@@ -12,6 +12,36 @@ var GSMsCP;
 var GSMsCntCP;
 var CurGSMCP;
 
+
+//-------------------------- Переменные контроллера для экрана Task
+var sKUCP 
+var commentMemoCP 
+var startTimeTextCP 
+var stopTimeTextCP 
+var startTimeFactTextCP 
+var stopTimeFactTextCP 
+
+
+var userIdCP
+var forepersonCP
+
+
+
+
+
+function OnLoad() {    
+	userIdCP = $.common.UserId;
+	
+	var q = new Query("SELECT Foreperson " +
+			"FROM Catalog_User " +
+			"WHERE Id == @userIdCP");
+	
+	q.AddParameter("userIdCP", "@ref[Catalog_User]:" + userIdCP);
+	
+	forepersonCP = q.ExecuteScalar();
+}
+
+
 //-------------------------- Скрин Technics
 
 function GetTechnics(searchText){
@@ -196,6 +226,160 @@ function OpenGSM(){
 	
 	 
 }
+
+
+//-------------------------- Скрин TechTask
+
+
+
+function GetTask(taskId){
+	
+		var q = new Query("SELECT T.Id, T.Adress, T.StartTime, T.StopTime, T.OperationTime, S.Id AS SKUId, S.Description AS SKU, " +
+				"T.TaskString, T.Comment, T.StartTimeFact, T.StopTimeFact FROM Document_Waybill_Tasks T " +
+			"LEFT JOIN Catalog_SKU S ON S.Id = T.Task " +
+				"WHERE Id == @taskId");
+		
+		q.AddParameter("taskId", taskId);
+		var qq = q.Execute();	
+		return qq;
+	}
+}
+
+
+function SaveTask(taskId){
+	
+	var atribNull = null;
+	
+	if(taskId == null){
+		// создание документа Task
+		var T = DB.Create("Document.Waybill_Tasks");
+		T.Ref = CurWaybillCP;
+		T.Requestioner = forepersonCP
+		T.Save();
+		
+		taskId = T.Id;
+	}
+	
+	var task = taskId.GetObject();
+		
+	if(sKUCP == null){
+		atribNull = 1;		
+	}else{	
+		task.Task = sKUCP;
+	}		
+	
+//	if(startTimeTextCP == null){
+//		atribNull = 1;		
+//	}else{
+//		if(TrimAll(startTimeTextCP) == "-"){
+//			atribNull = 1;			
+//		}else{
+//			task.StartTime = startTimeTextCP;
+//		}
+//	}
+//	
+//	if(stopTimeTextCP == null){
+//		atribNull = 1;		
+//	}else{
+//		if(TrimAll(stopTimeTextCP) == "-"){
+//			atribNull = 1;			
+//		}else{
+//			task.StopTime = stopTimeTextCP;
+//		}
+//	}
+	
+	if(startTimeFactTextCP == null){
+		atribNull = 1;		
+	}else{
+		if(TrimAll(startTimeFactTextCP) == "-"){
+			atribNull = 1;			
+		}else{
+			task.StartTimeFact = startTimeFactTextCP;
+		}
+	}
+	
+	if(stopTimeFactTextCP == null){
+		atribNull = 1;		
+	}else{
+		if(TrimAll(stopTimeFactTextCP) == "-"){
+			atribNull = 1;			
+		}else{
+			task.StopTimeFact = stopTimeFactTextCP;
+		}
+	}
+	
+	if(commentMemoCP == null){
+		var fds = 1;// просто так
+	}else{
+		task.Comment = commentMemoCP;
+	}
+
+	
+	if(atribNull != null){
+		Dialog.Message("Не все поля заполнены");
+	}else{
+		//Dialog.Debug(forepersonCP);
+		task.Save();
+		Workflow.Back();
+	}    
+}
+
+function MyDoSelect(entity, attribute, control) {
+    var tableName = entity[attribute].Metadata().TableName;
+        
+    var query = new Query();
+        
+    if(tableName == "Catalog_SKU"){
+    	query.Text = "SELECT Id, Description FROM " + tableName + " WHERE Service == 1 ORDER BY Description";
+    }else{
+    	query.Text = "SELECT Id, Description FROM " + tableName + " ORDER BY Description";
+    } 
+    
+    Dialog.Select("#select_answer#", query.Execute(), TechnicsTypeDoSelectCallback1, [entity, attribute, control]);
+            
+    return;
+}
+
+function SetTime(timeText, timeValueText, entity, attribute) {
+	
+	var caption = Translate["#enterDateTime#"];
+	
+	var timeValue = Variables[timeValueText].Text;
+	//Console.WriteLine(timeValue);
+	
+	if(timeValue == null){
+		Dialog.Time(caption, SetTimeNow, [timeText, entity, attribute]);
+	}else{
+		if(TrimAll(timeValue) == "-"){
+			Dialog.Time(caption, SetTimeNow, [timeText, entity, attribute]);
+		}else{
+			Dialog.Time(caption, timeValue, SetTimeNow, [timeText, entity, attribute]);
+		}
+	}
+}
+
+function SetTimeNow(state, args) {
+	var timeText = state[0];
+	var entity = state[1];
+	var attribute = state[2];
+			
+	if(attribute == "StartTimeFact"){
+		startTimeTextCP = String.Format("{0:HH:mm}", args.Result);		
+    }
+	
+	if(attribute == "StopTimeFact"){
+		stopTimeTextCP = String.Format("{0:HH:mm}", args.Result);    	
+    }
+	
+	timeText.Text = String.Format("{0:HH:mm}", args.Result);
+	
+	return
+}
+
+function CommentMemoEdit(){
+	commentMemoCP = Variables["commentMemo"].Text;
+}
+
 
 //-------------------------- Скрин GSMs
 

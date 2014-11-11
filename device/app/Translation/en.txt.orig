@@ -250,7 +250,11 @@ status	Status
 assignments	ASSIGNMENTS
 assignment	ASSIGNMENT
 note	NOTE
+<<<<<<< HEAD
 constructionObjects	Construction objects
+=======
+constructionObjects	CONSTRUCTION OBJECTS
+>>>>>>> origin/Develop_Ivan
 technics	Technics
 technicsList	Technics List
 waybills	Waybills
@@ -258,5 +262,3 @@ waybill	Waybill
 gsm	Fuel
 gsmList	Fuel List
 fillup	Fill-up
-malfunction	Malfunction
-free	Free
