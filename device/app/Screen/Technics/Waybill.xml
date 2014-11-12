@@ -4,7 +4,8 @@
     <s:Push Id="curWaybillInfo" Value="$GetCurWaybillInfo()"></s:Push>
     <s:Push Id="techTasks" Value="$GetTechTasks()"></s:Push>
     <s:Push Id="cntTasks" Value="$GetCntTasks($techTasks)"></s:Push>
-    				
+    <s:Push Id="bitmobileRole" Value="@bitmobileRoleCP"></s:Push>
+        				
 	<c:DockLayout>
 	
 		<c:DockLayout CssClass="top_navigator">
@@ -22,9 +23,16 @@
 		
 		<c:DockLayout CssClass="footer">
 			<c:HorizontalLine CssClass="navy"/>
-			<c:DockLayout CssClass="btn_center_footer" OnClickAction="$DoAction(TechTask, null)">
-				<c:TextView Text="#add#" />
-			</c:DockLayout>
+			<s:If Test="$bitmobileRole == 1">			
+				<c:DockLayout CssClass="btn_center_footer" OnClickAction="$DoAction(TaskFromForeperson, null)">
+					<c:TextView Text="#add#" />
+				</c:DockLayout>
+			</s:If>
+			<s:Else>
+				<c:DockLayout CssClass="btn_center_footer" OnClickAction="$DoAction(TechTask, null)">
+					<c:TextView Text="#add#" />
+				</c:DockLayout>
+			</s:Else>
 		</c:DockLayout>
 		
 		<c:HorizontalLine CssClass="navy"/>

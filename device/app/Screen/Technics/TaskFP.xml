@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Task.css">
+	<s:Push Id="taskId" Value="$param1"></s:Push>
+	<s:Push Id="taskIdNull" Value="$param3"></s:Push>
+    <s:Push Id="requestStatus" Value="$param2"></s:Push>
+    
+    <s:If Test="$requestStatus == 'New'">	
+		<c:DockLayout>
+						
+			<c:DockLayout CssClass="footer">
+				<c:HorizontalLine CssClass="navy"/>
+				
+				<c:DockLayout CssClass="btn_left_footer"  OnEvent="Back" OnClickAction="$CanselTask($taskId, taskIdNull)" >
+					<c:TextView Text="#cancel#" />
+				</c:DockLayout>
+				
+				<c:DockLayout CssClass="btn_right_footer" OnClickAction="$SaveTask($taskId)">
+					<c:TextView Text="#ready#" />
+				</c:DockLayout>
+			</c:DockLayout>
+			
+			<c:HorizontalLine CssClass="navy"/>
+	
+			<c:ScrollView Id="scrlVw">
+				
+				<c:HorizontalLine/>
+				
+				<c:HorizontalLayout CssClass="caption_grid">
+			        <c:TextView Text="#assignment#:"></c:TextView>
+			    </c:HorizontalLayout>
+			    
+			    <c:HorizontalLine/>
+				
+				<c:HorizontalLayout CssClass="grid">
+			    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout CssClass="half60_vl" OnClickAction="$MyDoSelect($taskId, TechnicsType, $technicsTypeText)">
+						<c:TextView Text="Вид техники" CssClass="description_row"></c:TextView>
+						<c:TextView Id="technicsTypeText" Text="{@technicsTypeTextCP}" CssClass="main_row"></c:TextView>								
+					</c:VerticalLayout>
+					
+					<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>
+					
+					<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout CssClass="half30_vl">
+						<c:TextView Text="Кол-во" CssClass="description_row"></c:TextView>
+						<c:EditText Id="cntText" Text="{@cntTextCP}" CssClass="main_row" Keyboard = "Numeric"></c:EditText>								
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+				
+				<c:HorizontalLine/>
+				
+				<c:HorizontalLayout CssClass="grid" OnClickAction="$MyDoSelect($taskId, SKU, $SKUText)">
+			    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout>
+						<c:TextView Text="Вид работы" CssClass="description_row"></c:TextView>
+						<c:TextView Id="SKUText" Text="{@sKUTextCP}" CssClass="main_row"></c:TextView>								
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+			    		
+				<c:HorizontalLine/>	
+				
+				<c:HorizontalLayout CssClass="grid" OnClickAction="$DoAction(ConstructionObjectsList, null)">
+			    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout>
+						<c:TextView Text="Объект" CssClass="description_row"></c:TextView>
+						<c:TextView Id="ConstructionObjectText" Text="{@constructionObjectTextCP}" CssClass="main_row"></c:TextView>								
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+			    		
+				<c:HorizontalLine/>
+				
+				<c:HorizontalLayout CssClass="grid">
+			    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StartTimeText, StartTimeText, $taskId, StartTime)">
+						<c:TextView Text="Время начала" CssClass="description_row"></c:TextView>
+						<c:TextView Id="StartTimeText" Text="{$GetTime(@startTimeTextCP)}" CssClass="main_row"></c:TextView>								
+					</c:VerticalLayout>
+					
+					<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>
+					
+					<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StopTimeText, StopTimeText, $taskId, StopTime)">
+						<c:TextView Text="Время окончания" CssClass="description_row"></c:TextView>
+						<c:TextView Id="StopTimeText" Text="{$GetTime(@stopTimeTextCP)}" CssClass="main_row"></c:TextView>								
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+			    		
+				<c:HorizontalLine/>	
+									    		
+				<c:HorizontalLayout CssClass="grid">
+			    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout>
+						<c:TextView Text="Режим работы" CssClass="description_row"></c:TextView>
+						<c:EditText Id="operationModeText" Placeholder="#insert_text#" Text="{@operationModeTextCP}" OnChange="$OperationModeEdit()" CssClass="main_row"></c:EditText>								
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+			    		
+				<c:HorizontalLine/>	
+				
+				<c:HorizontalLayout CssClass="caption_grid">
+			        <c:TextView Text="#note#:"></c:TextView>
+			    </c:HorizontalLayout>
+			    
+			    <c:HorizontalLine/>
+				
+				<c:HorizontalLayout CssClass="grid">
+					<c:VerticalLayout>
+						<c:MemoEdit Id="commentMemo" Text="{@commentMemoCP}" OnChange="$CommentMemoEdit()"></c:MemoEdit>
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+			    								    		
+				<c:HorizontalLine/>
+									
+			</c:ScrollView>
+		</c:DockLayout>
+	</s:If>
+	
+	<s:Else>
+		<c:DockLayout>
+						
+			<c:DockLayout CssClass="footer">
+				<c:HorizontalLine CssClass="navy"/>
+				
+				<c:DockLayout CssClass="btn_left_footer"  OnEvent="Back" OnClickAction="$DoBack()" >
+					<c:TextView Text="#back#" />
+				</c:DockLayout>
+								
+			</c:DockLayout>
+			
+			<c:HorizontalLine CssClass="navy"/>
+	
+			<c:ScrollView Id="scrlVw">
+				<!-- Id, ConstructionObject, TechnicsType, SKU, OperationMode, StartTime, StopTime, Note, Count -->
+			
+				<c:HorizontalLine/>
+				
+				<c:HorizontalLayout CssClass="caption_grid">
+			        <c:TextView Text="#assignment#:"></c:TextView>
+			    </c:HorizontalLayout>
+			    
+			    <c:HorizontalLine/>
+				
+				<c:HorizontalLayout CssClass="grid">
+			    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout CssClass="half60_vl">
+						<c:TextView Text="Вид техники" CssClass="description_row"></c:TextView>
+						<c:TextView Id="technicsTypeText" Text="{@technicsTypeTextCP}" CssClass="main_row"></c:TextView>								
+					</c:VerticalLayout>
+					
+					<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>
+					
+					<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout CssClass="half30_vl">
+						<c:TextView Text="Кол-во" CssClass="description_row"></c:TextView>
+						<c:TextView Id="cntText" Text="{@cntTextCP}" CssClass="main_row"></c:TextView>								
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+				
+				<c:HorizontalLine/>
+				
+				<c:HorizontalLayout CssClass="grid">
+			    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout>
+						<c:TextView Text="Вид работы" CssClass="description_row"></c:TextView>
+						<c:TextView Id="SKUText" Text="{@sKUTextCP}" CssClass="main_row"></c:TextView>								
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+			    		
+				<c:HorizontalLine/>	
+				
+				<c:HorizontalLayout CssClass="grid">
+			    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout>
+						<c:TextView Text="Объект" CssClass="description_row"></c:TextView>
+						<c:TextView Id="ConstructionObjectText" Text="{@constructionObjectTextCP}" CssClass="main_row"></c:TextView>								
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+			    		
+				<c:HorizontalLine/>
+				
+				<c:HorizontalLayout CssClass="grid">
+			    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout CssClass="half_vl">
+						<c:TextView Text="Время начала" CssClass="description_row"></c:TextView>
+						<c:TextView Id="StartTimeText" Text="{$GetTime(@startTimeTextCP)}" CssClass="main_row"></c:TextView>								
+					</c:VerticalLayout>
+					
+					<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>
+					
+					<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout CssClass="half_vl">
+						<c:TextView Text="Время окончания" CssClass="description_row"></c:TextView>
+						<c:TextView Id="StopTimeText" Text="{$GetTime(@stopTimeTextCP)}" CssClass="main_row"></c:TextView>								
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+			    		
+				<c:HorizontalLine/>	
+									    		
+				<c:HorizontalLayout CssClass="grid">
+			    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout>
+						<c:TextView Text="Режим работы" CssClass="description_row"></c:TextView>
+						<c:TextView Id="operationModeText" Text="{@operationModeTextCP}" CssClass="main_row"></c:TextView>								
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+			    		
+				<c:HorizontalLine/>	
+				
+				<c:HorizontalLayout CssClass="caption_grid">
+			        <c:TextView Text="#note#:"></c:TextView>
+			    </c:HorizontalLayout>
+			    
+			    <c:HorizontalLine/>
+				
+				<c:HorizontalLayout CssClass="grid">
+					<c:VerticalLayout>
+						<c:TextView Id="commentMemo" Text="{@commentMemoCP}"></c:TextView>
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+			    								    		
+				<c:HorizontalLine/>
+				
+				<c:HorizontalLayout CssClass="grid">
+			    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+					<c:VerticalLayout>
+						<c:TextView Text="Валидация" CssClass="description_row"></c:TextView>
+						<c:EditText Id="phoneNumText" Placeholder="#Введите номер#" Text="@validPhoneNum" OnChange="$ValidatePhoneNum($phoneNumText)" Keyboard="numeric" CssClass="main_row"></c:EditText>								
+					</c:VerticalLayout>
+				</c:HorizontalLayout>
+				
+				<c:HorizontalLine/>
+									
+						
+			</c:ScrollView>
+		</c:DockLayout>	
+	</s:Else>
+
+</c:Screen>

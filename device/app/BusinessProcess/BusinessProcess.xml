@@ -44,10 +44,22 @@
 	
 	<bp:Workflow Name="Waybill">
 		<bp:Step Name="Waybill" Screen="Technics\Waybill.xml" Controller="Technics\Main.js">
-			<bp:Action Name="TechTask" NextWorkflow="TechTask" />
+			<bp:Action Name="TechTask" NextStep="TechTask" />
 			<bp:Action Name="GSMs" NextWorkflow="GSMs" />
-			<bp:Action Name="GSM" NextWorkflow="GSM" />		
-		</bp:Step>		
+			<bp:Action Name="GSM" NextWorkflow="GSM" />	
+			<bp:Action Name="TaskFromForeperson" NextStep="TaskFromForeperson" />	
+		</bp:Step>	
+		
+		<bp:Step Name="TechTask" Screen="Technics\TechTask.xml" Controller="Technics\Main.js">	
+			
+		</bp:Step>
+		
+		<bp:Step Name="TaskFromForeperson" Screen="Technics\TaskFP.xml" Controller="Technics\Main.js">
+			<bp:Action Name="ConstructionObjectsListFP" NextStep="ConstructionObjectsListFP" />
+		</bp:Step>	
+		
+		<bp:Step Name="ConstructionObjectsListFP" Screen="Technics\ConstructionObjectsListFP.xml" Controller="Technics\Main.js">
+		</bp:Step>				
 	</bp:Workflow>
 	
 	<bp:Workflow Name="GSMs">
@@ -61,12 +73,7 @@
 		<bp:Action Name="Fill" NextWorkflow="Fill"/>		
 		</bp:Step>		
 	</bp:Workflow>
-	
-	<bp:Workflow Name="TechTask">
-		<bp:Step Name="TechTask" Screen="Technics\TechTask.xml" Controller="Technics\Main.js">		
-		</bp:Step>		
-	</bp:Workflow>
-	
+		
 	<bp:Workflow Name="Fill">
 		<bp:Step Name="Fill" Screen="Technics\Fill.xml" Controller="Technics\Main.js">		
 		</bp:Step>		

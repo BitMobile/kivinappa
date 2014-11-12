@@ -13,7 +13,7 @@ var GSMsCntCP;
 var CurGSMCP;
 
 
-//-------------------------- Переменные контроллера для экрана Task
+//-------------------------- Переменные контроллера для экранов Task и TechTask
 var sKUCP; 
 var commentMemoCP; 
 var startTimeTextCP; 
@@ -23,8 +23,8 @@ var stopTimeFactTextCP;
 
 
 var userIdCP;
-var forepersonCP;
-
+var bitmobileRoleCP
+var bitmobileRoleRefCP
 
 
 
@@ -32,13 +32,28 @@ var forepersonCP;
 function OnLoad() {    
 	userIdCP = $.common.UserId;
 	
-	var q = new Query("SELECT Foreperson " +
+	var qRole = new Query("SELECT BitmobileRole " +
 			"FROM Catalog_User " +
-			"WHERE Id == @userIdCP");
+			"WHERE Id == @userIdCP");	
+	qRole.AddParameter("userIdCP", "@ref[Catalog_User]:" + userIdCP);	
+	bitmobileRoleCP = qRole.ExecuteScalar();
 	
-	q.AddParameter("userIdCP", "@ref[Catalog_User]:" + userIdCP);
 	
-	forepersonCP = q.ExecuteScalar();
+	if(bitmobileRoleCP == 1){
+		//forepersonCP
+		var q = new Query("SELECT Foreperson " +
+				"FROM Catalog_User " +
+				"WHERE Id == @userIdCP");	
+		q.AddParameter("userIdCP", "@ref[Catalog_User]:" + userIdCP);	
+		bitmobileRoleRefCP = q.ExecuteScalar();
+	}else{
+		//machinistCP
+		var q = new Query("SELECT Machinist " +
+				"FROM Catalog_User " +
+				"WHERE Id == @userIdCP");	
+		q.AddParameter("userIdCP", "@ref[Catalog_User]:" + userIdCP);	
+		bitmobileRoleRefCP = q.ExecuteScalar();
+	}	
 }
 
 
@@ -233,15 +248,20 @@ function OpenGSM(){
 function GetTask(taskId){
 	
 	var q = new Query("SELECT T.Id, T.Adress, T.StartTime, T.StopTime, T.OperationTime, S.Id AS SKUId, S.Description AS SKU, " +
-			"T.TaskString, T.Comment, T.StartTimeFact, T.StopTimeFact FROM Document_Waybill_Tasks T " +
+			"T.TaskString, T.Comment, T.StartTimeFact, T.StopTimeFact, T.Requestioner, O.Description AS ConstructionObject " +
+			"FROM Document_Waybill_Tasks T " +
 			"LEFT JOIN Catalog_SKU S ON S.Id = T.Task " +
+			"LEFT JOIN Catalog_ConstructionObjects O ON O.Id = T.ConstructionObject " +
 			"WHERE T.Id = @taskId");
 	
 	q.AddParameter("taskId", taskId);	
 	return q.Execute();
 }
 
-function SaveTask(taskId){
+function SaveTask(taskId, typeSave){
+	//allsave 1
+	//halfsave 2
+	//timeSafe 3
 	
 	var atribNull = null;
 	
@@ -249,66 +269,114 @@ function SaveTask(taskId){
 		// создание документа Task
 		var T = DB.Create("Document.Waybill_Tasks");
 		T.Ref = CurWaybillCP;
-		T.Requestioner = forepersonCP;
-		T.Save();
-		
+		//T.Requestioner = forepersonCP;
+		T.Save();		
 		taskId = T.Id;
 	}
 	
 	var task = taskId.GetObject();
+	
+	if(typeSave == "allsave"){
+				
+		if(sKUCP == null){
+			atribNull = 1;		
+		}else{	
+			task.Task = sKUCP;
+		}		
+				
+		var startTimeValue = Variables[StartTimeFactText].Text;
+		if(startTimeValue == null){
+			atribNull = 1;		
+		}else{
+			if(TrimAll(startTimeValue) == "-"){
+				atribNull = 1;			
+			}else{
+				startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
+				task.StartTimeFact = startTimeFactTextCP;
+			}
+		}
 		
-	if(sKUCP == null){
-		atribNull = 1;		
-	}else{	
-		task.Task = sKUCP;
-	}		
-	
-//	if(startTimeTextCP == null){
-//	atribNull = 1;		
-//}else{
-//	if(TrimAll(startTimeTextCP) == "-"){
-//		atribNull = 1;			
-//	}else{
-//		task.StartTime = startTimeTextCP;
-//	}
-//}
-//
-//if(stopTimeTextCP == null){
-//	atribNull = 1;		
-//}else{
-//	if(TrimAll(stopTimeTextCP) == "-"){
-//		atribNull = 1;			
-//	}else{
-//		task.StopTime = stopTimeTextCP;
-//	}
-//}
-	
-	if(startTimeFactTextCP == null){
-		atribNull = 1;		
-	}else{
-		if(TrimAll(startTimeFactTextCP) == "-"){
-			atribNull = 1;			
+		var stopTimeValue = Variables[StopTimeFactText].Text;
+		if(stopTimeValue == null){
+			atribNull = 1;		
 		}else{
-			task.StartTimeFact = startTimeFactTextCP;
+			if(TrimAll(stopTimeValue) == "-"){
+				atribNull = 1;			
+			}else{
+				stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
+				task.StopTimeFact = stopTimeFactTextCP;
+			}
+		}
+		
+		if(commentMemoCP == null){
+			var fds = 1;// просто так
+		}else{
+			task.Comment = commentMemoCP;
+		}
+		   
+	}else if(typeSave == "halfsave"){
+		
+		if(sKUCP == null){
+			atribNull = 1;		
+		}else{	
+			task.Task = sKUCP;
+		}		
+				
+		var startTimeValue = Variables[StartTimeFactText].Text;
+		if(startTimeValue == null){
+			atribNull = 1;		
+		}else{
+			if(TrimAll(startTimeValue) == "-"){
+				atribNull = 1;			
+			}else{
+				startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
+				task.StartTimeFact = startTimeFactTextCP;
+			}
+		}
+		
+		var stopTimeValue = Variables[StopTimeFactText].Text;
+		if(stopTimeValue == null){
+			atribNull = 1;		
+		}else{
+			if(TrimAll(stopTimeValue) == "-"){
+				atribNull = 1;			
+			}else{
+				stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
+				task.StopTimeFact = stopTimeFactTextCP;
+			}
+		}
+		
+		if(commentMemoCP == null){
+			var fds = 1;// просто так
+		}else{
+			task.Comment = commentMemoCP;
+		}
+		
+	}else if(typeSave == "timeSafe"){
+		var startTimeValue = Variables[StartTimeFactText].Text;
+		if(startTimeValue == null){
+			atribNull = 1;		
+		}else{
+			if(TrimAll(startTimeValue) == "-"){
+				atribNull = 1;			
+			}else{
+				startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
+				task.StartTimeFact = startTimeFactTextCP;
+			}
+		}
+		
+		var stopTimeValue = Variables[StopTimeFactText].Text;
+		if(stopTimeValue == null){
+			atribNull = 1;		
+		}else{
+			if(TrimAll(stopTimeValue) == "-"){
+				atribNull = 1;			
+			}else{
+				stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
+				task.StopTimeFact = stopTimeFactTextCP;
+			}
 		}
 	}
-	
-	if(stopTimeFactTextCP == null){
-		atribNull = 1;		
-	}else{
-		if(TrimAll(stopTimeFactTextCP) == "-"){
-			atribNull = 1;			
-		}else{
-			task.StopTimeFact = stopTimeFactTextCP;
-		}
-	}
-	
-	if(commentMemoCP == null){
-		var fds = 1;// просто так
-	}else{
-		task.Comment = commentMemoCP;
-	}
-
 	
 	if(atribNull != null){
 		Dialog.Message("Не все поля заполнены");
@@ -316,22 +384,28 @@ function SaveTask(taskId){
 		//Dialog.Debug(forepersonCP);
 		task.Save();
 		Workflow.Back();
-	}    
+	} 
 }
 
-function MyDoSelect(entity, attribute, control) {
-    var tableName = entity[attribute].Metadata().TableName;
-        
+function MyDoSelectSKU(control) {
+           
     var query = new Query();
         
-    if(tableName == "Catalog_SKU"){
-    	query.Text = "SELECT Id, Description FROM " + tableName + " WHERE Service == 1 ORDER BY Description";
-    }else{
-    	query.Text = "SELECT Id, Description FROM " + tableName + " ORDER BY Description";
-    } 
-    
-    Dialog.Select("#select_answer#", query.Execute(), TechnicsTypeDoSelectCallback1, [entity, attribute, control]);
+    query.Text = "SELECT Id, Description FROM Catalog_SKU WHERE Service == 1 ORDER BY Description";
+        
+    Dialog.Select("#select_answer#", query.Execute(), DoSelectCallback1, [control]);
             
+    return;
+}
+
+function DoSelectSKUCallback1(key, args) {
+	
+	var control = args[0];
+    
+    control.Text = key.Description;
+    
+    sKUCP = key;
+    
     return;
 }
 
@@ -360,11 +434,11 @@ function SetTimeNow(state, args) {
 	var attribute = state[2];
 			
 	if(attribute == "StartTimeFact"){
-		startTimeTextCP = String.Format("{0:HH:mm}", args.Result);		
+		startTimeFactTextCP = String.Format("{0:HH:mm}", args.Result);		
     }
 	
 	if(attribute == "StopTimeFact"){
-		stopTimeTextCP = String.Format("{0:HH:mm}", args.Result);    	
+		stopTimeFactTextCP = String.Format("{0:HH:mm}", args.Result);    	
     }
 	
 	timeText.Text = String.Format("{0:HH:mm}", args.Result);
@@ -428,6 +502,16 @@ function ConvertDate(tskDate){
 	}else{
 		var t = "Время не указано";
 		return t;
+	}
+}
+
+function GetTime(Period)
+{
+	if(Period != null){
+		var s = String.Format("{0:HH:mm}", DateTime.Parse(Period));
+		return s;
+	}else{
+		return "-";
 	}
 }
 
