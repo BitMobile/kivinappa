@@ -81,7 +81,36 @@
 							<s:Else>
 								
 								<c:VerticalLayout CssClass="gray_mark_central"></c:VerticalLayout>
-							
+								
+								<s:If Test="$IsNullOrEmpty($technics.Requestioner)">
+									<s:If Test="$IsNullOrEmpty($technics.ConstructionObject)">
+										<c:VerticalLayout>
+											<c:TextView Text="{$technics.Description}, {$technics.VehicleRegTag}" CssClass="main_row"></c:TextView>
+											<c:TextView Text="{$technics.Task}{$technics.TaskString}, до {$technics.StopTime}" CssClass="description_row"></c:TextView>
+										</c:VerticalLayout>
+									</s:If>
+									<s:Else>
+										<c:VerticalLayout>
+											<c:TextView Text="{$technics.Description}, {$technics.VehicleRegTag}" CssClass="main_row"></c:TextView>
+											<c:TextView Text="{$technics.Task}{$technics.TaskString}, {$technics.ConstructionObject}, до {$technics.StopTime}" CssClass="description_row"></c:TextView>
+										</c:VerticalLayout>
+									</s:Else>
+								</s:If>
+								<s:Else>
+									<s:If Test="$IsNullOrEmpty($technics.ConstructionObject)">
+										<c:VerticalLayout>
+												<c:TextView Text="{$technics.Description}, {$technics.VehicleRegTag}" CssClass="main_row"></c:TextView>
+												<c:TextView Text="{$technics.Task}{$technics.TaskString}, до {$technics.StopTime}, {$technics.Requestioner}" CssClass="description_row"></c:TextView>
+										</c:VerticalLayout>
+									</s:If>
+									<s:Else>
+										<c:VerticalLayout>
+												<c:TextView Text="{$technics.Description}, {$technics.VehicleRegTag}" CssClass="main_row"></c:TextView>
+												<c:TextView Text="{$technics.Task}{$technics.TaskString}, {$technics.ConstructionObject}, до {$technics.StopTime}, {$technics.Requestioner}" CssClass="description_row"></c:TextView>
+										</c:VerticalLayout>
+									</s:Else>
+								</s:Else>
+								
 							</s:Else>
 						
 						</s:Else>

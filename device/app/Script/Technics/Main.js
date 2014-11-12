@@ -52,7 +52,7 @@ function GetTechnics(searchText){
 	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN 'Worked' WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN 'Planned' ELSE 'PlannedNext' END) AS Info, " +
 	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.Requestioner WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.Requestioner ELSE PNext.Requestioner END) AS Requestioner, " +
 	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.ConstructionObject WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.ConstructionObject ELSE PNext.ConstructionObject END) AS ConstructionObject, " +
-	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.Task WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.Task ELSE PNext.Task END) AS Task, " +
+	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.TaskD WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.TaskD ELSE PNext.TaskD END) AS Task, " +
 	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.TaskString WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.TaskString ELSE PNext.TaskString END) AS TaskString, " +
 	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.StartTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StartTime ELSE PNext.StartTime END) AS StartTime, " +
 	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.StopTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StopTime ELSE PNext.StopTime END) StopTime, " +
@@ -68,7 +68,7 @@ function GetTechnics(searchText){
 	"WHERE WbT.StartTimeFact > '0001-01-01 00:00:00' AND WbT.StopTimeFact = '0001-01-01 00:00:00' GROUP BY Wb.Technics) AS WN ON WN.Technics = TECH.ID " +
 	"LEFT JOIN (SELECT WbT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, Min(WbT.StartTime) AS StartTime, WbT.StopTime, WbT.StartTimeFact, " +
 	"WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id WHERE WbT.StartTime >= DATETIME('Now', 'localtime') GROUP BY Wb.Technics) " +
-	"AS PNext ON TECH.Id = PNext.Technics LEFT JOIN Catalog_Technics_TechnicsStatus AS St ON St.Ref = TECH.Id";
+	"AS PNext ON TECH.Id = PNext.Technics LEFT JOIN Catalog_Technics_TechnicsStatus AS St ON St.Ref = TECH.Id LEFT JOIN Catalog_SKU AS SKU ON WbT.Task = SKU.ID";
 		
 	if (searchText != "" && searchText != null) {
 		var plus = " WHERE (Contains(TECH.VehicleRegTag, @st)) OR (Contains(TT.Description, @st))";
