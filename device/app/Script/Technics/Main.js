@@ -276,15 +276,21 @@ function SaveTask(taskId, typeSave){
 	
 	var task = taskId.GetObject();
 	
-	if(typeSave == "allsave"){
+	if(typeSave == "1"){
 				
 		if(sKUCP == null){
 			atribNull = 1;		
 		}else{	
 			task.Task = sKUCP;
-		}		
+		}
+		
+		if(commentMemoCP == null){
+			var fds = 1;// просто так
+		}else{
+			task.Comment = Variables["AdressText"].Text;
+		}
 				
-		var startTimeValue = Variables[StartTimeFactText].Text;
+		var startTimeValue = Variables["StartTimeFactText"].Text;
 		if(startTimeValue == null){
 			atribNull = 1;		
 		}else{
@@ -296,7 +302,7 @@ function SaveTask(taskId, typeSave){
 			}
 		}
 		
-		var stopTimeValue = Variables[StopTimeFactText].Text;
+		var stopTimeValue = Variables["StopTimeFactText"].Text;
 		if(stopTimeValue == null){
 			atribNull = 1;		
 		}else{
@@ -314,7 +320,7 @@ function SaveTask(taskId, typeSave){
 			task.Comment = commentMemoCP;
 		}
 		   
-	}else if(typeSave == "halfsave"){
+	}else if(typeSave == "2"){
 		
 		if(sKUCP == null){
 			atribNull = 1;		
@@ -322,9 +328,12 @@ function SaveTask(taskId, typeSave){
 			task.Task = sKUCP;
 		}		
 				
-		var startTimeValue = Variables[StartTimeFactText].Text;
+		var startTimeValue = Variables["StartTimeFactText"].Text;
+						
 		if(startTimeValue == null){
 			atribNull = 1;		
+		}else if(startTimeValue == '0001-01-01 00:00:00.0000000'){
+			atribNull = 1;
 		}else{
 			if(TrimAll(startTimeValue) == "-"){
 				atribNull = 1;			
@@ -334,7 +343,7 @@ function SaveTask(taskId, typeSave){
 			}
 		}
 		
-		var stopTimeValue = Variables[StopTimeFactText].Text;
+		var stopTimeValue = Variables["StopTimeFactText"].Text;
 		if(stopTimeValue == null){
 			atribNull = 1;		
 		}else{
@@ -352,8 +361,9 @@ function SaveTask(taskId, typeSave){
 			task.Comment = commentMemoCP;
 		}
 		
-	}else if(typeSave == "timeSafe"){
-		var startTimeValue = Variables[StartTimeFactText].Text;
+	}else if(typeSave == "3"){
+		
+		var startTimeValue = Variables["StartTimeFactText"].Text;
 		if(startTimeValue == null){
 			atribNull = 1;		
 		}else{
@@ -365,7 +375,7 @@ function SaveTask(taskId, typeSave){
 			}
 		}
 		
-		var stopTimeValue = Variables[StopTimeFactText].Text;
+		var stopTimeValue = Variables["StopTimeFactText"].Text;
 		if(stopTimeValue == null){
 			atribNull = 1;		
 		}else{
@@ -393,7 +403,7 @@ function MyDoSelectSKU(control) {
         
     query.Text = "SELECT Id, Description FROM Catalog_SKU WHERE Service == 1 ORDER BY Description";
         
-    Dialog.Select("#select_answer#", query.Execute(), DoSelectCallback1, [control]);
+    Dialog.Select("#select_answer#", query.Execute(), DoSelectSKUCallback1, [control]);
             
     return;
 }
@@ -405,7 +415,7 @@ function DoSelectSKUCallback1(key, args) {
     control.Text = key.Description;
     
     sKUCP = key;
-    
+        
     return;
 }
 
@@ -506,8 +516,10 @@ function ConvertDate(tskDate){
 }
 
 function GetTime(Period)
-{
-	if(Period != null){
+{	
+	if(Period == '0001-01-01 00:00:00'){
+		return "-";
+	}else if(Period != null){
 		var s = String.Format("{0:HH:mm}", DateTime.Parse(Period));
 		return s;
 	}else{

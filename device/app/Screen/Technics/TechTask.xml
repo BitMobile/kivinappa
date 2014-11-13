@@ -43,7 +43,7 @@
 				<c:HorizontalLayout CssClass="grid">
 			    	<c:VerticalLayout>
 						<c:TextView Text="Адрес" CssClass="description_row"></c:TextView>
-						<c:EditText Id="ConstructionObjectText" Text="{$task.Adress}" CssClass="main_row"></c:EditText>	
+						<c:EditText Id="AdressText" Text="{$task.Adress}" CssClass="main_row"></c:EditText>	
 					</c:VerticalLayout>
 				</c:HorizontalLayout>
 			    		
