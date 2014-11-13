@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Task.css"> 
+
+	<s:Push Id="curTime" Value="$GetCurTime()"></s:Push>  	
+	
+	<c:DockLayout>
+				
+		<c:DockLayout CssClass="footer">
+			<c:HorizontalLine CssClass="navy"/>
+				
+			<c:DockLayout CssClass="btn_left_footer"  OnEvent="Back" OnClickAction="$Workflow.DoBack()" >
+				<c:TextView Text="#cancel#" />
+			</c:DockLayout>
+				
+			<c:DockLayout CssClass="btn_right_footer" OnClickAction="$SaveTask($taskId)">
+				<c:TextView Text="#ready#" />
+			</c:DockLayout>
+		</c:DockLayout>
+			
+		<c:HorizontalLine CssClass="navy"/>
+	
+		<c:ScrollView Id="scrlVw">
+			<!-- Id, ConstructionObject, TechnicsType, SKU, OperationMode, StartTime, StopTime, Note, Count -->
+			
+			<c:HorizontalLine/>
+				
+			<c:HorizontalLayout CssClass="caption_grid">
+				<c:TextView Text="#fill#:"></c:TextView>
+			</c:HorizontalLayout>
+			    
+			<c:HorizontalLine/>
+			
+			<c:HorizontalLayout CssClass="grid">
+			    <!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+				<c:VerticalLayout OnClickAction="$SetTime($StartTimeText, StartTimeText, $taskId, StartTime)">
+					<c:TextView Text="Время начала" CssClass="description_row"></c:TextView>
+					<c:TextView Id="StartTimeText" Text="{$GetTime()}" CssClass="main_row"></c:TextView>								
+				</c:VerticalLayout>	
+			</c:HorizontalLayout>		    		
+			<c:HorizontalLine/>
+				
+			<c:HorizontalLayout CssClass="grid">				
+				<c:VerticalLayout>
+					<c:TextView Text="Кол-во" CssClass="description_row"></c:TextView>
+					<c:EditText Id="cntText" Text="{@cntTextCP}" CssClass="main_row" Keyboard = "Numeric"></c:EditText>								
+				</c:VerticalLayout>
+			</c:HorizontalLayout>
+				
+			<c:HorizontalLine/>
+				
+			
+									
+		</c:ScrollView>
+	</c:DockLayout>
+	
+</c:Screen>

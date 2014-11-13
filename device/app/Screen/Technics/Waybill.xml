@@ -96,12 +96,12 @@
 							</s:Else>-->
 							<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
 							
-							<c:VerticalLayout>
-								
-								<c:TextView Text="{$techTask.StartTime} - {$techTask.StopTime} {$techTask.CODescription} {$techTask.Requestioner}" CssClass="description_row"></c:TextView>
-								<c:TextView Text="заменить на вид работ" CssClass="main_row"></c:TextView>
-																							
-							</c:VerticalLayout>
+								<c:VerticalLayout>
+									
+									<c:TextView Text="{$techTask.StartTime} - {$techTask.StopTime} {$techTask.CODescription} {$techTask.Requestioner}" CssClass="description_row"></c:TextView>
+									<c:TextView Text="{$techTask.Task}{$techTask.TaskString}" CssClass="main_row"></c:TextView>
+																								
+								</c:VerticalLayout>
 														
 						</c:HorizontalLayout>
 						

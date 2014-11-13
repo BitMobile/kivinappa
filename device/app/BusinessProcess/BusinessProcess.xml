@@ -58,7 +58,9 @@
 	
 	<bp:Workflow Name="GSM">
 		<bp:Step Name="GSM" Screen="Technics\GSM.xml" Controller="Technics\Main.js">
-		<bp:Action Name="Fill" NextWorkflow="Fill"/>		
+		<bp:Action Name="Fill" NextStep="Fill"/>		
+		</bp:Step>
+		<bp:Step Name="Fill" Screen="Technics\Fill.xml" Controller="Technics\Main.js">		
 		</bp:Step>		
 	</bp:Workflow>
 	
@@ -66,11 +68,6 @@
 		<bp:Step Name="TechTask" Screen="Technics\TechTask.xml" Controller="Technics\Main.js">		
 		</bp:Step>		
 	</bp:Workflow>
-	
-	<bp:Workflow Name="Fill">
-		<bp:Step Name="Fill" Screen="Technics\Fill.xml" Controller="Technics\Main.js">		
-		</bp:Step>		
-	</bp:Workflow>	
 
 	<bp:Workflow Name="Settings">
 		<bp:Step Name="Settings" Screen="Settings.xml">

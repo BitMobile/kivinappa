@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Waybill.css">
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="GSM.css">
 
-    <!-- <s:Push Id="curWaybillInfo" Value="$GetCurWaybillInfo()"></s:Push> -->
     <s:Push Id="Fills" Value="$GetFills()"></s:Push>
     <s:Push Id="cntFills" Value="$GetCntFills($Fills)"></s:Push>
     				
@@ -58,7 +57,7 @@
 			
 				<s:Iterator Id="Fills" Value="$Fills">
 
-					<!-- Id, RowId, Date, Count -->
+					<!-- Id, RowId, Date -->
 					
 					<c:SwipeHorizontalLayout Id="swipe_layout" CssClass="swipe_layout" Index="0">
 												
@@ -67,12 +66,17 @@
 							<c:VerticalLayout>
 								
 								<c:TextView Text="Заправка {$Fills.Date}" CssClass="description_row"></c:TextView>
-								<c:TextView Text="Количество топлива: {$Fills.Count}" CssClass="main_row"></c:TextView>
-								<c:TextView Text="Стоимость: " CssClass="main_row"></c:TextView>
+								<c:TextView Text="Количество топлива: {$Fills.Cnt}" CssClass="main_row"></c:TextView>
 																							
 							</c:VerticalLayout>
 														
 						</c:HorizontalLayout>
+						
+						<!-- <c:HorizontalLayout CssClass="red_swipe" OnClickAction="$KillFill($Fills.Id)">
+								<c:VerticalLayout >
+									<c:TextView Text="#del#"></c:TextView>
+								</c:VerticalLayout>
+						</c:HorizontalLayout> -->
 												
 					</c:SwipeHorizontalLayout>
 					
@@ -82,10 +86,11 @@
 								
 			</s:Else>
 						    	
-		 <c:HorizontalLayout CssClass="swipe_info">
-			<c:Image CssClass="img_right"/>
-			<c:TextView Text="Смахните влево, чтобы     удалить заправку" />				
-		</c:HorizontalLayout>
+		 <!-- <c:HorizontalLayout CssClass="swipe_info">
+			<c:Image CssClass="img_left"/>
+			<c:TextView Text="Смахните влево, чтобы 
+			удалить заправку" />				
+		</c:HorizontalLayout> -->
 
 		</c:ScrollView>
 		

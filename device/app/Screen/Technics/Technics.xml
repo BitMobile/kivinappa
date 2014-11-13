@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Requests.css">
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Technics.css">
 	<s:Push Id="search" Value="$param1"/>
 	<s:Push Id="technics" Value="$GetTechnics($search)"></s:Push>
 	<s:Push Id="technicsCount" Value="$GetTechnicsCount($technics)"></s:Push>

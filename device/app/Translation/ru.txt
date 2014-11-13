@@ -257,5 +257,6 @@ waybill	Путевой лист
 gsm	ГСМ
 gsmList	Список ГСМ
 fillup	Заправки
+fill	ЗАПРАВКА
 malfunction	Поломка
 free	Свободен

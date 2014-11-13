@@ -48,7 +48,8 @@ function GetTechnics(searchText){
 	
 	var q = new Query("");
 	
-	var qtext = "SELECT Q.Id, Q.VehicleRegTag, Q.Description, Q.Status, Q.Info, Q.Requestioner, CO.Description AS ConstructionObject, CS.Description AS Task, Q.TaskString, Q.StartTime, Q.StopTime, Q.StartTimeFact, Q.StopTimeFact " +
+	var qtext = "SELECT Q.Id, Q.VehicleRegTag, Q.Description, Q.Status, Q.Info, Req.Description AS Requestioner, CO.Description AS ConstructionObject, CS.Description AS Task, Q.TaskString, " +
+	"strftime('%d.%m.%Y %H:%M', Q.StartTime) AS StartTime, strftime('%d.%m.%Y %H:%M', Q.StopTime) AS StopTime, Q.StartTimeFact, Q.StopTimeFact " +
 	"FROM (SELECT TECH.Id, TECH.VehicleRegTag, TT.Description, St.Status As Status, " +
 	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN 'Worked' WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN 'Planned' ELSE 'PlannedNext' END) AS Info, " +
 	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.Requestioner WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.Requestioner ELSE PNext.Requestioner END) AS Requestioner, " +
@@ -70,7 +71,7 @@ function GetTechnics(searchText){
 	"LEFT JOIN (SELECT WbT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, Min(WbT.StartTime) AS StartTime, WbT.StopTime, WbT.StartTimeFact, " +
 	"WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id WHERE WbT.StartTime >= DATETIME('Now', 'localtime') GROUP BY Wb.Technics) " +
 	"AS PNext ON TECH.Id = PNext.Technics LEFT JOIN Catalog_Technics_TechnicsStatus AS St ON St.Ref = TECH.Id) AS Q LEFT JOIN Catalog_SKU AS CS ON Q.Task = CS.Id " +
-	"LEFT JOIN Catalog_ConstructionObjects AS CO ON Q.ConstructionObject = CO.Id";
+	"LEFT JOIN Catalog_ConstructionObjects AS CO ON Q.ConstructionObject = CO.Id LEFT JOIN Catalog_Requesters AS Req ON Q.Requestioner = Req.Id";
 		
 	if (searchText != "" && searchText != null) {
 		var plus = " WHERE (Contains(Q.VehicleRegTag, @st)) OR (Contains(Q.Description, @st))";
@@ -178,9 +179,10 @@ function GetCurWaybillInfo(){
 
 function GetTechTasks(){
 
-	q = new Query("SELECT WBT.Id, WBT.Requestioner, strftime('%H:%M', WBT.StartTime) AS StartTime, " +
+	q = new Query("SELECT WBT.Id, Req.Description AS Requestioner, strftime('%H:%M', WBT.StartTime) AS StartTime, S.Description AS Task, WBT.TaskString, " +
 			"strftime('%H:%M', WBT.StopTime) AS StopTime, CO.Description AS CODescription " +
 			"FROM Document_Waybill_Tasks WBT LEFT JOIN Catalog_ConstructionObjects CO ON WBT.ConstructionObject = CO.Id " +
+			"LEFT JOIN Catalog_SKU AS S ON WBT.Task = S.Id LEFT JOIN Catalog_Requesters AS Req ON WBT.Requestioner = Req.Id " +
 			"WHERE WBT.Ref = @ThisWaybill");
 	
 	q.AddParameter("ThisWaybill", CurWaybillCP);
@@ -387,7 +389,7 @@ function OpenGSMWf(GSMID){
 
 function GetFills(){
 	
-	var q = new Query("SELECT F.Id AS Id, FT.Id AS RowId, F.Date, FT.Count AS Cnt " +
+	var q = new Query("SELECT F.Id AS Id, FT.Id AS RowId, strftime('%H:%M', F.Date) AS Date, FT.Cnt " +
 			"FROM Document_Fill_Technics FT LEFT JOIN Document_Fill F " +
 			"ON FT.Ref = F.Id " +
 			"WHERE FT.GSM = @ThisGSM AND FT.Waybill = @ThisWaybill AND FT.Tech = @ThisTech");
@@ -395,15 +397,33 @@ function GetFills(){
 	q.AddParameter("ThisWaybill", CurWaybillCP);
 	q.AddParameter("ThisTech", TechnicsCP);
 	
-	res = q.Execute().Unload();
-	resc = res.Count();
-	
  	return q.Execute().Unload();
 
 }
 
 function GetCntFills(Fills){
 	return Fills.Count();
+}
+
+//function KillFill(FillId){
+//	var FillObj = FillId.GetObject();
+//	FillObj.DeletionMark = 1;
+//	Workflow.Refresh([]);
+//}
+
+//-------------------------- Скрин Fills
+function GetTime(Period)
+{
+	if(Period != null){
+		var s = String.Format("{0:HH:mm}", DateTime.Parse(Period));
+		return s;
+	}else{
+		return "-";
+	}
+}
+
+function GetCurTime(){
+	return DateTime.Now;
 }
 
 //--------------------------ОБЩАЯ ФУНЦИЯ ДЛЯ ИТЕРАТОРОВ
