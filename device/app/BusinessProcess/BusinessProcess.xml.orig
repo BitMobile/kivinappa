@@ -75,7 +75,19 @@
 		<bp:Step Name="Fill" Screen="Technics\Fill.xml" Controller="Technics\Main.js">		
 		</bp:Step>		
 	</bp:Workflow>
+<<<<<<< HEAD
+	
+	<bp:Workflow Name="TechTask">
+		<bp:Step Name="TechTask" Screen="Technics\TechTask.xml" Controller="Technics\Main.js">		
+		</bp:Step>		
+	</bp:Workflow>
+=======
 		
+	<bp:Workflow Name="Fill">
+		<bp:Step Name="Fill" Screen="Technics\Fill.xml" Controller="Technics\Main.js">		
+		</bp:Step>		
+	</bp:Workflow>	
+>>>>>>> origin/Develop_AVMurach
 
 	<bp:Workflow Name="Settings">
 		<bp:Step Name="Settings" Screen="Settings.xml">
