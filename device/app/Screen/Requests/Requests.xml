@@ -16,7 +16,7 @@
 			</c:HorizontalLayout>
 						
 			<c:HorizontalLayout CssClass="header_one_btn">
-				<c:TextView Text="#requestsS#" />
+				<c:TextView Text="#applicationsForTheTechnique#" />
 			</c:HorizontalLayout>
 			
 		</c:DockLayout>

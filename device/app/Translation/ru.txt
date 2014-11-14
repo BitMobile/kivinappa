@@ -260,3 +260,6 @@ fillup	Заправки
 fill	ЗАПРАВКА
 malfunction	Поломка
 free	Свободен
+fact	Факт
+saveTheApplication	Сохранить заявку?
+applicationsForTheTechnique	Заявки на технику

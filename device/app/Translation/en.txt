@@ -261,3 +261,6 @@ fillup	Fill-up
 fill	FILL-UP
 malfunction	Malfunction
 free	Free
+fact	Fact
+saveTheApplication	Save the application?
+applicationsForTheTechnique	Applications for the technique

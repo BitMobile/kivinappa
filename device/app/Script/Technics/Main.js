@@ -13,7 +13,7 @@ var GSMsCntCP;
 var CurGSMCP;
 
 
-//-------------------------- Переменные контроллера для экранов Task и TechTask
+//-------------------------- Переменные контроллера для экранов Task, TechTask, TaskFP
 var sKUCP; 
 var commentMemoCP; 
 var startTimeTextCP; 
@@ -21,11 +21,24 @@ var stopTimeTextCP;
 var startTimeFactTextCP; 
 var stopTimeFactTextCP; 
 
+var technicsTypeCP
+var technicsTypeTextCP
+var sKUTextCP 
+var constructionObjectCP 
+var constructionObjectTextCP
+var cntTextCP 
+var operationModeTextCP 
+var taskRequestionerCP
+
+var backFromObject
+
+var requestsCP
+
+
 
 var userIdCP;
 var bitmobileRoleCP
 var bitmobileRoleRefCP
-
 
 
 
@@ -193,9 +206,30 @@ function GetCurWaybillInfo(){
 }
 
 function GetTechTasks(){
+	
+	sKUCP = null; 
+	commentMemoCP = null; 
+	startTimeTextCP = null; 
+	stopTimeTextCP = null; 
+	startTimeFactTextCP = null; 
+	stopTimeFactTextCP = null; 
 
+	technicsTypeCP = null;
+	technicsTypeTextCP = null;
+	sKUTextCP = null; 
+	cntTextCP = null; 
+	operationModeTextCP = null; 
+
+	requestsCP = null;
+	constructionObjectCP = null;
+	constructionObjectTextCP = null;
+	
+	backFromObject = false;
+	
+	
+	
 	q = new Query("SELECT WBT.Id, Req.Description AS Requestioner, strftime('%H:%M', WBT.StartTime) AS StartTime, S.Description AS Task, WBT.TaskString, " +
-			"strftime('%H:%M', WBT.StopTime) AS StopTime, CO.Description AS CODescription " +
+			"strftime('%H:%M', WBT.StopTime) AS StopTime, strftime('%H:%M', WBT.StartTimeFact) AS StartTimeFact, strftime('%H:%M', WBT.StopTimeFact) AS StopTimeFact, CO.Description AS CODescription " +
 			"FROM Document_Waybill_Tasks WBT LEFT JOIN Catalog_ConstructionObjects CO ON WBT.ConstructionObject = CO.Id " +
 			"LEFT JOIN Catalog_SKU AS S ON WBT.Task = S.Id LEFT JOIN Catalog_Requesters AS Req ON WBT.Requestioner = Req.Id " +
 			"WHERE WBT.Ref = @ThisWaybill");
@@ -247,8 +281,69 @@ function OpenGSM(){
 }
 
 //-------------------------- Скрин TechTask
-function GetTask(taskId){
+function RecPeremCPAndDoActionMachin(taskId){
+	if(taskId == null){
+		// создание документа Task
+		var T = DB.Create("Document.Waybill_Tasks");
+		T.Ref = CurWaybillCP;
+		//T.Requestioner = forepersonCP;
+		T.Save(false);		
+		taskId = T.Id;
+	}
 	
+	var q = new Query("SELECT T.Id, T.Adress, T.StartTime, T.StopTime, T.OperationTime, S.Id AS SKUId, S.Description AS SKU, " +
+			"T.TaskString, T.Comment, T.StartTimeFact, T.StopTimeFact, T.Requestioner, " +
+			"O.Description AS ConstructionObject, T.ConstructionObject AS ConstructionObjectId " +
+			"FROM Document_Waybill_Tasks T " +
+			"LEFT JOIN Catalog_SKU S ON S.Id = T.Task " +
+			"LEFT JOIN Catalog_ConstructionObjects O ON O.Id = T.ConstructionObject " +
+			"WHERE T.Id = @taskId");
+	
+	q.AddParameter("taskId", taskId);	
+	qq = q.Execute();		
+	
+	if(qq.Next()){
+		sKUCP = qq.SKUId; 
+		constructionObjectCP = qq.ConstructionObjectId; 
+		
+		sKUTextCP = qq.SKU; 
+		constructionObjectTextCP = qq.ConstructionObject;
+		 
+		startTimeTextCP = qq.StartTime; 
+		stopTimeTextCP = qq.StopTime; 		
+		startTimeFactTextCP = qq.StartTimeFact; 
+		stopTimeFactTextCP = qq.StopTimeFact;
+		
+		
+		commentMemoCP = qq.Comment;
+		
+		taskRequestionerCP = qq.Requestioner;
+		if(taskRequestionerCP == "@ref[Catalog_Requesters]:00000000-0000-0000-0000-000000000000"){
+			taskRequestionerCP = null;
+		}
+				
+	}else{	
+		sKUCP = null; 
+		constructionObjectCP = null; 
+		
+		sKUTextCP = null; 
+		constructionObjectTextCP = null;
+		 
+		startTimeTextCP = null; 
+		stopTimeTextCP = null; 		
+		StartTimeFactTextCP = null; 
+		StopTimeFactTextCP = null;
+		
+		commentMemoCP = null;
+		
+		taskRequestionerCP = null;
+	}
+	
+	Workflow.Action("TechTask", [taskId]);
+}
+
+function GetTask(taskId){
+		
 	var q = new Query("SELECT T.Id, T.Adress, T.StartTime, T.StopTime, T.OperationTime, S.Id AS SKUId, S.Description AS SKU, " +
 			"T.TaskString, T.Comment, T.StartTimeFact, T.StopTimeFact, T.Requestioner, O.Description AS ConstructionObject " +
 			"FROM Document_Waybill_Tasks T " +
@@ -257,22 +352,33 @@ function GetTask(taskId){
 			"WHERE T.Id = @taskId");
 	
 	q.AddParameter("taskId", taskId);	
-	return q.Execute();
+	qq = q.Execute();
+	
+	
+	if(backFromObject == false){
+		
+		if(qq.Next()){
+			
+		}
+		return qq
+	}	
 }
 
 function SaveTask(taskId, typeSave){
-	//allsave 1
-	//halfsave 2
-	//timeSafe 3
+	//CreateMachinTask 1
+	//EditMachinTask 2
+	//Edit1cTask 3
 	
 	var atribNull = null;
+	var startTimeatribNull = null;
+	var stopTimeatribNull = null;
 	
 	if(taskId == null){
 		// создание документа Task
 		var T = DB.Create("Document.Waybill_Tasks");
 		T.Ref = CurWaybillCP;
 		//T.Requestioner = forepersonCP;
-		T.Save();		
+		T.Save(false);		
 		taskId = T.Id;
 	}
 	
@@ -286,33 +392,42 @@ function SaveTask(taskId, typeSave){
 			task.Task = sKUCP;
 		}
 		
-		if(commentMemoCP == null){
-			var fds = 1;// просто так
+		if(constructionObjectCP == null){
+			atribNull = 1;		
 		}else{
-			task.Comment = Variables["AdressText"].Text;
+			//Dialog.Debug(constructionObjectCP);
+			task.ConstructionObject = constructionObjectCP;
 		}
+		
+//		if(commentMemoCP == null){
+//			var fds = 1;// просто так
+//		}else{
+//			task.Adress = Variables["AdressText"].Text;
+//		}
 				
 		var startTimeValue = Variables["StartTimeFactText"].Text;
 		if(startTimeValue == null){
-			atribNull = 1;		
+			startTimeatribNull = 1;		
 		}else{
 			if(TrimAll(startTimeValue) == "-"){
-				atribNull = 1;			
+				startTimeatribNull = 1;			
 			}else{
 				startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
 				task.StartTimeFact = startTimeFactTextCP;
+				task.StartTime = startTimeFactTextCP;
 			}
 		}
 		
 		var stopTimeValue = Variables["StopTimeFactText"].Text;
 		if(stopTimeValue == null){
-			atribNull = 1;		
+			stopTimeatribNull = 1;		
 		}else{
 			if(TrimAll(stopTimeValue) == "-"){
-				atribNull = 1;			
+				stopTimeatribNull = 1;			
 			}else{
 				stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
 				task.StopTimeFact = stopTimeFactTextCP;
+				task.StopTime = stopTimeFactTextCP;
 			}
 		}
 		
@@ -328,32 +443,41 @@ function SaveTask(taskId, typeSave){
 			atribNull = 1;		
 		}else{	
 			task.Task = sKUCP;
-		}		
+		}
+		
+		if(constructionObjectCP == null){
+			atribNull = 1;		
+		}else{
+			//Dialog.Debug(constructionObjectCP);
+			task.ConstructionObject = constructionObjectCP;
+		}
 				
 		var startTimeValue = Variables["StartTimeFactText"].Text;
 						
 		if(startTimeValue == null){
-			atribNull = 1;		
-		}else if(startTimeValue == '0001-01-01 00:00:00.0000000'){
-			atribNull = 1;
+			startTimeatribNull = 1;		
+		}else if(startTimeValue == '0001-01-01 00:00:00'){
+			startTimeatribNull = 1;
 		}else{
 			if(TrimAll(startTimeValue) == "-"){
-				atribNull = 1;			
+				startTimeatribNull = 1;			
 			}else{
 				startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
 				task.StartTimeFact = startTimeFactTextCP;
+				task.StartTime = startTimeFactTextCP;
 			}
 		}
 		
 		var stopTimeValue = Variables["StopTimeFactText"].Text;
 		if(stopTimeValue == null){
-			atribNull = 1;		
+			stopTimeatribNull = 1;		
 		}else{
 			if(TrimAll(stopTimeValue) == "-"){
-				atribNull = 1;			
+				stopTimeatribNull = 1;			
 			}else{
 				stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
 				task.StopTimeFact = stopTimeFactTextCP;
+				task.StopTime = stopTimeFactTextCP;
 			}
 		}
 		
@@ -367,36 +491,51 @@ function SaveTask(taskId, typeSave){
 		
 		var startTimeValue = Variables["StartTimeFactText"].Text;
 		if(startTimeValue == null){
-			atribNull = 1;		
+			startTimeatribNull = 1;		
 		}else{
 			if(TrimAll(startTimeValue) == "-"){
-				atribNull = 1;			
+				startTimeatribNull = 1;			
 			}else{
 				startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
-				task.StartTimeFact = startTimeFactTextCP;
+				task.StartTimeFact = startTimeFactTextCP;				
 			}
 		}
 		
 		var stopTimeValue = Variables["StopTimeFactText"].Text;
 		if(stopTimeValue == null){
-			atribNull = 1;		
+			stopTimeatribNull = 1;		
 		}else{
 			if(TrimAll(stopTimeValue) == "-"){
-				atribNull = 1;			
+				stopTimeatribNull = 1;			
 			}else{
 				stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
-				task.StopTimeFact = stopTimeFactTextCP;
+				task.StopTimeFact = stopTimeFactTextCP;	
+				
 			}
 		}
 	}
 	
-	if(atribNull != null){
-		Dialog.Message("Не все поля заполнены");
+	if(stopTimeatribNull != 1){
+		if(startTimeatribNull == 1){
+			Dialog.Message("Нельзя установить время окончания, если не указано время начала");
+		}else{
+			if(atribNull != null){
+				Dialog.Message("Не все поля заполнены");			
+			}else{
+				//Dialog.Debug(forepersonCP);
+				task.Save(false);
+				Workflow.Back();
+			} 
+		}
 	}else{
-		//Dialog.Debug(forepersonCP);
-		task.Save();
-		Workflow.Back();
-	} 
+		if(atribNull != null){
+			Dialog.Message("Не все поля заполнены");			
+		}else{
+			//Dialog.Debug(forepersonCP);
+			task.Save(false);
+			Workflow.Back();
+		}		
+	}	 
 }
 
 function MyDoSelectSKU(control) {
@@ -439,21 +578,34 @@ function SetTime(timeText, timeValueText, entity, attribute) {
 	}
 }
 
-
 function SetTimeNow(state, args) {
 	var timeText = state[0];
 	var entity = state[1];
 	var attribute = state[2];
 			
+	strArgsResult = String.Format("{0:HH:mm}", args.Result);
+	
+	if(strArgsResult == "00:00"){
+		strArgsResult = "23:59";
+	}
+	
 	if(attribute == "StartTimeFact"){
-		startTimeFactTextCP = String.Format("{0:HH:mm}", args.Result);		
+		startTimeFactTextCP = strArgsResult;		
     }
 	
 	if(attribute == "StopTimeFact"){
-		stopTimeFactTextCP = String.Format("{0:HH:mm}", args.Result);    	
+		stopTimeFactTextCP = strArgsResult;    	
     }
 	
-	timeText.Text = String.Format("{0:HH:mm}", args.Result);
+	if(attribute == "StartTime"){
+		startTimeTextCP = strArgsResult;		
+    }
+	
+	if(attribute == "StopTime"){
+		stopTimeTextCP = strArgsResult;    	
+    }
+	
+	timeText.Text = strArgsResult;
 	
 	return
 }
@@ -461,6 +613,269 @@ function SetTimeNow(state, args) {
 function CommentMemoEdit(){
 	commentMemoCP = Variables["commentMemo"].Text;
 }
+
+
+
+//-------------------------- Скрин TaskFP
+
+function RecPeremCPAndDoAction(){
+		
+	// создание документа Request
+	var RQ = DB.Create("Document.Request");
+	RQ.Posted = 0;
+	RQ.DeletionMark = 0;
+	RQ.Date = DateTime.Now;
+	RQ.EnumTechnicsStatus = DB.Current.Constant.EnumTechnicsStatus.AtApproval;
+	RQ.Requester = bitmobileRoleRefCP;
+	//RQ.Requester = requester;
+			
+	RQ.Save(false);
+	requestsCP = RQ.Id;
+	
+	
+	var q = new Query("SELECT TT.Id FROM Catalog_TechnicsTypes TT " +
+			"LEFT JOIN Catalog_Technics T ON T.TechnicsTypes = TT.Id " +
+			"LEFT JOIN Document_Waybill W ON W.Technics = T.Id " +
+			"WHERE W.Id == @CurWaybillCP");	
+	q.AddParameter("CurWaybillCP", CurWaybillCP);
+	var technicsType = q.ExecuteScalar();
+	
+	// создание документа Task
+	var T = DB.Create("Document.Request_Task");
+	T.Posted = 0;
+	T.Ref = requestsCP;
+	T.TechnicsType = technicsType;
+	T.Count = 1;
+	T.Save(false);
+	
+	var	curTaskId = T.Id;
+		
+	var q = new Query("SELECT T.Id, T.OperationMode, T.StartTime, T.StopTime, T.Note, T.Count AS Cnt, " +
+			"O.Id AS ConstructionObjectId, O.Description AS ConstructionObject, TT.Id AS TechnicsTypeId, TT.Description AS TechnicsType, SKU.Id AS SKUId, SKU.Description AS SKU " +
+			"FROM Document_Request_Task T " +
+			"LEFT JOIN Catalog_ConstructionObjects O ON O.Id = T.ConstructionObject " +
+			"LEFT JOIN Catalog_TechnicsTypes TT ON TT.Id = T.TechnicsType " +
+			"LEFT JOIN Catalog_SKU SKU ON SKU.Id = T.SKU  " +
+			"WHERE T.Id == @curTaskId");
+	
+	q.AddParameter("curTaskId", curTaskId);
+	var qq = q.Execute();		
+	
+	if(qq.Next()){
+		technicsTypeCP = qq.TechnicsTypeId;
+		sKUCP = qq.SKUId; 
+		constructionObjectCP = qq.ConstructionObjectId; 
+		
+		technicsTypeTextCP = qq.TechnicsType;
+		sKUTextCP = qq.SKU; 
+		constructionObjectTextCP = qq.ConstructionObject;
+		 
+		startTimeTextCP = qq.StartTime; 
+		stopTimeTextCP = qq.StopTime; 
+		operationModeTextCP = qq.OperationMode;
+		cntTextCP = qq.Cnt;
+		commentMemoCP = qq.Note;
+	}else{	
+		technicsTypeCP = null;
+		sKUCP = null; 
+		constructionObjectCP = null; 
+		
+		technicsTypeTextCP = null;
+		sKUTextCP = null; 
+		constructionObjectTextCP = null;
+		
+		cntTextCP = null; 
+		startTimeTextCP = null; 
+		stopTimeTextCP = null; 
+		operationModeTextCP = null; 
+		commentMemoCP = null;
+	}
+	
+	Workflow.Action("TaskFromForeperson", [curTaskId]);
+}
+
+function SaveTaskFP(taskId){
+	var task = taskId.GetObject();
+		
+	var atribNull = null;
+	
+//	if(technicsTypeCP == null){
+//		atribNull = 1;		
+//	}else{
+//		task.TechnicsType = technicsTypeCP;
+//	}
+	
+//	if(cntTextCP == null){
+//		atribNull = 1;		
+//	}else{
+//		if(cntTextCP == ""){
+//			atribNull = 1;			
+//		}else{
+//			if(cntTextCP == 0){
+//				atribNull = 1;				
+//			}else{
+//				task.Count = cntTextCP;
+//			}
+//		}
+//	}
+	
+	if(sKUCP == null){
+		atribNull = 1;		
+	}else{	
+		task.SKU = sKUCP;
+	}	
+	
+	if(constructionObjectCP == null){
+		atribNull = 1;		
+	}else{
+		//Dialog.Debug(constructionObjectCP);
+		task.ConstructionObject = constructionObjectCP;
+	}
+	
+	if(startTimeTextCP == null){
+		atribNull = 1;		
+	}else{
+		if(TrimAll(startTimeTextCP) == "-"){
+			atribNull = 1;			
+		}else{
+			task.StartTime = startTimeTextCP;
+		}
+	}
+	
+	if(stopTimeTextCP == null){
+		atribNull = 1;		
+	}else{
+		if(TrimAll(stopTimeTextCP) == "-"){
+			atribNull = 1;			
+		}else{
+			task.StopTime = stopTimeTextCP;
+		}
+	}
+	
+	if(operationModeTextCP == null){
+		atribNull = 1;		
+	}else{
+		if(IsBlankString(operationModeTextCP)){
+			atribNull = 1;			
+		}else{
+			task.OperationMode = operationModeTextCP;
+		}
+	}
+	
+	if(commentMemoCP == null){
+		var fds = 1;// просто так
+	}else{
+		task.Note = commentMemoCP;
+	}
+
+	
+	if(atribNull != null){
+		Dialog.Message("Не все поля заполнены");
+	}else{
+		//Dialog.Debug(forepersonCP);
+		task.Save(false);
+		Workflow.Back();
+		Dialog.Message("Заявка будет передана на рассмотрение при синхронизации");
+	}    
+}
+
+function CanselTaskFP(taskId){
+	
+	DB.Delete(taskId);
+	DB.Delete(requestsCP);	
+	Workflow.Back();
+}
+
+function MyDoSelect(entity, attribute, control) {
+  var tableName = entity[attribute].Metadata().TableName;
+      
+  var query = new Query();
+      
+  if(tableName == "Catalog_SKU"){
+  	query.Text = "SELECT Id, Description FROM " + tableName + " WHERE Service == 1 ORDER BY Description";
+  }else{
+  	query.Text = "SELECT Id, Description FROM " + tableName + " ORDER BY Description";
+  } 
+  
+  Dialog.Select("#select_answer#", query.Execute(), TechnicsTypeDoSelectCallback1, [entity, attribute, control]);
+          
+  return;
+}
+
+function TechnicsTypeDoSelectCallback1(key, args) {
+	
+	var entity = args[0];
+	var attribute = args[1];
+  var control = args[2];
+  
+  control.Text = key.Description;
+  
+  if(attribute == "TechnicsType"){
+  	technicsTypeCP = key;
+  	technicsTypeTextCP = key.Description;
+  }
+  if(attribute == "SKU"){
+  	sKUCP = key;
+  	sKUTextCP = key.Description;
+  }
+  if(attribute == "ConstructionObject"){
+  	constructionObjectCP = key;
+  	constructionObjectTextCP = key.Description;
+  }
+  
+//  var task = entity.GetObject();
+//  
+//  task[attribute] = key;
+//  task.Save();
+  
+  return;
+}
+
+function OperationModeEdit(){
+	operationModeTextCP = Variables["operationModeText"].Text;
+}
+
+
+
+//-------------------------- Скрин ConstructionObjectsList
+
+function GetObjs(searchText){
+//	var q = new Query("SELECT Id, Description, Code FROM Catalog_ConstructionObjects WHERE DeletionMark = 0 ORDER BY Description");		
+//	return q.Execute().Unload();
+	
+	var q = new Query();
+	
+	var qtext = "SELECT Id, Description, Code FROM Catalog_ConstructionObjects WHERE DeletionMark = 0";
+			
+	if (searchText != "" && searchText != null) {
+		var plus = " AND (Contains(Description, @st)) ";
+		qtext = qtext + plus;
+		q.AddParameter("st", searchText);
+	}
+	
+	var textOrd = " ORDER BY Description";
+	
+	q.Text = qtext + textOrd;
+	return q.Execute().Unload();
+	
+}
+
+function GetObjsCount(result){
+	return result.Count();
+}
+
+function SetObj(objId, Description){
+	constructionObjectCP = objId;
+	constructionObjectTextCP = Description;
+	
+	backFromObject = true;
+	
+	Workflow.Back();
+}
+
+
+
+
 
 //-------------------------- Скрин GSMs
 
@@ -496,15 +911,6 @@ function GetCntFills(Fills){
 //}
 
 //-------------------------- Скрин Fills
-function GetTime(Period)
-{
-	if(Period != null){
-		var s = String.Format("{0:HH:mm}", DateTime.Parse(Period));
-		return s;
-	}else{
-		return "-";
-	}
-}
 
 function GetCurTime(){
 	return DateTime.Now;
