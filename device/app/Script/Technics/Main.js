@@ -465,7 +465,6 @@ function CommentMemoEdit(){
 //-------------------------- Скрин GSMs
 
 function OpenGSMWf(GSMID){
-	CurGSMCP = GSMID.SKU;
 	Workflow.Action("GSM", []);
 }
 
@@ -485,8 +484,57 @@ function GetFills(){
 
 }
 
+function GetGSMStartingCnt(){
+	
+	var q = new Query("SELECT GB.Count AS GSMCount " +
+			"FROM  Catalog_Technics_GSMBalance AS GB " +
+			"WHERE GB.Ref = @ThisTech AND GB.GSM = @ThisGSM");
+	q.AddParameter("ThisGSM", CurGSMCP);
+	q.AddParameter("ThisTech", TechnicsCP);
+	
+ 	return q.ExecuteScalar();
+
+}
+
+function GetGSMFinishingCnt(){
+	
+	var q = new Query("SELECT WbGs.Id, WbGs.BalanceIn GSMCount " +
+			"FROM document_waybill_gsmbalance AS WbGs " +
+			"LEFT JOIN document_waybill AS Wb ON WbGs.Ref = Wb.Id " +
+			"WHERE WbGs.SKU = @ThisGSM AND Wb.Technics = @ThisTech");
+	q.AddParameter("ThisGSM", CurGSMCP);
+	q.AddParameter("ThisTech", TechnicsCP);
+	
+	Rs = q.Execute().Unload();
+	
+	//Rs.First();
+	
+	Rs.Next();
+	
+ 	return Rs;
+	
+}
+
+function SetGSMBalance(RowId){
+	
+	var Cnt = ToDecimal(Variables["cntText"].Text);
+	
+	GSMBalanceObj = RowId.GetObject();
+	GSMBalanceObj.BalanceIn = Cnt;
+	GSMBalanceObj.Save();
+	
+	Workflow.Commit();
+	
+}
+
 function GetCntFills(Fills){
 	return Fills.Count();
+}
+
+function GetUserRole(){
+	
+	return bitmobileRoleCP;
+	
 }
 
 //function KillFill(FillId){
@@ -496,18 +544,37 @@ function GetCntFills(Fills){
 //}
 
 //-------------------------- Скрин Fills
-function GetTime(Period)
-{
-	if(Period != null){
-		var s = String.Format("{0:HH:mm}", DateTime.Parse(Period));
-		return s;
-	}else{
-		return "-";
-	}
-}
-
 function GetCurTime(){
 	return DateTime.Now;
+}
+
+function SaveFill(){
+	
+	var cnt = ToDecimal(Variables["cntText"].Text);
+	
+	if (cnt !== 0){
+		var FO = DB.Create("Document.Fill");
+		FO.Posted = 0;
+		FO.DeletionMark = 0;
+		FO.Date = String.Format("{0:dd/MM/yy}", DateTime.Now) + ' ' + Variables["StartTimeText"].Text;
+		FO.Save(false);
+		
+		var FTO = DB.Create("Document.Fill_Technics");
+		FTO.Ref = FO.Id;
+		FTO.Tech = TechnicsCP;
+		FTO.PhisicalPerson = bitmobileRoleRefCP;
+		FTO.GSM = CurGSMCP;
+		FTO.Cnt = cnt;
+		FTO.Waybill = CurWaybillCP;
+		FTO.Save(false);
+		
+		Workflow.Back();
+		
+	}else{
+		Dialog.Debug(cnt);
+		Dialog.Debug("Не все поля заполнены!");
+	}
+	
 }
 
 //--------------------------ОБЩАЯ ФУНЦИЯ ДЛЯ ИТЕРАТОРОВ
@@ -537,6 +604,8 @@ function ConvertDate(tskDate){
 
 function GetTime(Period)
 {	
+	FillTimeCP = Period;
+	
 	if(Period == '0001-01-01 00:00:00'){
 		return "-";
 	}else if(Period != null){

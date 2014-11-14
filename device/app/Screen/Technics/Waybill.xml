@@ -51,7 +51,6 @@
 			
 			<s:Iterator Id="WaybillInfo" Value="$curWaybillInfo">						
 
-					<c:HorizontalLine />
 					
 					<c:HorizontalLayout CssClass="small_grid">
 						

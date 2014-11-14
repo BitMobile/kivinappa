@@ -12,7 +12,7 @@
 				<c:TextView Text="#cancel#" />
 			</c:DockLayout>
 				
-			<c:DockLayout CssClass="btn_right_footer" OnClickAction="$SaveTask($taskId)">
+			<c:DockLayout CssClass="btn_right_footer" OnClickAction="$SaveFill()">
 				<c:TextView Text="#ready#" />
 			</c:DockLayout>
 		</c:DockLayout>
@@ -33,8 +33,8 @@
 			<c:HorizontalLayout CssClass="grid">
 			    <!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
 				<c:VerticalLayout OnClickAction="$SetTime($StartTimeText, StartTimeText, $taskId, StartTime)">
-					<c:TextView Text="Время начала" CssClass="description_row"></c:TextView>
-					<c:TextView Id="StartTimeText" Text="{$GetTime()}" CssClass="main_row"></c:TextView>								
+					<c:TextView Text="Время заправки" CssClass="description_row"></c:TextView>
+					<c:TextView Id="StartTimeText" Text="{$GetTime($curTime)}" CssClass="main_row"></c:TextView>								
 				</c:VerticalLayout>	
 			</c:HorizontalLayout>		    		
 			<c:HorizontalLine/>

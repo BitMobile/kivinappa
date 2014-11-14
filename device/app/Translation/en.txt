@@ -261,3 +261,6 @@ fillup	Fill-up
 fill	FILL-UP
 malfunction	Malfunction
 free	Free
+startingCount	Starting count
+stoppingCount	Stopping count
+inputQty	Input count

@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Main.css">
 
+	<s:Push Id="TaskDone" Value="$GetDoneTasks()"/>
+	<s:Push Id="TaskPlaned" Value="$GetTaskPlaned()"/>
+	<s:Push Id="Malfunction" Value="$GetMalfunction()"/>
+	<s:Push Id="Residual" Value="$GetResidual($TaskPlaned, $TaskDone)"/>
+
   <c:SwipeHorizontalLayout Id="swipe_layout" Index="0">
     <c:VerticalLayout CssClass="menu">
 
@@ -62,16 +67,16 @@
         <c:DockLayout>
           <c:VerticalLayout CssClass="left">
             <c:DockLayout CssClass="caption_big">
-              <c:TextView Text="0"/>
-              <c:TextView Text="заявок" CssClass="descr"/>
+              <c:TextView Text="$TaskDone"/>
+              <c:TextView Text="задач" CssClass="descr"/>
               <c:TextView Text="выполнено" CssClass="descr"/>
             </c:DockLayout>
 
             <c:VerticalLayout CssClass="simple">
               <c:HorizontalLayout>
                 <c:TextView Text="#further#" CssClass="descr"/>
-                <c:TextView Text="0" CssClass="mark"/>
-                <c:TextView Text="заявок"/>
+                <c:TextView Text="$Residual" CssClass="mark"/>
+                <c:TextView Text="задач"/>
               </c:HorizontalLayout>
               <c:TextView Text="запланировано" CssClass="descr"/>
             </c:VerticalLayout>
@@ -80,16 +85,16 @@
           <c:VerticalLayout CssClass="right">
             <c:DockLayout CssClass="grid">
               <c:VerticalLayout>
-                <c:TextView Text="0" CssClass="main_row"></c:TextView>
+                <c:TextView Text="$TaskPlaned" CssClass="main_row"></c:TextView>
                 <c:TextView Text="#planned#" CssClass="description_row"/>
-                <c:TextView Text="заявок" CssClass="description_row"/>
+                <c:TextView Text="задач" CssClass="description_row"/>
               </c:VerticalLayout>
             </c:DockLayout>
             <c:HorizontalLine/>
             <c:DockLayout CssClass="grid">
               <c:VerticalLayout>
-                <c:TextView Text="0" CssClass="main_row"></c:TextView>
-                <c:TextView Text="аварии" CssClass="description_row"/>
+                <c:TextView Text="$Malfunction" CssClass="main_row"></c:TextView>
+                <c:TextView Text="поломки" CssClass="description_row"/>
                 <c:TextView Text="" CssClass="description_row"/>
               </c:VerticalLayout>
             </c:DockLayout>
@@ -97,7 +102,7 @@
 
         </c:DockLayout>
 
-        <c:DockLayout CssClass="short_panel">
+        <!-- <c:DockLayout CssClass="short_panel">
           <c:DockLayout CssClass="grid">
             <c:VerticalLayout>
               <c:TextView Text="Документ1: {0}" CssClass="description_row"></c:TextView>
@@ -120,7 +125,7 @@
               <c:TextView Text="Инфо4" CssClass="description_row"/>
             </c:VerticalLayout>
           </c:DockLayout>
-        </c:DockLayout>
+        </c:DockLayout>-->
 
       </c:VerticalLayout>
 

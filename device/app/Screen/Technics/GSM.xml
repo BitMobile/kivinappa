@@ -3,6 +3,9 @@
 
     <s:Push Id="Fills" Value="$GetFills()"></s:Push>
     <s:Push Id="cntFills" Value="$GetCntFills($Fills)"></s:Push>
+    <s:Push Id="GSMStartingCnt" Value="$GetGSMStartingCnt()"></s:Push>
+    <s:Push Id="GSMBalance" Value="$GetGSMFinishingCnt()"/>
+    <s:Push Id="UserRole" Value="$GetUserRole()"/>
     				
 	<c:DockLayout>
 	
@@ -12,7 +15,7 @@
 				<c:TextView Text="#back#" />
 			</c:HorizontalLayout>
 												
-			<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
+			<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$SetGSMBalance($GSMBalance.Id)"/>
 			
 			<c:HorizontalLayout>
 				<c:TextView Text="#gsm#" />
@@ -35,10 +38,26 @@
 						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
 						
 						<c:VerticalLayout>
-							<c:TextView Text="" CssClass="main_row2"></c:TextView>
+							<c:TextView Text="#startingCount#: " CssClass="description_row"></c:TextView>
+							<c:TextView Text="$GSMStartingCnt" CssClass="main_row"></c:TextView>								
 						</c:VerticalLayout>
 						
 			</c:HorizontalLayout>
+			
+			<c:HorizontalLine />
+			
+			<c:HorizontalLayout CssClass="grid">
+						
+						<c:VerticalLayout CssClass="no_mark"></c:VerticalLayout>
+						
+						<c:VerticalLayout>
+							<c:TextView Text="#stoppingCount#: " CssClass="description_row_Orange"></c:TextView>
+							<c:EditText Id="cntText" Text="$GSMBalance.GSMCount" CssClass="main_row"  placeholder="#inputQty#" Keyboard = "Numeric"></c:EditText>								
+						</c:VerticalLayout>
+						
+			</c:HorizontalLayout>
+			
+			<c:HorizontalLine />			
 						
 			<c:HorizontalLayout CssClass="caption_grid">
 		        <c:TextView Text="#fillup#:"></c:TextView>

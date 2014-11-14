@@ -259,3 +259,11 @@ TextNoPlans {
 		    color: #fff;
 		    font: 100% Arial;
 		}
+		
+.description_row_Orange {
+    width: 100%;
+    height: 23%;
+    white-space: normal;
+    font: 80% Arial;
+    color: #b96f18;
+}

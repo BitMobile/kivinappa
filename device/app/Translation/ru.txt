@@ -260,3 +260,6 @@ fillup	Заправки
 fill	ЗАПРАВКА
 malfunction	Поломка
 free	Свободен
+startingCount	Начальное количество
+stoppingCount	Конечное количество
+inputQty	Введите количество
