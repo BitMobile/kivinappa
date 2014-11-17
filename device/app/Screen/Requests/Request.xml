@@ -8,7 +8,7 @@
 	<c:DockLayout>
 	
 		<c:DockLayout CssClass="top_navigator">
-			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$Workflow.DoRollback()">
+			<c:HorizontalLayout CssClass="btn_back" OnEvent="Back" OnClickAction="$QuestAndDoRollback()">
 				<c:Image />
 				<c:TextView Text="#back#" />
 			</c:HorizontalLayout>
@@ -17,7 +17,7 @@
 			<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
 		
 			<c:HorizontalLayout>
-				<c:TextView Text="#requestForS#" />
+				<c:TextView Text="#application#" />
 			</c:HorizontalLayout>
 								
 		</c:DockLayout>

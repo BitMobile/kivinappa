@@ -260,9 +260,12 @@ fillup	Заправки
 fill	ЗАПРАВКА
 malfunction	Поломка
 free	Свободен
+<<<<<<< HEAD
 startingCount	Начальное количество
 stoppingCount	Конечное количество
 inputQty	Введите количество
+=======
 fact	Факт
 saveTheApplication	Сохранить заявку?
 applicationsForTheTechnique	Заявки на технику
+>>>>>>> origin/Develop_AVMurach

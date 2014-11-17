@@ -51,7 +51,7 @@
 		</bp:Step>	
 		
 		<bp:Step Name="TechTask" Screen="Technics\TechTask.xml" Controller="Technics\Main.js">	
-			
+			<bp:Action Name="ConstructionObjectsListFP" NextStep="ConstructionObjectsListFP" />
 		</bp:Step>
 		
 		<bp:Step Name="TaskFromForeperson" Screen="Technics\TaskFP.xml" Controller="Technics\Main.js">

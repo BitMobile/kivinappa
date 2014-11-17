@@ -100,6 +100,18 @@ svl vl {
     background-color: #e6891b;
 }
 
+.btn_ticket {
+    height: 54.5%;
+    vertical-align: central;
+    background-image: url(ticket.png);
+}
+
+.btn_truck {
+    height: 54.5%;
+    vertical-align: central;
+    background-image: url(truck.png);
+}
+
 .btn_summary {
     height: 65%;
     margin-left: 5%;

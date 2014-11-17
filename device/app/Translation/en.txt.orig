@@ -261,9 +261,12 @@ fillup	Fill-up
 fill	FILL-UP
 malfunction	Malfunction
 free	Free
+<<<<<<< HEAD
 startingCount	Starting count
 stoppingCount	Stopping count
 inputQty	Input count
+=======
 fact	Fact
 saveTheApplication	Save the application?
 applicationsForTheTechnique	Applications for the technique
+>>>>>>> origin/Develop_AVMurach

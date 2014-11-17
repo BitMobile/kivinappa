@@ -13,7 +13,7 @@
 			<c:DockLayout CssClass="footer">
 				<c:HorizontalLine CssClass="navy"/>
 				
-				<c:DockLayout CssClass="btn_left_footer"  OnEvent="Back" OnClickAction="$CanselTask($taskId, taskIdNull)" >
+				<c:DockLayout CssClass="btn_left_footer"  OnEvent="Back" OnClickAction="$CanselTask($taskId, $taskIdNull)" >
 					<c:TextView Text="#cancel#" />
 				</c:DockLayout>
 				

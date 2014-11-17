@@ -5,6 +5,8 @@ var tasksendDateCP;
 var requestsCP
 var userIdCP
 
+var objectOfModified
+
 //-------------------------- Переменные контроллера для экрана Task
 var technicsTypeCP 
 var sKUCP 
@@ -165,6 +167,7 @@ function SetEndDateNow(key, arr) {
 //-------------------------- Скрин Request
 
 function GetCurRequest(){
+	objectOfModified = false;
 	
 	if(requestsCP == null){
 		// создание документа Request
@@ -178,6 +181,7 @@ function GetCurRequest(){
 				
 		RQ.Save();
 		requestsCP = RQ.Id;
+		objectOfModified = true;
 	}	
 	var q = new Query("SELECT RCV.Id, RCV.Number, RCV.Date, TS.Description AS Status, TS.Name AS StatusName " +
 			"FROM Document_Request RCV " +
@@ -210,13 +214,16 @@ function GetCntTasks(result){
 
 function KillTask(taskId){
 	DB.Delete(taskId);	
-	Workflow.Refresh([]);
+	objectOfModified = true;
+	
+	Workflow.Refresh([]);	
 }
 
 function ForApproval(requestId){
 	var request = requestId.GetObject();
 	request.EnumTechnicsStatus = DB.Current.Constant.EnumTechnicsStatus.AtApproval;
 	request.Save();
+	objectOfModified = true;
 	
 	Workflow.Refresh([]);
 }
@@ -230,6 +237,7 @@ function RecPeremCPAndDoAction(curTaskId, curRequestStatusName){
 		T.Ref = requestsCP;
 		T.Count = 1;
 		T.Save();
+		objectOfModified = true;
 		
 		curTaskId = T.Id;
 	}	
@@ -275,6 +283,23 @@ function RecPeremCPAndDoAction(curTaskId, curRequestStatusName){
 	}
 	
 	Workflow.Action("Task", [curTaskId, curRequestStatusName, curTaskIdNull]);
+}
+
+function QuestAndDoRollback(){
+	if(objectOfModified == true){
+		var curTask;
+		Dialog.Question(Translate["#saveTheApplication#"], LocationDialogHandler, curTask);
+	}else{
+		Workflow.Rollback();
+	}	
+}
+
+function LocationDialogHandler(answ, state){
+	if (answ == DialogResult.Yes) {
+		Workflow.Commit();        
+    }else{
+    	Workflow.Rollback();
+    }
 }
 
 
@@ -368,11 +393,13 @@ function SaveTask(taskId){
 	}else{
 		//Dialog.Debug(forepersonCP);
 		task.Save();
-		Workflow.Back();
+		objectOfModified = true;
+		Workflow.Back();		
 	}    
 }
 
 function CanselTask(taskId, tasknull){
+	Dialog.Debug(tasknull);
 	if(tasknull == null){
 		DB.Delete(taskId);
 	}	

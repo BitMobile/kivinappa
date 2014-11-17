@@ -16,15 +16,15 @@
       
       <c:DockLayout OnClickAction="$DoAction(Requests)">
         <c:HorizontalLayout>
-          <c:Image CssClass="btn_sync"/>
-          <c:TextView CssClass="menu_text" Text="#requestsS#"></c:TextView>
+          <c:Image CssClass="btn_ticket"/>
+          <c:TextView CssClass="menu_text" Text="#applications#"></c:TextView>
         </c:HorizontalLayout>
       </c:DockLayout>
       <c:HorizontalLine/>
       
       <c:DockLayout OnClickAction="$DoAction(Technics)">
         <c:HorizontalLayout>
-          <c:Image CssClass="btn_sync"/>
+          <c:Image CssClass="btn_truck"/>
           <c:TextView CssClass="menu_text" Text="#technics#"></c:TextView>
         </c:HorizontalLayout>
       </c:DockLayout>

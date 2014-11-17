@@ -24,12 +24,12 @@
 		<c:DockLayout CssClass="footer">
 			<c:HorizontalLine CssClass="navy"/>
 			<s:If Test="$bitmobileRole == 1">			
-				<c:DockLayout CssClass="btn_center_footer" OnClickAction="$DoAction(TaskFromForeperson, null)">
+				<c:DockLayout CssClass="btn_center_footer" OnClickAction="$RecPeremCPAndDoAction()">
 					<c:TextView Text="#add#" />
 				</c:DockLayout>
 			</s:If>
 			<s:Else>
-				<c:DockLayout CssClass="btn_center_footer" OnClickAction="$DoAction(TechTask, null)">
+				<c:DockLayout CssClass="btn_center_footer" OnClickAction="$RecPeremCPAndDoActionMachin(null)">  <!--"$DoAction(TechTask, null)">-->
 					<c:TextView Text="#add#" />
 				</c:DockLayout>
 			</s:Else>
@@ -93,7 +93,7 @@
 					
 					<c:SwipeHorizontalLayout Id="swipe_layout" CssClass="swipe_layout" Index="0">
 												
-						<c:HorizontalLayout CssClass="grid" OnClickAction="$Workflow.DoAction(TechTask, $techTask.Id)">
+						<c:HorizontalLayout CssClass="grid" OnClickAction="$RecPeremCPAndDoActionMachin($techTask.Id)">
 							
 							<!--<s:If Test="$ == $">
 								<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
@@ -103,12 +103,29 @@
 							</s:Else>-->
 							<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
 							
-								<c:VerticalLayout>
-									
-									<c:TextView Text="{$techTask.StartTime} - {$techTask.StopTime} {$techTask.CODescription} {$techTask.Requestioner}" CssClass="description_row"></c:TextView>
-									<c:TextView Text="{$techTask.Task}{$techTask.TaskString}" CssClass="main_row"></c:TextView>
-																								
-								</c:VerticalLayout>
+							<c:VerticalLayout>
+								
+								<c:TextView Text="{$techTask.StartTime} - {$techTask.StopTime} {$techTask.CODescription} {$techTask.Requestioner}" CssClass="description_row"></c:TextView>
+								<c:TextView Text="{$techTask.Task}{$techTask.TaskString}" CssClass="main_row_3_rows"></c:TextView>
+								
+																
+								<s:If Test="$techTask.StartTimeFact == '00:00'">
+									<s:Push Id="startTimeFact" Value=""></s:Push>
+								</s:If>
+								<s:Else>
+									<s:Push Id="startTimeFact" Value="$techTask.StartTimeFact"></s:Push>
+								</s:Else>
+								
+								<s:If Test="$techTask.StopTimeFact == '00:00'">
+									<s:Push Id="stopTimeFact" Value=""></s:Push>
+								</s:If>
+								<s:Else>
+									<s:Push Id="stopTimeFact" Value="$techTask.StopTimeFact"></s:Push>
+								</s:Else>															
+								
+								<c:TextView Text="#fact#: {$startTimeFact} - {$stopTimeFact}" CssClass="main_row_3_rows"></c:TextView>
+								
+							</c:VerticalLayout>
 														
 						</c:HorizontalLayout>
 						

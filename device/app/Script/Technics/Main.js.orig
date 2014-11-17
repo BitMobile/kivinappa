@@ -959,8 +959,13 @@ function GetUserRole(){
 //}
 
 //-------------------------- Скрин Fills
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/Develop_AVMurach
 function GetCurTime(){
 	return DateTime.Now;
+}
 
 function SaveFill(){
 	
@@ -988,9 +993,6 @@ function SaveFill(){
 		Dialog.Debug(cnt);
 		Dialog.Debug("Не все поля заполнены!");
 	}
-
-function GetCurTime(){
-	return DateTime.Now;
 	
 }
 
