@@ -88,7 +88,7 @@ function GetTechnics(searchText){
 	"FROM Catalog_Technics TECH JOIN Catalog_TechnicsTypes TT ON TECH.TechnicsTypes = TT.Id LEFT JOIN " +
 	"(SELECT WBT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, WbT.StartTime, WbT.StopTime, " +
 	"WbT.StartTimeFact, WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb " +
-	"ON WbT.Ref = Wb.Id WHERE WbT.StartTime <= DATETIME('Now', 'localtime') AND WbT.StopTime >= DATETIME('Now', 'localtime') GROUP BY Wb.Technics) " +
+	"ON WbT.Ref = Wb.Id WHERE WbT.StartTime <= DATETIME('Now', 'localtime') AND WbT.StopTime >= DATETIME('Now', 'localtime') AND WbT.StopTimeFact = '0001-01-01 00:00:00' GROUP BY Wb.Technics) " +
 	"AS PN ON PN.Technics = TECH.ID LEFT JOIN " +
 	"(SELECT WBT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, WbT.StartTime, WbT.StopTime, " +
 	"WbT.StartTimeFact, WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id " +
@@ -898,13 +898,15 @@ function GetFills(){
 
 function GetGSMStartingCnt(){
 	
-	var q = new Query("SELECT GB.Count AS GSMCount " +
-			"FROM  Catalog_Technics_GSMBalance AS GB " +
-			"WHERE GB.Ref = @ThisTech AND GB.GSM = @ThisGSM");
+	var q = new Query("SELECT WbGs.BalanceOut GSMCount " +
+			"FROM document_waybill_gsmbalance AS WbGs " +
+			"LEFT JOIN document_waybill AS Wb ON WbGs.Ref = Wb.Id " +
+			"WHERE WbGs.SKU = @ThisGSM AND Wb.Technics = @ThisTech AND Wb.Id = @ThisWb");
+	q.AddParameter("ThisWb", CurWaybillCP);
 	q.AddParameter("ThisGSM", CurGSMCP);
 	q.AddParameter("ThisTech", TechnicsCP);
 	
- 	return q.ExecuteScalar();
+	return q.ExecuteScalar();
 
 }
 
@@ -913,7 +915,8 @@ function GetGSMFinishingCnt(){
 	var q = new Query("SELECT WbGs.Id, WbGs.BalanceIn GSMCount " +
 			"FROM document_waybill_gsmbalance AS WbGs " +
 			"LEFT JOIN document_waybill AS Wb ON WbGs.Ref = Wb.Id " +
-			"WHERE WbGs.SKU = @ThisGSM AND Wb.Technics = @ThisTech");
+			"WHERE WbGs.SKU = @ThisGSM AND Wb.Technics = @ThisTech AND Wb.Id = @ThisWb");
+	q.AddParameter("ThisWb", CurWaybillCP);
 	q.AddParameter("ThisGSM", CurGSMCP);
 	q.AddParameter("ThisTech", TechnicsCP);
 	
@@ -942,18 +945,6 @@ function SetGSMBalance(RowId){
 function GetCntFills(Fills){
 	return Fills.Count();
 }
-
-function GetUserRole(){
-	
-	return bitmobileRoleCP;
-	
-}
-
-//function KillFill(FillId){
-//	var FillObj = FillId.GetObject();
-//	FillObj.DeletionMark = 1;
-//	Workflow.Refresh([]);
-//}
 
 //-------------------------- Скрин Fills
 function GetCurTime(){

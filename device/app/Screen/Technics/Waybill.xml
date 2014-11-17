@@ -64,13 +64,15 @@
 
 			</s:Iterator>
 			
-			<c:DockLayout CssClass="footer">
-				<c:HorizontalLine />
-				<c:DockLayout CssClass="btn_center_footer" OnClickAction="$OpenGSM()">
-					<c:TextView Text="#gsm#"/>
-				</c:DockLayout>
-				<c:HorizontalLine />
-			</c:DockLayout>			
+			<s:If Test="$bitmobileRole == 0">
+				<c:DockLayout CssClass="footer">
+					<c:HorizontalLine />
+					<c:DockLayout CssClass="btn_center_footer" OnClickAction="$OpenGSM()">
+						<c:TextView Text="#gsm#"/>
+					</c:DockLayout>
+					<c:HorizontalLine />
+				</c:DockLayout>			
+			</s:If>
 			
 			<c:HorizontalLayout CssClass="caption_grid">
 		        <c:TextView Text="#assignments#:"></c:TextView>
