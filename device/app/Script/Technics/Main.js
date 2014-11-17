@@ -12,7 +12,6 @@ var GSMsCP;
 var GSMsCntCP;
 var CurGSMCP;
 
-
 //-------------------------- Переменные контроллера для экранов Task, TechTask, TaskFP
 var sKUCP; 
 var commentMemoCP; 
@@ -33,8 +32,6 @@ var taskRequestionerCP
 var backFromObject
 
 var requestsCP
-
-
 
 var userIdCP;
 var bitmobileRoleCP
@@ -961,6 +958,7 @@ function GetUserRole(){
 //-------------------------- Скрин Fills
 function GetCurTime(){
 	return DateTime.Now;
+}
 
 function SaveFill(){
 	
@@ -988,6 +986,7 @@ function SaveFill(){
 		Dialog.Debug(cnt);
 		Dialog.Debug("Не все поля заполнены!");
 	}
+}
 
 function GetCurTime(){
 	return DateTime.Now;
