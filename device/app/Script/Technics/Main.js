@@ -36,6 +36,7 @@ var requestsCP
 var userIdCP;
 var bitmobileRoleCP
 var bitmobileRoleRefCP
+var ThatIsNewTaskCP
 
 
 
@@ -230,7 +231,7 @@ function GetTechTasks(){
 	
 	
 	
-	q = new Query("SELECT WBT.Id, Req.Description AS Requestioner, strftime('%H:%M', WBT.StartTime) AS StartTime, S.Description AS Task, WBT.TaskString, " +
+	q = new Query("SELECT WBT.Id, Req.Description AS Requestioner, strftime('%H:%M', WBT.StartTime) AS StartTime, WBT.StartTime AS StartDateTime, S.Description AS Task, WBT.TaskString, " +
 			"strftime('%H:%M', WBT.StopTime) AS StopTime, strftime('%H:%M', WBT.StartTimeFact) AS StartTimeFact, strftime('%H:%M', WBT.StopTimeFact) AS StopTimeFact, CO.Description AS CODescription " +
 			"FROM Document_Waybill_Tasks WBT LEFT JOIN Catalog_ConstructionObjects CO ON WBT.ConstructionObject = CO.Id " +
 			"LEFT JOIN Catalog_SKU AS S ON WBT.Task = S.Id LEFT JOIN Catalog_Requesters AS Req ON WBT.Requestioner = Req.Id " +
@@ -284,14 +285,16 @@ function OpenGSM(){
 
 //-------------------------- Скрин TechTask
 function RecPeremCPAndDoActionMachin(taskId){
-	if(taskId == null){
-		// создание документа Task
-		var T = DB.Create("Document.Waybill_Tasks");
-		T.Ref = CurWaybillCP;
+	//ThatIsNewTaskCP = false;
+	//if(taskId == null){
+		 // создание документа Task
+		//var T = DB.Create("Document.Waybill_Tasks");
+		//T.Ref = CurWaybillCP;
 		//T.Requestioner = forepersonCP;
-		T.Save(false);		
-		taskId = T.Id;
-	}
+		//T.Save(false);		
+		//taskId = T.Id;
+		//ThatIsNewTaskCP = true;
+	//}
 	
 	var q = new Query("SELECT T.Id, T.Adress, T.StartTime, T.StopTime, T.OperationTime, S.Id AS SKUId, S.Description AS SKU, " +
 			"T.TaskString, T.Comment, T.StartTimeFact, T.StopTimeFact, T.Requestioner, " +
@@ -351,7 +354,7 @@ function CheckingCoordinates(taskId){
     	var longitudeNow = location.Longitude;
     	
     	var q = new Query("SELECT O.TopLeftX, O.TopLeftY, O.BottomRightX, O.BottomRightY FROM Catalog_ConstructionObjects O " +
-    			"LEFT JOIN Document_Waybill_Tasks T ON T.ConstructionObject = O.Id WHERE Id == @taskId");
+    			"LEFT JOIN Document_Waybill_Tasks T ON T.ConstructionObject = O.Id WHERE T.Id == @taskId");
 		q.AddParameter("taskId", taskId);
 		var LL = q.Execute();
     	
@@ -457,7 +460,7 @@ function SaveTask(taskId, typeSave){
 		var T = DB.Create("Document.Waybill_Tasks");
 		T.Ref = CurWaybillCP;
 		//T.Requestioner = forepersonCP;
-		T.Save(false);		
+		T.Save();		
 		taskId = T.Id;
 	}
 	
@@ -686,7 +689,9 @@ function SetTimeNow(state, args) {
 	
 	timeText.Text = strArgsResult;
 	
-	CheckingCoordinates(entity);
+	if(entity != null){
+		CheckingCoordinates(entity);
+	}
 	
 	return
 }

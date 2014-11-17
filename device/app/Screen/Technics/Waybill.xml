@@ -6,6 +6,7 @@
     <s:Push Id="cntTasks" Value="$GetCntTasks($techTasks)"></s:Push>
     <s:Push Id="bitmobileRole" Value="@bitmobileRoleCP"></s:Push>
     <s:Push Id="MyStartTracking" Value="$MyStartTracking()"></s:Push>
+    <s:Push Id="CurDateTime" Value="$GetCurTime()"/>
         				
 	<c:DockLayout>
 	
@@ -98,13 +99,22 @@
 												
 						<c:HorizontalLayout CssClass="grid" OnClickAction="$RecPeremCPAndDoActionMachin($techTask.Id)">
 							
-							<!--<s:If Test="$ == $">
-								<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
+							<s:If Test="$techTask.Requestioner == ''">
+								<c:VerticalLayout CssClass="no_mark_central"></c:VerticalLayout>
 							</s:If>
 							<s:Else>
-								<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
-							</s:Else>-->
-							<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>
+								<s:If Test="$techTask.StartTimeFact != '00:00'">
+									<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
+								</s:If>
+								<s:Else>
+									<s:If Test="$techTask.StartDateTime > CurDateTime">
+										<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>	
+									</s:If>
+									<s:Else>
+										<c:VerticalLayout CssClass="gray_mark_central"></c:VerticalLayout>
+									</s:Else>
+								</s:Else>
+							</s:Else>
 							
 							<c:VerticalLayout>
 								

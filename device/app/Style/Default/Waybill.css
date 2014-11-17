@@ -136,6 +136,14 @@ grid green_mark_central {
 	vertical-align: central;
 }
 
+grid no_mark_central{
+    height: 0%;
+    width: 4.1%;
+    margin-left: 2%;
+    margin-right: 0%;
+	vertical-align: central;	
+}
+
 .small_grid {
     height: 7.6%;
     selected-color: #bacdce;
