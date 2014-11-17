@@ -190,6 +190,11 @@ function AddPeremAndDoAction(TechnicsID, TechDescription, TechVRT){
 }
 
 //-------------------------- Скрин Waybill
+function MyStartTracking() {
+	GPS.StartTracking();
+	return;
+}
+
 function GetCurWaybillInfo(){
 	
 	q = new Query("SELECT WBR.Role, PP.Description AS PhysicalPersons " +
@@ -337,6 +342,83 @@ function RecPeremCPAndDoActionMachin(taskId){
 	}
 	
 	Workflow.Action("TechTask", [taskId]);
+}
+
+function CheckingCoordinates(taskId){
+	var location = GPS.CurrentLocation;
+    if (location.NotEmpty) {
+    	var latitudeNow = location.Latitude;
+    	var longitudeNow = location.Longitude;
+    	
+    	var q = new Query("SELECT O.TopLeftX, O.TopLeftY, O.BottomRightX, O.BottomRightY FROM Catalog_ConstructionObjects O " +
+    			"LEFT JOIN Document_Waybill_Tasks T ON T.ConstructionObject = O.Id WHERE Id == @taskId");
+		q.AddParameter("taskId", taskId);
+		var LL = q.Execute();
+    	
+		if (LL.Next()) {
+			if (LL.TopLeftX != null && LL.TopLeftY != null && LL.BottomRightX != null && LL.BottomRightY != null && parseFloat(LL.TopLeftX) != 0 && parseFloat(LL.TopLeftY != 0) && parseFloat(LL.BottomRightX) != 0 && parseFloat(LL.BottomRightY != 0)) {
+				if (latitudeNow != null && longitudeNow != null) {
+	    			
+					//расположение точек проверяемого квадрата
+					//1 - 2
+					//3 - 4
+					
+					var latitude1 = LL.TopLeftX;
+					var longitude1 = LL.TopLeftY;
+					
+					var latitude2 = LL.BottomRightX;
+					var longitude2 = LL.TopLeftY;
+					
+					var latitude3 = LL.TopLeftX;
+					var longitude3 = LL.BottomRightY;
+					
+					var latitude4 = LL.BottomRightX;
+					var longitude4 = LL.BottomRightY;
+					
+					var massTrue = false;
+					
+					// определяем вхождение по широте
+					var deltaLatitude = latitude1 - latitudeNow;
+					if(deltaLatitude <= 0) {
+						deltaLatitude = latitudeNow - latitude2;
+					}
+															
+					if(deltaLatitude > 0){
+						if(deltaLatitude > 0.00048){
+			        		var deltaLatitudeMeter = Math.round(deltaLatitude*31/0.0001); 	
+			        		massTrue = true;
+			        	}
+					}
+	    			
+					// определяем вхождение по долготе
+	    			var deltaLongitude = longitude3 - longitudeNow;
+	    			if(deltaLongitude <= 0){
+	    				deltaLongitude = longitudeNow - longitude1;
+					}
+					
+					if(deltaLongitude > 0){
+						if(deltaLongitude > 0.00083){
+		    				var deltaLongitudeMeter = Math.round(deltaLongitude*18/0.0001); 	
+		    				massTrue = true;
+			        	}
+					}
+					
+					if(massTrue == true){
+						if (deltaLatitudeMeter > deltaLongitudeMeter) {
+		    				var deltaInDialog = deltaLatitudeMeter;
+		    			}else{
+		    				var deltaInDialog = deltaLongitudeMeter;
+		    			}
+		    			
+		    			Dialog.Debug("Внимание! Вы находитесь далеко от объекта!");// + deltaInDialog + " метров");
+					}			
+						    			
+				}else{
+					Dialog.Debug("Координаты начала работы не определены.");
+				}
+			}
+		}
+    }
 }
 
 function GetTask(taskId){
@@ -603,6 +685,8 @@ function SetTimeNow(state, args) {
     }
 	
 	timeText.Text = strArgsResult;
+	
+	CheckingCoordinates(entity);
 	
 	return
 }

@@ -3,8 +3,8 @@
 
     <s:Push Id="curRequest" Value="$GetCurRequest()"></s:Push>
     <s:Push Id="tasks" Value="$GetTasks()"></s:Push>
-    <s:Push Id="cntTasks" Value="$GetCntTasks($tasks)"></s:Push>
-    				
+    <s:Push Id="cntTasks" Value="$GetCntTasks($tasks)"></s:Push>    
+        				
 	<c:DockLayout>
 	
 		<c:DockLayout CssClass="top_navigator">
