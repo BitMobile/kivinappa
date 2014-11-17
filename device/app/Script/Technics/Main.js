@@ -454,31 +454,15 @@ function SaveTask(taskId, typeSave){
 	var atribNull = null;
 	var startTimeatribNull = null;
 	var stopTimeatribNull = null;
-	
-	if(taskId == null){
-		// создание документа Task
-		var T = DB.Create("Document.Waybill_Tasks");
-		T.Ref = CurWaybillCP;
-		//T.Requestioner = forepersonCP;
-		T.Save();		
-		taskId = T.Id;
-	}
-	
-	var task = taskId.GetObject();
-	
+		
 	if(typeSave == "1"){
 				
 		if(sKUCP == null){
 			atribNull = 1;		
-		}else{	
-			task.Task = sKUCP;
 		}
 		
 		if(constructionObjectCP == null){
 			atribNull = 1;		
-		}else{
-			//Dialog.Debug(constructionObjectCP);
-			task.ConstructionObject = constructionObjectCP;
 		}
 		
 //		if(commentMemoCP == null){
@@ -493,10 +477,6 @@ function SaveTask(taskId, typeSave){
 		}else{
 			if(TrimAll(startTimeValue) == "-"){
 				startTimeatribNull = 1;			
-			}else{
-				startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
-				task.StartTimeFact = startTimeFactTextCP;
-				task.StartTime = startTimeFactTextCP;
 			}
 		}
 		
@@ -506,32 +486,39 @@ function SaveTask(taskId, typeSave){
 		}else{
 			if(TrimAll(stopTimeValue) == "-"){
 				stopTimeatribNull = 1;			
-			}else{
-				stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
-				task.StopTimeFact = stopTimeFactTextCP;
-				task.StopTime = stopTimeFactTextCP;
 			}
 		}
 		
 		if(commentMemoCP == null){
 			var fds = 1;// просто так
-		}else{
-			task.Comment = commentMemoCP;
 		}
+		
+		if(stopTimeatribNull != 1){
+			if(startTimeatribNull == 1){
+				Dialog.Message("Нельзя установить время окончания, если не указано время начала");
+			}else{
+				if(atribNull != null){
+					Dialog.Message("Не все поля заполнены");			
+				}else{
+					EditTask(taskId);
+				} 
+			}
+		}else{
+			if(atribNull != null){
+				Dialog.Message("Не все поля заполнены");			
+			}else{
+				EditTask(taskId);
+			}		
+		}						
 		   
 	}else if(typeSave == "2"){
 		
 		if(sKUCP == null){
 			atribNull = 1;		
-		}else{	
-			task.Task = sKUCP;
 		}
 		
 		if(constructionObjectCP == null){
 			atribNull = 1;		
-		}else{
-			//Dialog.Debug(constructionObjectCP);
-			task.ConstructionObject = constructionObjectCP;
 		}
 				
 		var startTimeValue = Variables["StartTimeFactText"].Text;
@@ -543,10 +530,6 @@ function SaveTask(taskId, typeSave){
 		}else{
 			if(TrimAll(startTimeValue) == "-"){
 				startTimeatribNull = 1;			
-			}else{
-				startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
-				task.StartTimeFact = startTimeFactTextCP;
-				task.StartTime = startTimeFactTextCP;
 			}
 		}
 		
@@ -556,19 +539,31 @@ function SaveTask(taskId, typeSave){
 		}else{
 			if(TrimAll(stopTimeValue) == "-"){
 				stopTimeatribNull = 1;			
-			}else{
-				stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
-				task.StopTimeFact = stopTimeFactTextCP;
-				task.StopTime = stopTimeFactTextCP;
 			}
 		}
 		
 		if(commentMemoCP == null){
 			var fds = 1;// просто так
-		}else{
-			task.Comment = commentMemoCP;
 		}
 		
+		if(stopTimeatribNull != 1){
+			if(startTimeatribNull == 1){
+				Dialog.Message("Нельзя установить время окончания, если не указано время начала");
+			}else{
+				if(atribNull != null){
+					Dialog.Message("Не все поля заполнены");			
+				}else{
+					EditTask(taskId);
+				} 
+			}
+		}else{
+			if(atribNull != null){
+				Dialog.Message("Не все поля заполнены");			
+			}else{
+				EditTask(taskId);
+			}		
+		}
+						
 	}else if(typeSave == "3"){
 		
 		var startTimeValue = Variables["StartTimeFactText"].Text;
@@ -577,9 +572,6 @@ function SaveTask(taskId, typeSave){
 		}else{
 			if(TrimAll(startTimeValue) == "-"){
 				startTimeatribNull = 1;			
-			}else{
-				startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
-				task.StartTimeFact = startTimeFactTextCP;				
 			}
 		}
 		
@@ -589,35 +581,73 @@ function SaveTask(taskId, typeSave){
 		}else{
 			if(TrimAll(stopTimeValue) == "-"){
 				stopTimeatribNull = 1;			
-			}else{
-				stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
-				task.StopTimeFact = stopTimeFactTextCP;	
-				
 			}
 		}
-	}
-	
-	if(stopTimeatribNull != 1){
-		if(startTimeatribNull == 1){
-			Dialog.Message("Нельзя установить время окончания, если не указано время начала");
+		
+		if(stopTimeatribNull != 1){
+			if(startTimeatribNull == 1){
+				Dialog.Message("Нельзя установить время окончания, если не указано время начала");
+			}else{
+				if(atribNull != null){
+					Dialog.Message("Не все поля заполнены");			
+				}else{
+					var task = taskId.GetObject();		
+					startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
+					task.StartTimeFact = startTimeFactTextCP;
+					
+					stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
+					task.StopTimeFact = stopTimeFactTextCP;
+					
+					task.Save(false);
+					Workflow.Back();
+				} 
+			}
 		}else{
 			if(atribNull != null){
 				Dialog.Message("Не все поля заполнены");			
 			}else{
-				//Dialog.Debug(forepersonCP);
+				var task = taskId.GetObject();		
+				startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
+				task.StartTimeFact = startTimeFactTextCP;
+				
+				stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
+				task.StopTimeFact = stopTimeFactTextCP;
+				
 				task.Save(false);
 				Workflow.Back();
-			} 
+			}		
 		}
-	}else{
-		if(atribNull != null){
-			Dialog.Message("Не все поля заполнены");			
-		}else{
-			//Dialog.Debug(forepersonCP);
-			task.Save(false);
-			Workflow.Back();
-		}		
-	}	 
+	}
+	
+		 
+}
+
+function EditTask(taskId) {
+	if(taskId == null){
+		// создание документа Task
+		var T = DB.Create("Document.Waybill_Tasks");
+		T.Ref = CurWaybillCP;
+		//T.Requestioner = forepersonCP;
+		T.Save();		
+		taskId = T.Id;
+	}		
+	
+	var task = taskId.GetObject();		
+	task.Task = sKUCP;
+	task.ConstructionObject = constructionObjectCP;
+	
+	startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
+	task.StartTimeFact = startTimeFactTextCP;
+	task.StartTime = startTimeFactTextCP;
+	
+	stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
+	task.StopTimeFact = stopTimeFactTextCP;
+	task.StopTime = stopTimeFactTextCP;
+	
+	task.Comment = commentMemoCP;
+	
+	task.Save(false);
+	Workflow.Back();
 }
 
 function MyDoSelectSKU(control) {
