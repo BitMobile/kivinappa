@@ -59,7 +59,9 @@ function OnLoad() {
 function GetDoneTasks(){
 	var QText = "SELECT Count(*) " +
 		"FROM Document_Waybill_Tasks AS WbT " +
-		"WHERE WbT.StartTime <= DATETIME('Now', 'localtime') AND WbT.StopTime >= DATETIME('Now', 'localtime') AND WbT.StopTimeFact > '0001-01-01 00:00:00' "
+		"WHERE IFNULL(WbT.StartTime,DATETIME('0001-01-01 00:00:00')) >= DATE('now','start of day') " +
+		"AND IFNULL(WbT.StopTime,DATETIME('0001-01-01 00:00:00')) <=  DATETIME('now', 'start of day', '+1 day') " +
+		"AND IFNULL(WbT.StopTimeFact,DATETIME('0001-01-01 00:00:00')) > '0001-01-01 00:00:00' "
 		
 	if(bitmobileRoleCP == 1){
 		QText = QText + " AND Requestioner == @ThisUsr"
@@ -78,7 +80,8 @@ function GetDoneTasks(){
 function GetTaskPlaned(){
 	var QText = "SELECT Count(*) " +
 		"FROM Document_Waybill_Tasks AS WbT " +
-		"WHERE WbT.StartTime <= DATETIME('Now', 'localtime') AND WbT.StopTime >= DATETIME('Now', 'localtime') "
+		"WHERE IFNULL(WbT.StartTime,DATETIME('0001-01-01 00:00:00')) >= DATE('now','start of day') " +
+		"AND IFNULL(WbT.StopTime,DATETIME('0001-01-01 00:00:00')) <=  DATETIME('now', 'start of day', '+1 day') "
 		
 	if(bitmobileRoleCP == 1){
 		QText = QText + " AND Requestioner == @ThisUsr"

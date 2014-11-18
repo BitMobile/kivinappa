@@ -28,6 +28,7 @@ var constructionObjectTextCP
 var cntTextCP 
 var operationModeTextCP 
 var taskRequestionerCP
+var CanModTaskCP
 
 var backFromObject
 
@@ -93,7 +94,7 @@ function GetTechnics(searchText){
 	"AS PN ON PN.Technics = TECH.ID LEFT JOIN " +
 	"(SELECT WBT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, WbT.StartTime, WbT.StopTime, " +
 	"WbT.StartTimeFact, WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id " +
-	"WHERE WbT.StartTimeFact > '0001-01-01 00:00:00' AND WbT.StopTimeFact = '0001-01-01 00:00:00' GROUP BY Wb.Technics) AS WN ON WN.Technics = TECH.ID " +
+	"WHERE WbT.StartTimeFact > '0001-01-01 00:00:00' AND (WbT.StopTimeFact = '0001-01-01 00:00:00' OR WbT.StopTimeFact IS NULL) GROUP BY Wb.Technics) AS WN ON WN.Technics = TECH.ID " +
 	"LEFT JOIN (SELECT WbT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, Min(WbT.StartTime) AS StartTime, WbT.StopTime, WbT.StartTimeFact, " +
 	"WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id WHERE WbT.StartTime >= DATETIME('Now', 'localtime') GROUP BY Wb.Technics) " +
 	"AS PNext ON TECH.Id = PNext.Technics LEFT JOIN Catalog_Technics_TechnicsStatus AS St ON St.Ref = TECH.Id) AS Q LEFT JOIN Catalog_SKU AS CS ON Q.Task = CS.Id " +
@@ -283,6 +284,28 @@ function OpenGSM(){
 	 
 }
 
+function StartStopTask(taskId, param){
+	
+	taskObj = taskId.GetObject();
+	
+	if(param == 0){
+		taskObj.StartTimeFact = DateTime.Now;
+		if(taskObj.StartTime == null){
+			taskObj.StartTime = DateTime.Now;
+		}
+	}else{
+		taskObj.StopTimeFact = DateTime.Now;
+		if(taskObj.StopTime == null){
+			taskObj.StopTime = DateTime.Now;
+		}
+	}
+	
+	taskObj.Save(false);
+	
+	DoRefresh();
+	
+}
+
 //-------------------------- Скрин TechTask
 function RecPeremCPAndDoActionMachin(taskId){
 	//ThatIsNewTaskCP = false;
@@ -305,9 +328,14 @@ function RecPeremCPAndDoActionMachin(taskId){
 			"WHERE T.Id = @taskId");
 	
 	q.AddParameter("taskId", taskId);	
-	qq = q.Execute();		
+	qq = q.Execute();
+	
+	CanModTaskCP = false;
 	
 	if(qq.Next()){
+		if(((qq.Requestioner == null || qq.Requestioner == "@ref[Catalog_Requesters]:00000000-0000-0000-0000-000000000000") && bitmobileRoleCP == 0) || (qq.Requestioner == bitmobileRoleRefCP)){
+			CanModTaskCP = true;
+		}
 		sKUCP = qq.SKUId; 
 		constructionObjectCP = qq.ConstructionObjectId; 
 		
@@ -327,7 +355,8 @@ function RecPeremCPAndDoActionMachin(taskId){
 			taskRequestionerCP = null;
 		}
 				
-	}else{	
+	}else{
+		CanModTaskCP = true;
 		sKUCP = null; 
 		constructionObjectCP = null; 
 		
@@ -636,13 +665,23 @@ function EditTask(taskId) {
 	task.Task = sKUCP;
 	task.ConstructionObject = constructionObjectCP;
 	
-	startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
-	task.StartTimeFact = startTimeFactTextCP;
-	task.StartTime = startTimeFactTextCP;
+	var startTimeValue = Variables["StartTimeFactText"].Text;
+	if(startTimeValue != null && TrimAll(startTimeValue) != "-"){
+		
+		startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
+		task.StartTimeFact = startTimeFactTextCP;
+		task.StartTime = startTimeFactTextCP;
 	
-	stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
-	task.StopTimeFact = stopTimeFactTextCP;
-	task.StopTime = stopTimeFactTextCP;
+	}
+
+	var stopTimeValue = Variables["StopTimeFactText"].Text;
+	if(stopTimeValue != null && TrimAll(stopTimeValue) != "-"){
+		
+		stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
+		task.StopTimeFact = stopTimeFactTextCP;
+		task.StopTime = stopTimeFactTextCP;
+	
+	}
 	
 	task.Comment = commentMemoCP;
 	
@@ -668,6 +707,7 @@ function DoSelectSKUCallback1(key, args) {
     control.Text = key.Description;
     
     sKUCP = key;
+    sKUTextCP = key.Description;
         
     return;
 }
