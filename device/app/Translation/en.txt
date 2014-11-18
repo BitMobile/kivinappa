@@ -267,3 +267,5 @@ inputQty	Input count
 fact	Fact
 saveTheApplication	Save the application?
 applicationsForTheTechnique	Applications for the technique
+start	Start
+stop	Stop

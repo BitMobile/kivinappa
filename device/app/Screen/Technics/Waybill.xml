@@ -99,7 +99,26 @@
 												
 						<c:HorizontalLayout CssClass="grid" OnClickAction="$RecPeremCPAndDoActionMachin($techTask.Id)">
 							
-							<s:If Test="$techTask.Requestioner == ''">
+							<s:If Test="$bitmobileRole == 0">
+								<s:If Test="$techTask.Requestioner == NULL">
+									<s:If Test="$techTask.StartTimeFact == '00:00'">
+										<c:HorizontalLayout CssClass="green_swipe" OnClickAction="$KillTask($task.Id)">
+											<c:VerticalLayout >
+												<c:TextView Text="#start#"></c:TextView>
+											</c:VerticalLayout>
+										</c:HorizontalLayout>
+									</s:If>
+									<s:Else>
+										<c:HorizontalLayout CssClass="red_swipe" OnClickAction="$KillTask($task.Id)">
+											<c:VerticalLayout >
+												<c:TextView Text="#stop#"></c:TextView>
+											</c:VerticalLayout>
+										</c:HorizontalLayout>
+									</s:Else>
+								</s:If>
+							</s:If>
+							
+							<s:If Test="$techTask.Requestioner == NULL">
 								<c:VerticalLayout CssClass="no_mark_central"></c:VerticalLayout>
 							</s:If>
 							<s:Else>
@@ -141,15 +160,7 @@
 							</c:VerticalLayout>
 														
 						</c:HorizontalLayout>
-						
-						<!-- <s:If Test="$curRequest.StatusName == 'New'">
-							<c:HorizontalLayout CssClass="red_swipe" >
-								<c:VerticalLayout >
-									<c:TextView Text="#del#"></c:TextView>
-								</c:VerticalLayout>
-							</c:HorizontalLayout>
-						</s:If>-->
-												
+			
 					</c:SwipeHorizontalLayout>
 					
 					<c:HorizontalLine/>

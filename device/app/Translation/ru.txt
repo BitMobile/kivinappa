@@ -266,3 +266,5 @@ inputQty	Введите количество
 fact	Факт
 saveTheApplication	Сохранить заявку?
 applicationsForTheTechnique	Заявки на технику
+start	Начать
+stop	Завершить
