@@ -236,7 +236,7 @@ function GetTechTasks(){
 			"strftime('%H:%M', WBT.StopTime) AS StopTime, strftime('%H:%M', WBT.StartTimeFact) AS StartTimeFact, strftime('%H:%M', WBT.StopTimeFact) AS StopTimeFact, CO.Description AS CODescription " +
 			"FROM Document_Waybill_Tasks WBT LEFT JOIN Catalog_ConstructionObjects CO ON WBT.ConstructionObject = CO.Id " +
 			"LEFT JOIN Catalog_SKU AS S ON WBT.Task = S.Id LEFT JOIN Catalog_Requesters AS Req ON WBT.Requestioner = Req.Id " +
-			"WHERE WBT.Ref = @ThisWaybill");
+			"WHERE WBT.Ref = @ThisWaybill ORDER BY WBT.StartTime");
 	
 	q.AddParameter("ThisWaybill", CurWaybillCP);
 	

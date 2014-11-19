@@ -5,6 +5,7 @@
 	<s:Push Id="TaskPlaned" Value="$GetTaskPlaned()"/>
 	<s:Push Id="Malfunction" Value="$GetMalfunction()"/>
 	<s:Push Id="Residual" Value="$GetResidual($TaskPlaned, $TaskDone)"/>
+	<s:Push Id="BitmobileRole" Value="@bitmobileRoleCP"/>
 
   <c:SwipeHorizontalLayout Id="swipe_layout" Index="0">
     <c:VerticalLayout CssClass="menu">
@@ -14,13 +15,15 @@
         <c:TextView CssClass="menu_text" Text="#summary#"></c:TextView>
       </c:HorizontalLayout>
       
-      <c:DockLayout OnClickAction="$DoAction(Requests)">
-        <c:HorizontalLayout>
-          <c:Image CssClass="btn_ticket"/>
-          <c:TextView CssClass="menu_text" Text="#applications#"></c:TextView>
-        </c:HorizontalLayout>
-      </c:DockLayout>
-      <c:HorizontalLine/>
+      <s:If Test="$BitmobileRole=='1'">
+	      <c:DockLayout OnClickAction="$DoAction(Requests)">
+	        <c:HorizontalLayout>
+	          <c:Image CssClass="btn_ticket"/>
+	          <c:TextView CssClass="menu_text" Text="#applications#"></c:TextView>
+	        </c:HorizontalLayout>
+	      </c:DockLayout>
+	      <c:HorizontalLine/>
+      </s:If>
       
       <c:DockLayout OnClickAction="$DoAction(Technics)">
         <c:HorizontalLayout>

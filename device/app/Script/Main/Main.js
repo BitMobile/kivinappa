@@ -29,7 +29,7 @@ function Fake() {
 
 }
 
-function OnLoad() {    
+function OnLoading() {    
 	userIdCP = $.common.UserId;
 	
 	var qRole = new Query("SELECT BitmobileRole " +
@@ -37,7 +37,6 @@ function OnLoad() {
 			"WHERE Id == @userIdCP");	
 	qRole.AddParameter("userIdCP", "@ref[Catalog_User]:" + userIdCP);	
 	bitmobileRoleCP = qRole.ExecuteScalar();
-	
 	
 	if(bitmobileRoleCP == 1){
 		//forepersonCP
