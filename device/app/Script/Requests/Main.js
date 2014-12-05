@@ -399,7 +399,7 @@ function SaveTask(taskId){
 }
 
 function CanselTask(taskId, tasknull){
-	Dialog.Debug(tasknull);
+	
 	if(tasknull == null){
 		DB.Delete(taskId);
 	}	

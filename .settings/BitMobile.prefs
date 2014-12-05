@@ -1,6 +1,6 @@
 Bitmobile.device_address=192.168.0.102
 Bitmobile.device_debug_port=8082
-Bitmobile.device_deploy_script=D\:\\BitMobile Server\\utils.exe -dr -host %HOST% -sp KivenappaIDDQD12321 -sn Kivenappa %PATH%\r\nD\:\\BitMobile Server\\utils.exe -ar -host %HOST% -sp KivenappaIDDQD12321 -sn Kivenappa
+Bitmobile.device_deploy_script=C\:\\inetpub\\wwwroot\\bitmobile\\Utils\\utils.exe -dr -host %HOST% -sp 1234567890Qq -sn kivdev %PATH%\r\nC\:\\inetpub\\wwwroot\\bitmobile\\Utils\\utils.exe -ar -host %HOST% -sp 1234567890Qq -sn kivdev
 Bitmobile.device_starter_port=8082
 Bitmobile.server_url=http\://localhost/bitmobile
 eclipse.preferences.version=1
