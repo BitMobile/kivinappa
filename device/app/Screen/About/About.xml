@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack"
+	StyleSheet="About.css">
+	<c:VerticalLayout Id="VLayout">
+
+		<c:DockLayout CssClass="top_navigator">
+			<c:HorizontalLayout Id="btnMenu" CssClass="btn_menu"
+				OnEvent="Back" OnClick="$DoRollback()">
+				<c:Image CssClass="menuIcon" />
+			</c:HorizontalLayout>
+			<c:HorizontalLayout CssClass="btn_forward" />
+			<c:HorizontalLayout>
+				<c:TextView Text="#info#" />
+			</c:HorizontalLayout>
+		</c:DockLayout>
+		<c:HorizontalLine />
+
+		<c:ScrollView Id="grScrollView">
+
+			<c:HorizontalLayout CssClass="caption_grid">
+				<c:TextView Text="#developer#:" />
+			</c:HorizontalLayout>
+			<c:VerticalLayout CssClass="title_grid">
+				<c:TextView Text="#bitMobile#" CssClass="main_row" />
+				<c:TextView
+					Text="#bitmobileDesc#"
+					CssClass="description_row" />
+			</c:VerticalLayout>
+			<c:HorizontalLayout CssClass="end_of_block" />
+
+		</c:ScrollView>
+
+	</c:VerticalLayout>
+</c:Screen>

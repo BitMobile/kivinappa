@@ -29,7 +29,7 @@ function Fake() {
 
 }
 
-function OnLoad() {    
+function OnLoading() {    
 	userIdCP = $.common.UserId;
 	
 	var qRole = new Query("SELECT BitmobileRole " +
@@ -37,7 +37,6 @@ function OnLoad() {
 			"WHERE Id == @userIdCP");	
 	qRole.AddParameter("userIdCP", "@ref[Catalog_User]:" + userIdCP);	
 	bitmobileRoleCP = qRole.ExecuteScalar();
-	
 	
 	if(bitmobileRoleCP == 1){
 		//forepersonCP
@@ -59,7 +58,9 @@ function OnLoad() {
 function GetDoneTasks(){
 	var QText = "SELECT Count(*) " +
 		"FROM Document_Waybill_Tasks AS WbT " +
-		"WHERE WbT.StartTime <= DATETIME('Now', 'localtime') AND WbT.StopTime >= DATETIME('Now', 'localtime') AND WbT.StopTimeFact > '0001-01-01 00:00:00' "
+		"WHERE IFNULL(WbT.StartTime,DATETIME('0001-01-01 00:00:00')) >= DATE('now','start of day') " +
+		"AND IFNULL(WbT.StopTime,DATETIME('0001-01-01 00:00:00')) <=  DATETIME('now', 'start of day', '+1 day') " +
+		"AND IFNULL(WbT.StopTimeFact,DATETIME('0001-01-01 00:00:00')) > '0001-01-01 00:00:00' "
 		
 	if(bitmobileRoleCP == 1){
 		QText = QText + " AND Requestioner == @ThisUsr"
@@ -78,7 +79,8 @@ function GetDoneTasks(){
 function GetTaskPlaned(){
 	var QText = "SELECT Count(*) " +
 		"FROM Document_Waybill_Tasks AS WbT " +
-		"WHERE WbT.StartTime <= DATETIME('Now', 'localtime') AND WbT.StopTime >= DATETIME('Now', 'localtime') "
+		"WHERE IFNULL(WbT.StartTime,DATETIME('0001-01-01 00:00:00')) >= DATE('now','start of day') " +
+		"AND IFNULL(WbT.StopTime,DATETIME('0001-01-01 00:00:00')) <=  DATETIME('now', 'start of day', '+1 day') "
 		
 	if(bitmobileRoleCP == 1){
 		QText = QText + " AND Requestioner == @ThisUsr"
@@ -103,6 +105,18 @@ function GetMalfunction(){
 	var q = new Query(QText);
 		
 	return q.ExecuteScalar();
+	
+}
+
+function GetUsed(){
+	var q = new Query("SELECT DISTINCT WB.Technics  FROM Document_Waybill WB " +
+			"WHERE DATE(WB.PlannedStartDate) <= DATE('now', 'localtime') AND DATE(WB.PlannedEndDate) >= DATE('now', 'localtime') " +
+			"");
+	q.AddParameter("ThisTech", TechnicsID);
+	
+	CntUsedTech = q.ExecuteCount();
+	
+	return CntUsedTech;
 	
 }
 

@@ -1,0 +1,23 @@
+.title_grid {
+	height: 20sp;
+	width: 100%;
+	background-color: none;
+	padding-left: 3.5%;
+	padding-right: 3.5%;
+	padding-top: 5%;
+	padding-bottom: 5%;	
+}
+
+.title_grid main_row {
+	height: 30%;
+	width: 100%;	
+	color: #228AED;
+	font: 80% Arial-BoldMT;
+}
+
+.title_grid description_row {
+	height: 70%;
+	width: 100%;
+	margin-top: 5%;	
+	font: 20% Arial;
+}

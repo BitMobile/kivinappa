@@ -256,3 +256,42 @@ TextNoPlans {
 		text-align: center;
 		color: #000000;
 		font: 30% arial;
+}
+
+.red_swipe {
+    height: 15.9sp;
+    width: 27%;
+    background-color: #f74747;
+}
+	.red_swipe vl {
+        height: 100%;
+        width: 100%;
+    }
+	
+		.red_swipe vl TextView {
+		    height: 15%;
+		    width: 100%;
+		    margin-top: 35%;
+		    text-align: center;
+		    color: #fff;
+		    font: 100% Arial;
+		}
+	
+.green_swipe {
+    height: 15.9sp;
+    width: 27%;
+    background-color: #4cd864;
+}
+	.green_swipe vl {
+        height: 100%;
+        width: 100%;
+    }
+	
+		.green_swipe vl TextView {
+		    height: 15%;
+		    width: 100%;
+		    margin-top: 35%;
+		    text-align: center;
+		    color: #fff;
+		    font: 100% Arial;
+		}

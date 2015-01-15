@@ -201,7 +201,7 @@ function GetTasks(){
 			"LEFT JOIN Catalog_ConstructionObjects O ON O.Id = T.ConstructionObject " +
 			"LEFT JOIN Catalog_TechnicsTypes TT ON TT.Id = T.TechnicsType " +
 			"LEFT JOIN Catalog_SKU SKU ON SKU.Id = T.SKU  " +
-			"WHERE T.Ref == @curRequest");
+			"WHERE T.Ref == @curRequest ORDER BY T.StartTime");
 	
 	q.AddParameter("curRequest", requestsCP);
 	
@@ -313,6 +313,10 @@ function LocationDialogHandler(answ, state){
 //	ConstructionObjectCP = ConstructionObjectId;
 //}
 
+function AddCntTextCP(){
+	cntTextCP = Variables["cntText"].Text;
+}
+
 function SaveTask(taskId){
 	var task = taskId.GetObject();
 		
@@ -323,7 +327,7 @@ function SaveTask(taskId){
 	}else{
 		task.TechnicsType = technicsTypeCP;
 	}
-	
+		
 	if(cntTextCP == null){
 		atribNull = 1;		
 	}else{
@@ -391,10 +395,15 @@ function SaveTask(taskId){
 	if(atribNull != null){
 		Dialog.Message("Не все поля заполнены");
 	}else{
-		//Dialog.Debug(forepersonCP);
-		task.Save();
-		objectOfModified = true;
-		Workflow.Back();		
+		
+		if(StrReplace(startTimeTextCP,":","") > StrReplace(stopTimeTextCP,":","")){
+			Dialog.Message("Время окончания не может быть меньше времени начала");
+		}else{
+			//Dialog.Debug(forepersonCP);
+			task.Save();
+			objectOfModified = true;
+			Workflow.Back();
+		}
 	}    
 }
 

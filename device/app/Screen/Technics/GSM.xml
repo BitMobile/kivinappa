@@ -91,11 +91,11 @@
 														
 						</c:HorizontalLayout>
 						
-						<!-- <c:HorizontalLayout CssClass="red_swipe" OnClickAction="$KillFill($Fills.Id)">
+						<c:HorizontalLayout CssClass="red_swipe" OnClickAction="$KillFill($Fills.RowId)">
 								<c:VerticalLayout >
 									<c:TextView Text="#del#"></c:TextView>
 								</c:VerticalLayout>
-						</c:HorizontalLayout> -->
+						</c:HorizontalLayout> 
 												
 					</c:SwipeHorizontalLayout>
 					
@@ -105,11 +105,11 @@
 								
 			</s:Else>
 						    	
-		 <!-- <c:HorizontalLayout CssClass="swipe_info">
+		 <c:HorizontalLayout CssClass="swipe_info">
 			<c:Image CssClass="img_left"/>
 			<c:TextView Text="Смахните влево, чтобы 
 			удалить заправку" />				
-		</c:HorizontalLayout> -->
+		</c:HorizontalLayout>
 
 		</c:ScrollView>
 		

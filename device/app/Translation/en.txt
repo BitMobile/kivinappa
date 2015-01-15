@@ -267,3 +267,9 @@ inputQty	Input count
 fact	Fact
 saveTheApplication	Save the application?
 applicationsForTheTechnique	Applications for the technique
+start	Start
+stop	Stop
+developer	DEVELOPER
+bitMobile	BIT.MOBILE
+bitmobileDesc	BIT.MOBILE is a division of the First Bit. We are developing mobile solutions for business.
+error	Error

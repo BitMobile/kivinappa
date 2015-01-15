@@ -89,15 +89,15 @@ function DrawFtpReport() {
 	 var time = FileSystem.LastSyncTime.ToString(" HH:mm");
 
 	 if (FileSystem.SuccessSync) {
-	  $.ftpSyncReport.Text = date + at + time;
-	  $.ftpSyncReport.Visible = true;
-	  $.ftpSyncError.Visible = false;
+		  $.ftpSyncReport.Text = date + at + time;
+		  $.ftpSyncReport.Visible = true;
+		  $.ftpSyncError.Visible = false;
 	 } else {
-	  if (isDefault(FileSystem.LastSyncTime))
-	   $.ftpSyncError.Text = Translate["#Synchronization_has_not_been_performed#"];
-	  else
-	   $.ftpSyncError.Text = Translate["#error#"] + ": " + date + at + time;
-	  $.ftpSyncError.Visible = true;
-	  $.ftpSyncReport.Visible = false;
+		  if (isDefault(FileSystem.LastSyncTime))
+			  $.ftpSyncError.Text = Translate["#Synchronization_has_not_been_performed#"];
+		  else
+			  $.ftpSyncError.Text = Translate["#error#"] + ": " + date + at + time;
+			  $.ftpSyncError.Visible = true;
+			  $.ftpSyncReport.Visible = false;
 	 }
 }

@@ -5,6 +5,8 @@
 	<s:Push Id="TaskPlaned" Value="$GetTaskPlaned()"/>
 	<s:Push Id="Malfunction" Value="$GetMalfunction()"/>
 	<s:Push Id="Residual" Value="$GetResidual($TaskPlaned, $TaskDone)"/>
+	<s:Push Id="BitmobileRole" Value="@bitmobileRoleCP"/>
+	<s:Push Id="GetUsed" Value="$GetUsed()"/>
 
   <c:SwipeHorizontalLayout Id="swipe_layout" Index="0">
     <c:VerticalLayout CssClass="menu">
@@ -14,13 +16,15 @@
         <c:TextView CssClass="menu_text" Text="#summary#"></c:TextView>
       </c:HorizontalLayout>
       
-      <c:DockLayout OnClickAction="$DoAction(Requests)">
-        <c:HorizontalLayout>
-          <c:Image CssClass="btn_ticket"/>
-          <c:TextView CssClass="menu_text" Text="#applications#"></c:TextView>
-        </c:HorizontalLayout>
-      </c:DockLayout>
-      <c:HorizontalLine/>
+      <s:If Test="$BitmobileRole=='1'">
+	      <c:DockLayout OnClickAction="$DoAction(Requests)">
+	        <c:HorizontalLayout>
+	          <c:Image CssClass="btn_ticket"/>
+	          <c:TextView CssClass="menu_text" Text="#applications#"></c:TextView>
+	        </c:HorizontalLayout>
+	      </c:DockLayout>
+	      <c:HorizontalLine/>
+      </s:If>
       
       <c:DockLayout OnClickAction="$DoAction(Technics)">
         <c:HorizontalLayout>
@@ -38,16 +42,15 @@
       </c:DockLayout>
       <c:HorizontalLine/>
 
-      <c:DockLayout>
+      <c:DockLayout OnClickAction="$DoAction(About)">
         <c:HorizontalLayout>
           <c:Image CssClass="btn_info"/>
           <c:TextView CssClass="menu_text" Text="#info#"></c:TextView>
         </c:HorizontalLayout>
         <c:TextView CssClass="menu_text" Text="ver. 1.6.10.50"></c:TextView>
       </c:DockLayout>
-      <c:HorizontalLine/>      
+      <c:HorizontalLine/>
       
-
     </c:VerticalLayout>
     <c:VerticalLayout>
 
@@ -102,16 +105,16 @@
 
         </c:DockLayout>
 
-        <!-- <c:DockLayout CssClass="short_panel">
+        <c:DockLayout CssClass="short_panel">
           <c:DockLayout CssClass="grid">
             <c:VerticalLayout>
-              <c:TextView Text="Документ1: {0}" CssClass="description_row"></c:TextView>
-              <c:TextView Text="Документ2: {0}" CssClass="description_row"/>
+              <c:TextView Text="Техники задействовано: {$GetUsed}" CssClass="description_row"></c:TextView>
+              <!-- <c:TextView Text="Документ2: {0}" CssClass="description_row"/> -->
             </c:VerticalLayout>
           </c:DockLayout>
         </c:DockLayout>
 
-        <c:DockLayout>
+        <!-- <c:DockLayout>
           <c:DockLayout CssClass="grid">
             <c:VerticalLayout>
               <c:TextView Text="Документ3" CssClass="main_row"></c:TextView>
@@ -125,7 +128,7 @@
               <c:TextView Text="Инфо4" CssClass="description_row"/>
             </c:VerticalLayout>
           </c:DockLayout>
-        </c:DockLayout>-->
+        </c:DockLayout> -->
 
       </c:VerticalLayout>
 

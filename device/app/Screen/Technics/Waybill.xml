@@ -5,6 +5,7 @@
     <s:Push Id="techTasks" Value="$GetTechTasks()"></s:Push>
     <s:Push Id="cntTasks" Value="$GetCntTasks($techTasks)"></s:Push>
     <s:Push Id="bitmobileRole" Value="@bitmobileRoleCP"></s:Push>
+    <s:Push Id="bitmobileRoleRefCP" Value="@bitmobileRoleRefCP"/>
     <s:Push Id="MyStartTracking" Value="$MyStartTracking()"></s:Push>
     <s:Push Id="CurDateTime" Value="$GetCurTime()"/>
         				
@@ -70,11 +71,13 @@
 				<c:DockLayout CssClass="footer">
 					<c:HorizontalLine />
 					<c:DockLayout CssClass="btn_center_footer" OnClickAction="$OpenGSM()">
-						<c:TextView Text="#gsm#"/>
-					</c:DockLayout>
+						<c:TextView Text="#gsm#"/>						
+					</c:DockLayout>					
 					<c:HorizontalLine />
 				</c:DockLayout>			
 			</s:If>
+			
+			<c:HorizontalLine />
 			
 			<c:HorizontalLayout CssClass="caption_grid">
 		        <c:TextView Text="#assignments#:"></c:TextView>
@@ -95,11 +98,66 @@
 
 					<!-- Id, ConstructionObject, TechnicsType, SKU, OperationMode, StartTime, StopTime, Note, Count -->
 					
-					<c:SwipeHorizontalLayout Id="swipe_layout" CssClass="swipe_layout" Index="0">
+					<s:If Test="$bitmobileRole == 0">
+						<s:If Test="$techTask.Requestioner == NULL">
+							<s:If Test="$techTask.StartTimeFact == '00:00' || $techTask.StopTimeFact == '00:00' || $techTask.StartTimeFact == NULL || $techTask.StopTimeFact == NULL">
+								<s:Push Id="indind" Value="1"></s:Push>
+							</s:If>
+							<s:Else>
+								<s:Push Id="indind" Value="0"></s:Push>	
+							</s:Else>
+						</s:If>						
+						<s:Else>
+								<s:Push Id="indind" Value="0"></s:Push>																		
+						</s:Else>
+					</s:If>
+					
+					<c:SwipeHorizontalLayout Id="swipe_layout" CssClass="swipe_layout" Index="$indind">
+					
+						<s:If Test="$bitmobileRole == 0">
+							<s:If Test="$techTask.Requestioner == NULL">
+								<s:If Test="$techTask.StartTimeFact == '00:00' || $techTask.StartTimeFact == NULL">
+									<c:HorizontalLayout CssClass="green_swipe" OnClickAction="$StartStopTask($techTask.Id, 0)">
+										<c:VerticalLayout >
+											<c:TextView Text="#start#"></c:TextView>
+										</c:VerticalLayout>
+									</c:HorizontalLayout>
+								</s:If>
+								<s:Else>
+									<s:If Test="$techTask.StopTimeFact == '00:00' || $techTask.StopTimeFact == NULL">
+										<c:HorizontalLayout CssClass="red_swipe" OnClickAction="$StartStopTask($techTask.Id , 1)">
+											<c:VerticalLayout >
+												<c:TextView Text="#stop#"></c:TextView>
+											</c:VerticalLayout>
+										</c:HorizontalLayout>
+									</s:If>
+								</s:Else>
+							</s:If>
+						</s:If>
+						<s:Else>
+							<s:If Test="$techTask.Requestioner == $bitmobileRoleRefCP">
+								<s:If Test="$techTask.StartTimeFact == '00:00' || $techTask.StartTimeFact == NULL">
+									<c:HorizontalLayout CssClass="green_swipe" OnClickAction="$StartStopTask($techTask.Id, 0)">
+										<c:VerticalLayout >
+											<c:TextView Text="#start#"></c:TextView>
+										</c:VerticalLayout>
+									</c:HorizontalLayout>
+								</s:If>
+								<s:Else>
+									<s:If Test="$techTask.StopTimeFact == '00:00' || $techTask.StopTimeFact == NULL">
+										<c:HorizontalLayout CssClass="red_swipe" OnClickAction="$StartStopTask($techTask.Id, 1)">
+											<c:VerticalLayout >
+												<c:TextView Text="#stop#"></c:TextView>
+											</c:VerticalLayout>
+										</c:HorizontalLayout>
+									</s:If>
+								</s:Else>
+							</s:If>
+						</s:Else>
 												
 						<c:HorizontalLayout CssClass="grid" OnClickAction="$RecPeremCPAndDoActionMachin($techTask.Id)">
 							
-							<s:If Test="$techTask.Requestioner == ''">
+							<s:If Test="$techTask.Requestioner == NULL">
 								<c:VerticalLayout CssClass="no_mark_central"></c:VerticalLayout>
 							</s:If>
 							<s:Else>
@@ -107,7 +165,7 @@
 									<c:VerticalLayout CssClass="green_mark_central"></c:VerticalLayout>
 								</s:If>
 								<s:Else>
-									<s:If Test="$techTask.StartDateTime > CurDateTime">
+									<s:If Test="$techTask.StartDateTime > $CurDateTime">
 										<c:VerticalLayout CssClass="yellow_mark_central"></c:VerticalLayout>	
 									</s:If>
 									<s:Else>
@@ -127,7 +185,7 @@
 								</s:If>
 								<s:Else>
 									<s:Push Id="startTimeFact" Value="$techTask.StartTimeFact"></s:Push>
-								</s:Else>
+								</s:Else> 
 								
 								<s:If Test="$techTask.StopTimeFact == '00:00'">
 									<s:Push Id="stopTimeFact" Value=""></s:Push>
@@ -141,15 +199,7 @@
 							</c:VerticalLayout>
 														
 						</c:HorizontalLayout>
-						
-						<!-- <s:If Test="$curRequest.StatusName == 'New'">
-							<c:HorizontalLayout CssClass="red_swipe" >
-								<c:VerticalLayout >
-									<c:TextView Text="#del#"></c:TextView>
-								</c:VerticalLayout>
-							</c:HorizontalLayout>
-						</s:If>-->
-												
+			
 					</c:SwipeHorizontalLayout>
 					
 					<c:HorizontalLine/>

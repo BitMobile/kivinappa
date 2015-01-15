@@ -13,13 +13,18 @@
 				<c:TextView Text="#back#" />
 			</c:HorizontalLayout>
 												
-						
-			<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
-		
-			<c:HorizontalLayout>
-				<c:TextView Text="#application#" />
-			</c:HorizontalLayout>
-								
+			<s:If Test="$curRequest.StatusName == 'New'">			
+				<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
+				<c:HorizontalLayout>
+					<c:TextView Text="#application#" />
+				</c:HorizontalLayout>
+			</s:If>
+			<s:Else>
+				<c:HorizontalLayout CssClass="header_one_btn">
+					<c:TextView Text="#application#" />
+				</c:HorizontalLayout>
+			</s:Else>
+										
 		</c:DockLayout>
 		
 		<s:If Test="$curRequest.StatusName == 'New'">		

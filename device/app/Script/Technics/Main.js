@@ -28,6 +28,7 @@ var constructionObjectTextCP
 var cntTextCP 
 var operationModeTextCP 
 var taskRequestionerCP
+var CanModTaskCP
 
 var backFromObject
 
@@ -77,15 +78,15 @@ function GetTechnics(searchText){
 	var qtext = "SELECT Q.Id, Q.VehicleRegTag, Q.Description, Q.Status, Q.Info, Req.Description AS Requestioner, CO.Description AS ConstructionObject, CS.Description AS Task, Q.TaskString, " +
 	"strftime('%d.%m.%Y %H:%M', Q.StartTime) AS StartTime, strftime('%d.%m.%Y %H:%M', Q.StopTime) AS StopTime, Q.StartTimeFact, Q.StopTimeFact " +
 	"FROM (SELECT TECH.Id, TECH.VehicleRegTag, TT.Description, St.Status As Status, " +
-	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN 'Worked' WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN 'Planned' ELSE 'PlannedNext' END) AS Info, " +
-	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.Requestioner WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.Requestioner ELSE PNext.Requestioner END) AS Requestioner, " +
-	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.ConstructionObject WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.ConstructionObject ELSE PNext.ConstructionObject END) AS ConstructionObject, " +
-	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.Task WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.Task ELSE PNext.Task END) AS Task, " +
-	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.TaskString WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.TaskString ELSE PNext.TaskString END) AS TaskString, " +
-	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.StartTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StartTime ELSE PNext.StartTime END) AS StartTime, " +
-	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.StopTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StopTime ELSE PNext.StopTime END) StopTime, " +
-	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.StartTimeFact WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StartTimeFact ELSE PNext.StartTimeFact END) StartTimeFact, " +
-	"(SELECT CASE WHEN NOT WN.Id IS NULL THEN WN.StopTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StopTimeFact ELSE PNext.StopTimeFact END) StopTimeFact " +
+	"(CASE WHEN NOT WN.Id IS NULL THEN 'Worked' WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN 'Planned' ELSE 'PlannedNext' END) AS Info, " +
+	"(CASE WHEN NOT WN.Id IS NULL THEN WN.Requestioner WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.Requestioner ELSE PNext.Requestioner END) AS Requestioner, " +
+	"(CASE WHEN NOT WN.Id IS NULL THEN WN.ConstructionObject WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.ConstructionObject ELSE PNext.ConstructionObject END) AS ConstructionObject, " +
+	"(CASE WHEN NOT WN.Id IS NULL THEN WN.Task WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.Task ELSE PNext.Task END) AS Task, " +
+	"(CASE WHEN NOT WN.Id IS NULL THEN WN.TaskString WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.TaskString ELSE PNext.TaskString END) AS TaskString, " +
+	"(CASE WHEN NOT WN.Id IS NULL THEN WN.StartTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StartTime ELSE PNext.StartTime END) AS StartTime, " +
+	"(CASE WHEN NOT WN.Id IS NULL THEN WN.StopTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StopTime ELSE PNext.StopTime END) StopTime, " +
+	"(CASE WHEN NOT WN.Id IS NULL THEN WN.StartTimeFact WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StartTimeFact ELSE PNext.StartTimeFact END) StartTimeFact, " +
+	"(CASE WHEN NOT WN.Id IS NULL THEN WN.StopTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StopTimeFact ELSE PNext.StopTimeFact END) StopTimeFact " +
 	"FROM Catalog_Technics TECH JOIN Catalog_TechnicsTypes TT ON TECH.TechnicsTypes = TT.Id LEFT JOIN " +
 	"(SELECT WBT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, WbT.StartTime, WbT.StopTime, " +
 	"WbT.StartTimeFact, WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb " +
@@ -93,7 +94,7 @@ function GetTechnics(searchText){
 	"AS PN ON PN.Technics = TECH.ID LEFT JOIN " +
 	"(SELECT WBT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, WbT.StartTime, WbT.StopTime, " +
 	"WbT.StartTimeFact, WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id " +
-	"WHERE WbT.StartTimeFact > '0001-01-01 00:00:00' AND WbT.StopTimeFact = '0001-01-01 00:00:00' GROUP BY Wb.Technics) AS WN ON WN.Technics = TECH.ID " +
+	"WHERE WbT.StartTimeFact > '0001-01-01 00:00:00' AND (IFNULL(WbT.StopTimeFact,'0001-01-01 00:00:00') = '0001-01-01 00:00:00' OR WbT.StopTimeFact > DATETIME('Now', 'localtime')) GROUP BY Wb.Technics) AS WN ON WN.Technics = TECH.ID " +
 	"LEFT JOIN (SELECT WbT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, Min(WbT.StartTime) AS StartTime, WbT.StopTime, WbT.StartTimeFact, " +
 	"WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id WHERE WbT.StartTime >= DATETIME('Now', 'localtime') GROUP BY Wb.Technics) " +
 	"AS PNext ON TECH.Id = PNext.Technics LEFT JOIN Catalog_Technics_TechnicsStatus AS St ON St.Ref = TECH.Id) AS Q LEFT JOIN Catalog_SKU AS CS ON Q.Task = CS.Id " +
@@ -235,7 +236,7 @@ function GetTechTasks(){
 			"strftime('%H:%M', WBT.StopTime) AS StopTime, strftime('%H:%M', WBT.StartTimeFact) AS StartTimeFact, strftime('%H:%M', WBT.StopTimeFact) AS StopTimeFact, CO.Description AS CODescription " +
 			"FROM Document_Waybill_Tasks WBT LEFT JOIN Catalog_ConstructionObjects CO ON WBT.ConstructionObject = CO.Id " +
 			"LEFT JOIN Catalog_SKU AS S ON WBT.Task = S.Id LEFT JOIN Catalog_Requesters AS Req ON WBT.Requestioner = Req.Id " +
-			"WHERE WBT.Ref = @ThisWaybill");
+			"WHERE WBT.Ref = @ThisWaybill ORDER BY WBT.StartTime");
 	
 	q.AddParameter("ThisWaybill", CurWaybillCP);
 	
@@ -283,6 +284,28 @@ function OpenGSM(){
 	 
 }
 
+function StartStopTask(taskId, param){
+	
+	taskObj = taskId.GetObject();
+	
+	if(param == 0){
+		taskObj.StartTimeFact = DateTime.Now;
+		if(taskObj.StartTime == null){
+			taskObj.StartTime = DateTime.Now;
+		}
+	}else{
+		taskObj.StopTimeFact = DateTime.Now;
+		if(taskObj.StopTime == null){
+			taskObj.StopTime = DateTime.Now;
+		}
+	}
+	
+	taskObj.Save(false);
+	
+	DoRefresh();
+	
+}
+
 //-------------------------- Скрин TechTask
 function RecPeremCPAndDoActionMachin(taskId){
 	//ThatIsNewTaskCP = false;
@@ -305,9 +328,14 @@ function RecPeremCPAndDoActionMachin(taskId){
 			"WHERE T.Id = @taskId");
 	
 	q.AddParameter("taskId", taskId);	
-	qq = q.Execute();		
+	qq = q.Execute();
+	
+	CanModTaskCP = false;
 	
 	if(qq.Next()){
+		if(((qq.Requestioner == null || qq.Requestioner == "@ref[Catalog_Requesters]:00000000-0000-0000-0000-000000000000") && bitmobileRoleCP == 0) || (qq.Requestioner == bitmobileRoleRefCP)){
+			CanModTaskCP = true;
+		}
 		sKUCP = qq.SKUId; 
 		constructionObjectCP = qq.ConstructionObjectId; 
 		
@@ -327,7 +355,8 @@ function RecPeremCPAndDoActionMachin(taskId){
 			taskRequestionerCP = null;
 		}
 				
-	}else{	
+	}else{
+		CanModTaskCP = true;
 		sKUCP = null; 
 		constructionObjectCP = null; 
 		
@@ -497,12 +526,19 @@ function SaveTask(taskId, typeSave){
 			if(startTimeatribNull == 1){
 				Dialog.Message("Нельзя установить время окончания, если не указано время начала");
 			}else{
-				if(atribNull != null){
-					Dialog.Message("Не все поля заполнены");			
+				if(StrReplace(startTimeValue,":","") > StrReplace(stopTimeValue,":","")){
+					Dialog.Message("Время окончания не может быть меньше времени начала");
 				}else{
-					EditTask(taskId);
-				} 
+					if(atribNull != null){
+						Dialog.Message("Не все поля заполнены");			
+					}else{
+						EditTask(taskId);
+					} 
+				}
 			}
+			
+			
+			
 		}else{
 			if(atribNull != null){
 				Dialog.Message("Не все поля заполнены");			
@@ -636,13 +672,23 @@ function EditTask(taskId) {
 	task.Task = sKUCP;
 	task.ConstructionObject = constructionObjectCP;
 	
-	startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
-	task.StartTimeFact = startTimeFactTextCP;
-	task.StartTime = startTimeFactTextCP;
+	var startTimeValue = Variables["StartTimeFactText"].Text;
+	if(startTimeValue != null && TrimAll(startTimeValue) != "-"){
+		
+		startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
+		task.StartTimeFact = startTimeFactTextCP;
+		task.StartTime = startTimeFactTextCP;
 	
-	stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
-	task.StopTimeFact = stopTimeFactTextCP;
-	task.StopTime = stopTimeFactTextCP;
+	}
+
+	var stopTimeValue = Variables["StopTimeFactText"].Text;
+	if(stopTimeValue != null && TrimAll(stopTimeValue) != "-"){
+		
+		stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
+		task.StopTimeFact = stopTimeFactTextCP;
+		task.StopTime = stopTimeFactTextCP;
+	
+	}
 	
 	task.Comment = commentMemoCP;
 	
@@ -668,6 +714,7 @@ function DoSelectSKUCallback1(key, args) {
     control.Text = key.Description;
     
     sKUCP = key;
+    sKUTextCP = key.Description;
         
     return;
 }
@@ -888,10 +935,14 @@ function SaveTaskFP(taskId){
 	if(atribNull != null){
 		Dialog.Message("Не все поля заполнены");
 	}else{
-		//Dialog.Debug(forepersonCP);
-		task.Save(false);
-		Workflow.Back();
-		Dialog.Message("Заявка будет передана на рассмотрение при синхронизации");
+		if(StrReplace(startTimeTextCP,":","") > StrReplace(stopTimeTextCP,":","")){
+			Dialog.Message("Время окончания не может быть меньше времени начала");
+		}else{
+			//Dialog.Debug(forepersonCP);
+			task.Save(false);
+			Workflow.Back();
+			Dialog.Message("Заявка будет передана на рассмотрение при синхронизации");
+		}		
 	}    
 }
 
@@ -1015,6 +1066,11 @@ function GetFills(){
 
 }
 
+function KillFill(idFillTechnics){
+	DB.Delete(idFillTechnics);
+	Workflow.Refresh([]);
+}
+
 function GetGSMStartingCnt(){
 	
 	var q = new Query("SELECT WbGs.BalanceOut GSMCount " +
@@ -1051,8 +1107,14 @@ function GetGSMFinishingCnt(){
 
 function SetGSMBalance(RowId){
 	
-	var Cnt = ToDecimal(Variables["cntText"].Text);
+	var CntText = Variables["cntText"].Text;
 	
+	if(CntText == ""){
+		CntText = 0;
+	}
+	
+	var Cnt = parseFloat(CntText);
+		
 	GSMBalanceObj = RowId.GetObject();
 	GSMBalanceObj.BalanceIn = Cnt;
 	GSMBalanceObj.Save();
@@ -1072,7 +1134,13 @@ function GetCurTime(){
 
 function SaveFill(){
 	
-	var cnt = ToDecimal(Variables["cntText"].Text);
+	var CntText = Variables["cntText"].Text;
+	
+	if(CntText == ""){
+		CntText = 0;
+	}
+			
+	var cnt = parseFloat(CntText);
 	
 	if (cnt !== 0){
 		var FO = DB.Create("Document.Fill");
@@ -1093,7 +1161,7 @@ function SaveFill(){
 		Workflow.Back();
 		
 	}else{
-		Dialog.Debug(cnt);
+		//Dialog.Debug(cnt);
 		Dialog.Debug("Не все поля заполнены!");
 	}
 }

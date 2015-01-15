@@ -2,7 +2,9 @@
 <c:Screen xmlns:c="BitMobile.Controls" xmlns:s="BitMobile.ValueStack" StyleSheet="Task.css">
 	<s:Push Id="taskId" Value="$param1"></s:Push>
 	<s:Push Id="taskRequestioner" Value="@taskRequestionerCP"></s:Push>
-		                        					
+	<s:Push Id="canModTaskCP" Value="@CanModTaskCP"/>
+	
+	<s:If Test="$canModTaskCP">	                        					
 	<s:If Test="$taskId == null">	<!-- Если параметр null тогда это новая заявка от машиниста -->	
 		<c:DockLayout>
 						
@@ -266,5 +268,84 @@
 			</c:DockLayout>
 		</s:Else>
 	</s:Else>
+</s:If>
+ <s:Else>
+	
+	<c:DockLayout>
+							
+				<c:DockLayout CssClass="footer">
+					<c:HorizontalLine CssClass="navy"/>
+					
+					<c:DockLayout CssClass="btn_left_footer"  OnEvent="Back" OnClickAction="$DoBack()" >
+						<c:TextView Text="#cancel#" />
+					</c:DockLayout>
+				</c:DockLayout>
+				
+				<c:HorizontalLine CssClass="navy"/>
+		
+				<c:ScrollView Id="scrlVw">
+								
+					<c:HorizontalLine/>
+					
+					<c:HorizontalLayout CssClass="caption_grid">
+				        <c:TextView Text="#assignment#:"></c:TextView>
+				    </c:HorizontalLayout>
+				    
+				    <c:HorizontalLine/>
+					
+					
+					<c:HorizontalLayout CssClass="grid">
+				    	<c:VerticalLayout>
+							<c:TextView Text="Вид работы" CssClass="description_row"></c:TextView>
+							<c:TextView Id="SKUText" Text="{@sKUTextCP}" CssClass="main_row"></c:TextView>								
+						</c:VerticalLayout>
+					</c:HorizontalLayout>
+				    		
+					<c:HorizontalLine/>	
+					
+					<c:HorizontalLayout CssClass="grid">
+				    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+						<c:VerticalLayout>
+							<c:TextView Text="Объект" CssClass="description_row"></c:TextView>
+							<c:TextView Id="ConstructionObjectText" Text="{@constructionObjectTextCP}" CssClass="main_row"></c:TextView>								
+						</c:VerticalLayout>
+					</c:HorizontalLayout>
+				    		
+					<c:HorizontalLine/>
+					
+					<c:HorizontalLayout CssClass="grid">
+				    	<c:VerticalLayout CssClass="half_vl">
+							<c:TextView Text="Время начала факт" CssClass="description_row"></c:TextView>
+							<c:TextView Id="StartTimeFactText" Text="{$GetTime(@startTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
+						</c:VerticalLayout>
+						
+						<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>
+						
+						<c:VerticalLayout CssClass="half_vl">
+							<c:TextView Text="Время оконч факт" CssClass="description_row"></c:TextView>
+							<c:TextView Id="StopTimeFactText" Text="{$GetTime(@stopTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
+						</c:VerticalLayout>
+					</c:HorizontalLayout>
+				    		
+					<c:HorizontalLine/>
+										    		
+					<c:HorizontalLayout CssClass="caption_grid">
+				        <c:TextView Text="#note#:"></c:TextView>
+				    </c:HorizontalLayout>
+				    
+				    <c:HorizontalLine/>
+					
+					<c:HorizontalLayout CssClass="grid">
+						<c:VerticalLayout>
+							<c:TextView Id="commentMemo" Text="{@commentMemoCP}" ></c:TextView>
+						</c:VerticalLayout>
+					</c:HorizontalLayout>
+				    								    		
+					<c:HorizontalLine/>
+							
+				</c:ScrollView>
+		</c:DockLayout>
+
+</s:Else>
 
 </c:Screen>

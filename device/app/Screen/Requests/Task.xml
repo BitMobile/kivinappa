@@ -47,7 +47,7 @@
 					<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
 					<c:VerticalLayout CssClass="half30_vl">
 						<c:TextView Text="Кол-во" CssClass="description_row"></c:TextView>
-						<c:EditText Id="cntText" Text="{@cntTextCP}" CssClass="main_row" Keyboard = "Numeric"></c:EditText>								
+						<c:EditText Id="cntText" OnChange="$AddCntTextCP()" Text="{@cntTextCP}" CssClass="main_row" Keyboard = "Numeric"></c:EditText>								
 					</c:VerticalLayout>
 				</c:HorizontalLayout>
 				

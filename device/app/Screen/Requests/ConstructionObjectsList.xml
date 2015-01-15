@@ -51,11 +51,11 @@
 					
 					<c:HorizontalLayout CssClass="grid">
 						
-						<c:VerticalLayout CssClass="date_object" OnClickAction="$SetObj($obj.Id, $obj.Description)">
+						<!-- <c:VerticalLayout CssClass="date_object" OnClickAction="$SetObj($obj.Id, $obj.Description)">
 							<c:TextView Text="+" CssClass="placeholder_row"></c:TextView>							
-						</c:VerticalLayout>						
+						</c:VerticalLayout> -->						
 						
-						<c:VerticalLayout>
+						<c:VerticalLayout OnClickAction="$SetObj($obj.Id, $obj.Description)">
 							<c:TextView Text="$obj.Description" CssClass="description_row"></c:TextView>
 							<!-- <c:TextView Text="$obj.Code" CssClass="main_row"></c:TextView> -->						
 						</c:VerticalLayout>
