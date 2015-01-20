@@ -171,6 +171,7 @@ function GetCurRequest(){
 	
 	if(requestsCP == null){
 		// создание документа Request
+		Dialog.Debug("Создание");
 		var RQ = DB.Create("Document.Request");
 		RQ.Posted = 0;
 		RQ.DeletionMark = 0;
@@ -225,7 +226,8 @@ function ForApproval(requestId){
 	request.Save();
 	objectOfModified = true;
 	
-	Workflow.Refresh([]);
+	//Workflow.Refresh([]);
+	Workflow.Commit()
 }
 
 function RecPeremCPAndDoAction(curTaskId, curRequestStatusName){
