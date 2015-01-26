@@ -330,7 +330,7 @@ function RecPeremCPAndDoActionMachin(taskId){
 	q.AddParameter("taskId", taskId);	
 	qq = q.Execute();
 	
-	CanModTaskCP = false;
+	CanModTaskCP = true;
 	
 	if(qq.Next()){
 		if(((qq.Requestioner == null || qq.Requestioner == "@ref[Catalog_Requesters]:00000000-0000-0000-0000-000000000000") && bitmobileRoleCP == 0) || (qq.Requestioner == bitmobileRoleRefCP)){
@@ -346,6 +346,15 @@ function RecPeremCPAndDoActionMachin(taskId){
 		stopTimeTextCP = qq.StopTime; 		
 		startTimeFactTextCP = qq.StartTimeFact; 
 		stopTimeFactTextCP = qq.StopTimeFact;
+		
+		if(startTimeFactTextCP == '00:00' || startTimeFactTextCP == '0001-01-01 00:00:00'){
+			startTimeFactTextCP == null;
+		}
+		//Dialog.Debug(startTimeFactTextCP);
+		
+		if(stopTimeFactTextCP == '00:00' || startTimeFactTextCP == '0001-01-01 00:00:00'){
+			stopTimeFactTextCP == null;
+		}
 		
 		
 		commentMemoCP = qq.Comment;
@@ -501,7 +510,7 @@ function SaveTask(taskId, typeSave){
 //		}
 				
 		var startTimeValue = Variables["StartTimeFactText"].Text;
-		if(startTimeValue == null){
+		if(startTimeValue == null || startTimeValue == '00:00'){
 			startTimeatribNull = 1;		
 		}else{
 			if(TrimAll(startTimeValue) == "-"){
@@ -510,7 +519,7 @@ function SaveTask(taskId, typeSave){
 		}
 		
 		var stopTimeValue = Variables["StopTimeFactText"].Text;
-		if(stopTimeValue == null){
+		if(stopTimeValue == null || stopTimeValue == '00:00'){
 			stopTimeatribNull = 1;		
 		}else{
 			if(TrimAll(stopTimeValue) == "-"){
@@ -559,7 +568,7 @@ function SaveTask(taskId, typeSave){
 				
 		var startTimeValue = Variables["StartTimeFactText"].Text;
 						
-		if(startTimeValue == null){
+		if(startTimeValue == null || startTimeValue == '00:00'){
 			startTimeatribNull = 1;		
 		}else if(startTimeValue == '0001-01-01 00:00:00'){
 			startTimeatribNull = 1;
@@ -570,7 +579,7 @@ function SaveTask(taskId, typeSave){
 		}
 		
 		var stopTimeValue = Variables["StopTimeFactText"].Text;
-		if(stopTimeValue == null){
+		if(stopTimeValue == null || stopTimeValue == '00:00'){
 			stopTimeatribNull = 1;		
 		}else{
 			if(TrimAll(stopTimeValue) == "-"){
@@ -586,11 +595,15 @@ function SaveTask(taskId, typeSave){
 			if(startTimeatribNull == 1){
 				Dialog.Message("Нельзя установить время окончания, если не указано время начала");
 			}else{
-				if(atribNull != null){
-					Dialog.Message("Не все поля заполнены");			
+				if(StrReplace(startTimeValue,":","") > StrReplace(stopTimeValue,":","")){
+					Dialog.Message("Время окончания не может быть меньше времени начала");
 				}else{
-					EditTask(taskId);
-				} 
+					if(atribNull != null){
+						Dialog.Message("Не все поля заполнены");			
+					}else{
+						EditTask(taskId);
+					} 
+				}
 			}
 		}else{
 			if(atribNull != null){
@@ -603,7 +616,7 @@ function SaveTask(taskId, typeSave){
 	}else if(typeSave == "3"){
 		
 		var startTimeValue = Variables["StartTimeFactText"].Text;
-		if(startTimeValue == null){
+		if(startTimeValue == null || startTimeValue == '00:00'){
 			startTimeatribNull = 1;		
 		}else{
 			if(TrimAll(startTimeValue) == "-"){
@@ -612,7 +625,7 @@ function SaveTask(taskId, typeSave){
 		}
 		
 		var stopTimeValue = Variables["StopTimeFactText"].Text;
-		if(stopTimeValue == null){
+		if(stopTimeValue == null || stopTimeValue == '00:00'){
 			stopTimeatribNull = 1;		
 		}else{
 			if(TrimAll(stopTimeValue) == "-"){
@@ -624,19 +637,23 @@ function SaveTask(taskId, typeSave){
 			if(startTimeatribNull == 1){
 				Dialog.Message("Нельзя установить время окончания, если не указано время начала");
 			}else{
-				if(atribNull != null){
-					Dialog.Message("Не все поля заполнены");			
+				if(StrReplace(startTimeValue,":","") > StrReplace(stopTimeValue,":","")){
+					Dialog.Message("Время окончания не может быть меньше времени начала");
 				}else{
-					var task = taskId.GetObject();		
-					startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
-					task.StartTimeFact = startTimeFactTextCP;
-					
-					stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
-					task.StopTimeFact = stopTimeFactTextCP;
-					
-					task.Save(false);
-					Workflow.Back();
-				} 
+					if(atribNull != null){
+						Dialog.Message("Не все поля заполнены");			
+					}else{
+						var task = taskId.GetObject();		
+						startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
+						task.StartTimeFact = startTimeFactTextCP;
+						
+						stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
+						task.StopTimeFact = stopTimeFactTextCP;
+						
+						task.Save(false);
+						Workflow.Back();
+					} 
+				}
 			}
 		}else{
 			if(atribNull != null){
@@ -644,10 +661,17 @@ function SaveTask(taskId, typeSave){
 			}else{
 				var task = taskId.GetObject();		
 				startTimeFactTextCP = String.Format("{0:HH:mm}", startTimeValue)
+				if(startTimeFactTextCP == "-"){
+					startTimeFactTextCP = null;
+				}
 				task.StartTimeFact = startTimeFactTextCP;
 				
 				stopTimeFactTextCP = String.Format("{0:HH:mm}", stopTimeValue)
+				if(stopTimeFactTextCP == "-"){
+					stopTimeFactTextCP = null;
+				}
 				task.StopTimeFact = stopTimeFactTextCP;
+				
 				
 				task.Save(false);
 				Workflow.Back();
@@ -1199,8 +1223,8 @@ function ConvertDate(tskDate){
 function GetTime(Period)
 {	
 	FillTimeCP = Period;
-	
-	if(Period == '0001-01-01 00:00:00'){
+			
+	if(Period == '0001-01-01 00:00:00' || Period == '00:00'){
 		return "-";
 	}else if(Period != null){
 		var s = String.Format("{0:HH:mm}", DateTime.Parse(Period));

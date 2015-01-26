@@ -3,6 +3,7 @@
 	<s:Push Id="taskId" Value="$param1"></s:Push>
 	<s:Push Id="taskRequestioner" Value="@taskRequestionerCP"></s:Push>
 	<s:Push Id="canModTaskCP" Value="@CanModTaskCP"/>
+	<s:Push Id="bitmobileRole" Value="@bitmobileRoleCP"></s:Push>
 	
 	<s:If Test="$canModTaskCP">	                        					
 	<s:If Test="$taskId == null">	<!-- Если параметр null тогда это новая заявка от машиниста -->	
@@ -93,179 +94,361 @@
 	</s:If>
 	<s:Else> <!-- Если параметр не null тогда это заявка, открытая для просмотра -->
 		
-		<s:If Test="$taskRequestioner == null"> <!-- Если атрибут null, тогда это заявка машиниста, и ее можно редактировать -->
+		<s:If Test="$taskRequestioner == null"> <!-- Если атрибут null, тогда это заявка машиниста,  -->
 		
-			<c:DockLayout>
-							
-				<c:DockLayout CssClass="footer">
-					<c:HorizontalLine CssClass="navy"/>
-					
-					<c:DockLayout CssClass="btn_left_footer"  OnEvent="Back" OnClickAction="$DoBack()" >
-						<c:TextView Text="#cancel#" />
-					</c:DockLayout>
-					
-					<c:DockLayout CssClass="btn_right_footer" OnClickAction="$SaveTask($taskId, 2)">
-						<c:TextView Text="#ready#" />
-					</c:DockLayout>
-				</c:DockLayout>
-				
-				<c:HorizontalLine CssClass="navy"/>
+			<s:If Test="$bitmobileRole == 0"> <!-- Если атрибут 0, тогда заявку машиниста просматривает машинист и ему можно редактировать,  -->
 		
-				<c:ScrollView Id="scrlVw">
+				<c:DockLayout>
 								
-					<c:HorizontalLine/>
-					
-					<c:HorizontalLayout CssClass="caption_grid">
-				        <c:TextView Text="#assignment#:"></c:TextView>
-				    </c:HorizontalLayout>
-				    
-				    <c:HorizontalLine/>
-					
-					
-					<c:HorizontalLayout CssClass="grid" OnClickAction="$MyDoSelectSKU($SKUText)">
-				    	<c:VerticalLayout>
-							<c:TextView Text="Вид работы" CssClass="description_row"></c:TextView>
-							<c:TextView Id="SKUText" Text="{@sKUTextCP}" CssClass="main_row"></c:TextView>								
-						</c:VerticalLayout>
-					</c:HorizontalLayout>
-				    		
-					<c:HorizontalLine/>	
-					
-					<c:HorizontalLayout CssClass="grid" OnClickAction="$DoAction(ConstructionObjectsListFP, null)">
-				    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
-						<c:VerticalLayout>
-							<c:TextView Text="Объект" CssClass="description_row"></c:TextView>
-							<c:TextView Id="ConstructionObjectText" Text="{@constructionObjectTextCP}" CssClass="main_row"></c:TextView>								
-						</c:VerticalLayout>
-					</c:HorizontalLayout>
-				    		
-					<c:HorizontalLine/>
-					
-					<c:HorizontalLayout CssClass="grid">
-				    	<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StartTimeFactText, StartTimeFactText, $taskId, StartTimeFact)">
-							<c:TextView Text="Время начала факт" CssClass="description_row"></c:TextView>
-							<c:TextView Id="StartTimeFactText" Text="{$GetTime(@startTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
-						</c:VerticalLayout>
+					<c:DockLayout CssClass="footer">
+						<c:HorizontalLine CssClass="navy"/>
 						
-						<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>
+						<c:DockLayout CssClass="btn_left_footer"  OnEvent="Back" OnClickAction="$DoBack()" >
+							<c:TextView Text="#cancel#" />
+						</c:DockLayout>
 						
-						<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StopTimeFactText, StopTimeFactText, $taskId, StopTimeFact)">
-							<c:TextView Text="Время оконч факт" CssClass="description_row"></c:TextView>
-							<c:TextView Id="StopTimeFactText" Text="{$GetTime(@stopTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
-						</c:VerticalLayout>
-					</c:HorizontalLayout>
-				    		
-					<c:HorizontalLine/>
-										    		
-					<c:HorizontalLayout CssClass="caption_grid">
-				        <c:TextView Text="#note#:"></c:TextView>
-				    </c:HorizontalLayout>
-				    
-				    <c:HorizontalLine/>
+						<c:DockLayout CssClass="btn_right_footer" OnClickAction="$SaveTask($taskId, 2)">
+							<c:TextView Text="#ready#" />
+						</c:DockLayout>
+					</c:DockLayout>
 					
-					<c:HorizontalLayout CssClass="grid">
-						<c:VerticalLayout>
-							<c:MemoEdit Id="commentMemo" Text="{@commentMemoCP}" OnChange="$CommentMemoEdit()"></c:MemoEdit>
-						</c:VerticalLayout>
-					</c:HorizontalLayout>
-				    								    		
-					<c:HorizontalLine/>
+					<c:HorizontalLine CssClass="navy"/>
+			
+					<c:ScrollView Id="scrlVw">
+									
+						<c:HorizontalLine/>
+						
+						<c:HorizontalLayout CssClass="caption_grid">
+					        <c:TextView Text="#assignment#:"></c:TextView>
+					    </c:HorizontalLayout>
+					    
+					    <c:HorizontalLine/>
+						
+						
+						<c:HorizontalLayout CssClass="grid" OnClickAction="$MyDoSelectSKU($SKUText)">
+					    	<c:VerticalLayout>
+								<c:TextView Text="Вид работы" CssClass="description_row"></c:TextView>
+								<c:TextView Id="SKUText" Text="{@sKUTextCP}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    		
+						<c:HorizontalLine/>	
+						
+						<c:HorizontalLayout CssClass="grid" OnClickAction="$DoAction(ConstructionObjectsListFP, null)">
+					    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+							<c:VerticalLayout>
+								<c:TextView Text="Объект" CssClass="description_row"></c:TextView>
+								<c:TextView Id="ConstructionObjectText" Text="{@constructionObjectTextCP}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    		
+						<c:HorizontalLine/>
+						
+						<c:HorizontalLayout CssClass="grid">
+					    	<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StartTimeFactText, StartTimeFactText, $taskId, StartTimeFact)">
+								<c:TextView Text="Время начала факт" CssClass="description_row"></c:TextView>
+								<c:TextView Id="StartTimeFactText" Text="{$GetTime(@startTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
 							
-				</c:ScrollView>
-			</c:DockLayout>
+							<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>
+							
+							<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StopTimeFactText, StopTimeFactText, $taskId, StopTimeFact)">
+								<c:TextView Text="Время оконч факт" CssClass="description_row"></c:TextView>
+								<c:TextView Id="StopTimeFactText" Text="{$GetTime(@stopTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    		
+						<c:HorizontalLine/>
+											    		
+						<c:HorizontalLayout CssClass="caption_grid">
+					        <c:TextView Text="#note#:"></c:TextView>
+					    </c:HorizontalLayout>
+					    
+					    <c:HorizontalLine/>
+						
+						<c:HorizontalLayout CssClass="grid">
+							<c:VerticalLayout>
+								<c:MemoEdit Id="commentMemo" Text="{@commentMemoCP}" OnChange="$CommentMemoEdit()"></c:MemoEdit>
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    								    		
+						<c:HorizontalLine/>
+								
+					</c:ScrollView>
+				</c:DockLayout>
+			</s:If>
+			<s:Else> <!-- Если атрибут 1, тогда заявку машиниста просматривает бригадир и ему нельзя редактировать,  -->
+		
+				<c:DockLayout>
+								
+					<c:DockLayout CssClass="footer">
+						<c:HorizontalLine CssClass="navy"/>
+						
+						<c:DockLayout CssClass="btn_left_footer"  OnEvent="Back" OnClickAction="$DoBack()" >
+							<c:TextView Text="#cancel#" />
+						</c:DockLayout>
+						
+						<!--<c:DockLayout CssClass="btn_right_footer" OnClickAction="$SaveTask($taskId, 2)">
+							<c:TextView Text="#ready#" />
+						</c:DockLayout>-->
+					</c:DockLayout>
+					
+					<c:HorizontalLine CssClass="navy"/>
+			
+					<c:ScrollView Id="scrlVw">
+									
+						<c:HorizontalLine/>
+						
+						<c:HorizontalLayout CssClass="caption_grid">
+					        <c:TextView Text="#assignment#:"></c:TextView>
+					    </c:HorizontalLayout>
+					    
+					    <c:HorizontalLine/>
+						
+						
+						<c:HorizontalLayout CssClass="grid" >
+					    	<c:VerticalLayout>
+								<c:TextView Text="Вид работы" CssClass="description_row"></c:TextView>
+								<c:TextView Id="SKUText" Text="{@sKUTextCP}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    		
+						<c:HorizontalLine/>	
+						
+						<c:HorizontalLayout CssClass="grid" >
+					    	<!-- <c:VerticalLayout CssClass="no_mark"></c:VerticalLayout> -->
+							<c:VerticalLayout>
+								<c:TextView Text="Объект" CssClass="description_row"></c:TextView>
+								<c:TextView Id="ConstructionObjectText" Text="{@constructionObjectTextCP}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    		
+						<c:HorizontalLine/>
+						
+						<c:HorizontalLayout CssClass="grid">
+					    	<c:VerticalLayout CssClass="half_vl" >
+								<c:TextView Text="Время начала факт" CssClass="description_row"></c:TextView>
+								<c:TextView Id="StartTimeFactText" Text="{$GetTime(@startTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+							
+							<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>
+							
+							<c:VerticalLayout CssClass="half_vl" >
+								<c:TextView Text="Время оконч факт" CssClass="description_row"></c:TextView>
+								<c:TextView Id="StopTimeFactText" Text="{$GetTime(@stopTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    		
+						<c:HorizontalLine/>
+											    		
+						<c:HorizontalLayout CssClass="caption_grid">
+					        <c:TextView Text="#note#:"></c:TextView>
+					    </c:HorizontalLayout>
+					    
+					    <c:HorizontalLine/>
+						
+						<c:HorizontalLayout CssClass="grid">
+							<c:VerticalLayout>
+								<c:TextView Id="commentMemo" Text="{@commentMemoCP}" ></c:TextView>
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    								    		
+						<c:HorizontalLine/>
+								
+					</c:ScrollView>
+				</c:DockLayout>
+			
+			</s:Else>
 		</s:If>
 		<s:Else> <!-- Если атрибут не null, тогда это заявка пришедшая из 1С, и ее нельзя редактировать, только фактическое время -->
-			<c:DockLayout>
-							
-				<c:DockLayout CssClass="footer">
-					<c:HorizontalLine CssClass="navy"/>
-					
-					<c:DockLayout CssClass="btn_left_footer"  OnEvent="Back" OnClickAction="$DoBack()" >
-						<c:TextView Text="#cancel#" />
+			
+			<s:If Test="$bitmobileRole == 1"> <!-- Если атрибут 1, тогда заявку бригадира просматривает бригадир и ему можно редактировать,  -->
+			
+				<c:DockLayout>
+								
+					<c:DockLayout CssClass="footer">
+						<c:HorizontalLine CssClass="navy"/>
+						
+						<c:DockLayout CssClass="btn_left_footer"  OnEvent="Back" OnClickAction="$DoBack()" >
+							<c:TextView Text="#cancel#" />
+						</c:DockLayout>
+						
+						<c:DockLayout CssClass="btn_right_footer" OnClickAction="$SaveTask($taskId, 3)">
+							<c:TextView Text="#ready#" />
+						</c:DockLayout>									
 					</c:DockLayout>
 					
-					<c:DockLayout CssClass="btn_right_footer" OnClickAction="$SaveTask($taskId, 3)">
-						<c:TextView Text="#ready#" />
-					</c:DockLayout>									
-				</c:DockLayout>
-				
-				<c:HorizontalLine CssClass="navy"/>
-		
-				<c:ScrollView Id="scrlVw">
-								
-					<c:HorizontalLine/>
-					
-					<c:HorizontalLayout CssClass="caption_grid">
-				        <c:TextView Text="#assignment#:"></c:TextView>
-				    </c:HorizontalLayout>
-				    
-				    <c:HorizontalLine/>
-					
-					
-					<c:HorizontalLayout CssClass="grid" >
-				    	<c:VerticalLayout>
-							<c:TextView Text="Вид работы" CssClass="description_row"></c:TextView>
-							<c:TextView Id="SKUText" Text="{@sKUTextCP}" CssClass="main_row"></c:TextView>								
-						</c:VerticalLayout>
-					</c:HorizontalLayout>
+					<c:HorizontalLine CssClass="navy"/>
+			
+					<c:ScrollView Id="scrlVw">
 									
-				    		
-					<c:HorizontalLine/>	
-					
-					<c:HorizontalLayout CssClass="grid">
-				    	<c:VerticalLayout>							
-								<c:TextView Text="Объект" CssClass="description_row"></c:TextView>
-								<c:TextView Id="ConstructionObjectText" Text="{@constructionObjectTextCP}" CssClass="main_row"></c:TextView>													
-						</c:VerticalLayout>
-					</c:HorizontalLayout>
-				    		
-					<c:HorizontalLine/>
-					
-					<!-- <c:HorizontalLayout CssClass="grid">			    	
-						<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StartTimeText, StartTimeText, $task.Id, StartTime)">
-							<c:TextView Text="Время начала" CssClass="description_row"></c:TextView>
-							<c:TextView Id="StartTimeText" Text="{$GetTime($task.StartTime)}" CssClass="main_row"></c:TextView>								
-						</c:VerticalLayout>					
-						<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>					
-						<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StopTimeText, StopTimeText, $task.Id, StopTime)">
-							<c:TextView Text="Время окончания" CssClass="description_row"></c:TextView>
-							<c:TextView Id="StopTimeText" Text="{$GetTime($task.StopTime)}" CssClass="main_row"></c:TextView>								
-						</c:VerticalLayout>
-					</c:HorizontalLayout>			    		
-					<c:HorizontalLine/>  -->	
-					
-					<c:HorizontalLayout CssClass="grid">
-				    	<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StartTimeFactText, StartTimeFactText, $taskId, StartTimeFact)">
-							<c:TextView Text="Время начала факт" CssClass="description_row"></c:TextView>
-							<c:TextView Id="StartTimeFactText" Text="{$GetTime(@startTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
-						</c:VerticalLayout>
+						<c:HorizontalLine/>
 						
-						<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>
+						<c:HorizontalLayout CssClass="caption_grid">
+					        <c:TextView Text="#assignment#:"></c:TextView>
+					    </c:HorizontalLayout>
+					    
+					    <c:HorizontalLine/>
 						
-						<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StopTimeFactText, StopTimeFactText, $taskId, StopTimeFact)">
-							<c:TextView Text="Время оконч факт" CssClass="description_row"></c:TextView>
-							<c:TextView Id="StopTimeFactText" Text="{$GetTime(@stopTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
-						</c:VerticalLayout>
-					</c:HorizontalLayout>
-				    		
-					<c:HorizontalLine/>
-										    		
-					<c:HorizontalLayout CssClass="caption_grid">
-				        <c:TextView Text="#note#:"></c:TextView>
-				    </c:HorizontalLayout>
-				    
-				    <c:HorizontalLine/>
-					
-					<c:HorizontalLayout CssClass="grid">
-						<c:VerticalLayout>
-							<c:TextView Id="commentMemo" Text="{@commentMemoCP}" ></c:TextView>
-						</c:VerticalLayout>
-					</c:HorizontalLayout>
-				    								    		
-					<c:HorizontalLine/>
+						
+						<c:HorizontalLayout CssClass="grid" >
+					    	<c:VerticalLayout>
+								<c:TextView Text="Вид работы" CssClass="description_row"></c:TextView>
+								<c:TextView Id="SKUText" Text="{@sKUTextCP}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+										
+					    		
+						<c:HorizontalLine/>	
+						
+						<c:HorizontalLayout CssClass="grid">
+					    	<c:VerticalLayout>							
+									<c:TextView Text="Объект" CssClass="description_row"></c:TextView>
+									<c:TextView Id="ConstructionObjectText" Text="{@constructionObjectTextCP}" CssClass="main_row"></c:TextView>													
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    		
+						<c:HorizontalLine/>
+						
+						<!-- <c:HorizontalLayout CssClass="grid">			    	
+							<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StartTimeText, StartTimeText, $task.Id, StartTime)">
+								<c:TextView Text="Время начала" CssClass="description_row"></c:TextView>
+								<c:TextView Id="StartTimeText" Text="{$GetTime($task.StartTime)}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>					
+							<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>					
+							<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StopTimeText, StopTimeText, $task.Id, StopTime)">
+								<c:TextView Text="Время окончания" CssClass="description_row"></c:TextView>
+								<c:TextView Id="StopTimeText" Text="{$GetTime($task.StopTime)}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+						</c:HorizontalLayout>			    		
+						<c:HorizontalLine/>  -->	
+						
+						<c:HorizontalLayout CssClass="grid">
+					    	<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StartTimeFactText, StartTimeFactText, $taskId, StartTimeFact)">
+								<c:TextView Text="Время начала факт" CssClass="description_row"></c:TextView>
+								<c:TextView Id="StartTimeFactText" Text="{$GetTime(@startTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
 							
-				</c:ScrollView>
-			</c:DockLayout>
+							<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>
+							
+							<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StopTimeFactText, StopTimeFactText, $taskId, StopTimeFact)">
+								<c:TextView Text="Время оконч факт" CssClass="description_row"></c:TextView>
+								<c:TextView Id="StopTimeFactText" Text="{$GetTime(@stopTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    		
+						<c:HorizontalLine/>
+											    		
+						<c:HorizontalLayout CssClass="caption_grid">
+					        <c:TextView Text="#note#:"></c:TextView>
+					    </c:HorizontalLayout>
+					    
+					    <c:HorizontalLine/>
+						
+						<c:HorizontalLayout CssClass="grid">
+							<c:VerticalLayout>
+								<c:TextView Id="commentMemo" Text="{@commentMemoCP}" ></c:TextView>
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    								    		
+						<c:HorizontalLine/>
+								
+					</c:ScrollView>
+				</c:DockLayout>
+			</s:If>
+			<s:Else> <!-- Если атрибут 0, тогда заявку бригадира просматривает машинист и ему нельзя редактировать,  -->
+				<c:DockLayout>
+								
+					<c:DockLayout CssClass="footer">
+						<c:HorizontalLine CssClass="navy"/>
+						
+						<c:DockLayout CssClass="btn_left_footer"  OnEvent="Back" OnClickAction="$DoBack()" >
+							<c:TextView Text="#cancel#" />
+						</c:DockLayout>
+						
+						<!-- <c:DockLayout CssClass="btn_right_footer" OnClickAction="$SaveTask($taskId, 3)">
+							<c:TextView Text="#ready#" />
+						</c:DockLayout>	 -->								
+					</c:DockLayout>
+					
+					<c:HorizontalLine CssClass="navy"/>
+			
+					<c:ScrollView Id="scrlVw">
+									
+						<c:HorizontalLine/>
+						
+						<c:HorizontalLayout CssClass="caption_grid">
+					        <c:TextView Text="#assignment#:"></c:TextView>
+					    </c:HorizontalLayout>
+					    
+					    <c:HorizontalLine/>
+						
+						
+						<c:HorizontalLayout CssClass="grid" >
+					    	<c:VerticalLayout>
+								<c:TextView Text="Вид работы" CssClass="description_row"></c:TextView>
+								<c:TextView Id="SKUText" Text="{@sKUTextCP}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+										
+					    		
+						<c:HorizontalLine/>	
+						
+						<c:HorizontalLayout CssClass="grid">
+					    	<c:VerticalLayout>							
+									<c:TextView Text="Объект" CssClass="description_row"></c:TextView>
+									<c:TextView Id="ConstructionObjectText" Text="{@constructionObjectTextCP}" CssClass="main_row"></c:TextView>													
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    		
+						<c:HorizontalLine/>
+						
+						<!-- <c:HorizontalLayout CssClass="grid">			    	
+							<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StartTimeText, StartTimeText, $task.Id, StartTime)">
+								<c:TextView Text="Время начала" CssClass="description_row"></c:TextView>
+								<c:TextView Id="StartTimeText" Text="{$GetTime($task.StartTime)}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>					
+							<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>					
+							<c:VerticalLayout CssClass="half_vl" OnClickAction="$SetTime($StopTimeText, StopTimeText, $task.Id, StopTime)">
+								<c:TextView Text="Время окончания" CssClass="description_row"></c:TextView>
+								<c:TextView Id="StopTimeText" Text="{$GetTime($task.StopTime)}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+						</c:HorizontalLayout>			    		
+						<c:HorizontalLine/>  -->	
+						
+						<c:HorizontalLayout CssClass="grid">
+					    	<c:VerticalLayout CssClass="half_vl" >
+								<c:TextView Text="Время начала факт" CssClass="description_row"></c:TextView>
+								<c:TextView Id="StartTimeFactText" Text="{$GetTime(@startTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+							
+							<c:VerticalLayout CssClass="verticalLine"></c:VerticalLayout>
+							
+							<c:VerticalLayout CssClass="half_vl" >
+								<c:TextView Text="Время оконч факт" CssClass="description_row"></c:TextView>
+								<c:TextView Id="StopTimeFactText" Text="{$GetTime(@stopTimeFactTextCP)}" CssClass="main_row"></c:TextView>								
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    		
+						<c:HorizontalLine/>
+											    		
+						<c:HorizontalLayout CssClass="caption_grid">
+					        <c:TextView Text="#note#:"></c:TextView>
+					    </c:HorizontalLayout>
+					    
+					    <c:HorizontalLine/>
+						
+						<c:HorizontalLayout CssClass="grid">
+							<c:VerticalLayout>
+								<c:TextView Id="commentMemo" Text="{@commentMemoCP}" ></c:TextView>
+							</c:VerticalLayout>
+						</c:HorizontalLayout>
+					    								    		
+						<c:HorizontalLine/>
+								
+					</c:ScrollView>
+				</c:DockLayout>
+			</s:Else>
 		</s:Else>
 	</s:Else>
 </s:If>
