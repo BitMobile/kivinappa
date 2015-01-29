@@ -14,10 +14,12 @@
 			</c:HorizontalLayout>
 												
 			<s:If Test="$curRequest.StatusName == 'New'">			
-				<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
-				<c:HorizontalLayout>
-					<c:TextView Text="#application#" />
-				</c:HorizontalLayout>
+				
+					<c:Button Id="btnForward" Text="#ready#" CssClass="btn_forward" OnClickAction="$Workflow.DoCommit()"/>
+					<c:HorizontalLayout>
+						<c:TextView Text="#application#" />
+					</c:HorizontalLayout>
+					
 			</s:If>
 			<s:Else>
 				<c:HorizontalLayout CssClass="header_one_btn">
@@ -33,11 +35,13 @@
 				<c:DockLayout CssClass="btn_left_footer" OnClickAction="$RecPeremCPAndDoAction(null, $curRequest.StatusName)">
 					<c:TextView Text="#add#" />
 				</c:DockLayout>
-				
-				<c:DockLayout CssClass="btn_right_footer" OnClickAction="$ForApproval($curRequest.Id)">
-					<c:TextView Text="#forApproval#" />
-				</c:DockLayout>
-			</c:DockLayout>
+								
+				<s:If Test="$cntTasks != 0">
+					<c:DockLayout CssClass="btn_right_footer" OnClickAction="$ForApproval($curRequest.Id)">
+						<c:TextView Text="#forApproval#" />
+					</c:DockLayout>
+				</s:If>
+			</c:DockLayout>			
 		</s:If>
 		
 		<c:HorizontalLine CssClass="navy"/>
