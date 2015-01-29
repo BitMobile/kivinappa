@@ -378,10 +378,10 @@ function SaveTask(taskId){
 	}
 	
 	if(operationModeTextCP == null){
-		atribNull = 1;		
+		//atribNull = 1;		
 	}else{
 		if(IsBlankString(operationModeTextCP)){
-			atribNull = 1;			
+			//atribNull = 1;			
 		}else{
 			task.OperationMode = operationModeTextCP;
 		}
