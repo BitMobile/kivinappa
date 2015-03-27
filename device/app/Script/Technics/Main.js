@@ -94,7 +94,7 @@ function GetTechnics(searchText){
 	"AS PN ON PN.Technics = TECH.ID LEFT JOIN " +
 	"(SELECT WBT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, WbT.StartTime, WbT.StopTime, " +
 	"WbT.StartTimeFact, WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id " +
-	"WHERE WbT.StartTimeFact > '0001-01-01 00:00:00' AND (IFNULL(WbT.StopTimeFact,'0001-01-01 00:00:00') = '0001-01-01 00:00:00' OR WbT.StopTimeFact > DATETIME('Now', 'localtime')) GROUP BY Wb.Technics) AS WN ON WN.Technics = TECH.ID " +
+	"WHERE WbT.StartTimeFact > '0001-01-01 00:00:00' AND (IFNULL(WbT.StopTimeFact,'0001-01-01 00:00:00') = '0001-01-01 00:00:00' OR WbT.StopTimeFact > DATETIME('Now', 'localtime')) AND DATETIME(Wb.PlannedEndDate,'start of day', '+1 days') >= DATETIME('Now', 'localtime') GROUP BY Wb.Technics) AS WN ON WN.Technics = TECH.ID " +
 	"LEFT JOIN (SELECT WbT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, Min(WbT.StartTime) AS StartTime, WbT.StopTime, WbT.StartTimeFact, " +
 	"WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id WHERE WbT.StartTime >= DATETIME('Now', 'localtime') GROUP BY Wb.Technics) " +
 	"AS PNext ON TECH.Id = PNext.Technics LEFT JOIN Catalog_Technics_TechnicsStatus AS St ON St.Ref = TECH.Id) AS Q LEFT JOIN Catalog_SKU AS CS ON Q.Task = CS.Id " +
