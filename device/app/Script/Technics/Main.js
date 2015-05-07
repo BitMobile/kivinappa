@@ -42,6 +42,8 @@ var ThatIsNewTaskCP
 
 
 function OnLoad() {    
+	MyStartTracking();
+	
 	userIdCP = $.common.UserId;
 	
 	var qRole = new Query("SELECT BitmobileRole " +
@@ -302,6 +304,8 @@ function StartStopTask(taskId, param){
 	
 	taskObj.Save(false);
 	
+	CheckingCoordinates(taskId);
+	
 	DoRefresh();
 	
 }
@@ -387,17 +391,19 @@ function RecPeremCPAndDoActionMachin(taskId){
 
 function CheckingCoordinates(taskId){
 	var location = GPS.CurrentLocation;
+	
     if (location.NotEmpty) {
     	var latitudeNow = location.Latitude;
     	var longitudeNow = location.Longitude;
-    	
+    	    	
     	var q = new Query("SELECT O.TopLeftX, O.TopLeftY, O.BottomRightX, O.BottomRightY FROM Catalog_ConstructionObjects O " +
     			"LEFT JOIN Document_Waybill_Tasks T ON T.ConstructionObject = O.Id WHERE T.Id == @taskId");
 		q.AddParameter("taskId", taskId);
 		var LL = q.Execute();
     	
 		if (LL.Next()) {
-			if (LL.TopLeftX != null && LL.TopLeftY != null && LL.BottomRightX != null && LL.BottomRightY != null && parseFloat(LL.TopLeftX) != 0 && parseFloat(LL.TopLeftY != 0) && parseFloat(LL.BottomRightX) != 0 && parseFloat(LL.BottomRightY != 0)) {
+			
+			if (LL.TopLeftX != null && LL.TopLeftY != null && LL.BottomRightX != null && LL.BottomRightY != null && parseFloat(LL.TopLeftX) != 0 && parseFloat(LL.TopLeftY) != 0 && parseFloat(LL.BottomRightX) != 0 && parseFloat(LL.BottomRightY) != 0) {
 				if (latitudeNow != null && longitudeNow != null) {
 	    			
 					//расположение точек проверяемого квадрата
@@ -443,7 +449,7 @@ function CheckingCoordinates(taskId){
 		    				massTrue = true;
 			        	}
 					}
-					
+										
 					if(massTrue == true){
 						if (deltaLatitudeMeter > deltaLongitudeMeter) {
 		    				var deltaInDialog = deltaLatitudeMeter;
@@ -457,9 +463,13 @@ function CheckingCoordinates(taskId){
 				}else{
 					Dialog.Debug("Координаты начала работы не определены.");
 				}
+			}else{
+				//Dialog.Debug("Координаты объекта в 1С заполнены не верно.");
 			}
 		}
-    }
+    }else{
+		//Dialog.Debug("Координаты начала работы не определены.");
+	}
 }
 
 function GetTask(taskId){

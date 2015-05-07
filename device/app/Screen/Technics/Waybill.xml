@@ -6,7 +6,7 @@
     <s:Push Id="cntTasks" Value="$GetCntTasks($techTasks)"></s:Push>
     <s:Push Id="bitmobileRole" Value="@bitmobileRoleCP"></s:Push>
     <s:Push Id="bitmobileRoleRefCP" Value="@bitmobileRoleRefCP"/>
-    <s:Push Id="MyStartTracking" Value="$MyStartTracking()"></s:Push>
+    <!-- <s:Push Id="MyStartTracking" Value="$MyStartTracking()"></s:Push>  -->
     <s:Push Id="CurDateTime" Value="$GetCurTime()"/>
     
         				
