@@ -41,7 +41,7 @@ var ThatIsNewTaskCP
 
 
 
-function OnLoad() {    
+function OnLoading() {    
 	MyStartTracking();
 	
 	userIdCP = $.common.UserId;
@@ -51,8 +51,7 @@ function OnLoad() {
 			"WHERE Id == @userIdCP");	
 	qRole.AddParameter("userIdCP", "@ref[Catalog_User]:" + userIdCP);	
 	bitmobileRoleCP = qRole.ExecuteScalar();
-	
-	
+		
 	if(bitmobileRoleCP == 1){
 		//forepersonCP
 		var q = new Query("SELECT Foreperson " +
@@ -77,30 +76,65 @@ function GetTechnics(searchText){
 	
 	var q = new Query("");
 	
-	var qtext = "SELECT Q.Id, Q.VehicleRegTag, Q.Description, Q.Status, Q.Info, Req.Description AS Requestioner, CO.Description AS ConstructionObject, CS.Description AS Task, Q.TaskString, " +
-	"strftime('%d.%m.%Y %H:%M', Q.StartTime) AS StartTime, strftime('%d.%m.%Y %H:%M', Q.StopTime) AS StopTime, Q.StartTimeFact, Q.StopTimeFact " +
-	"FROM (SELECT TECH.Id, TECH.VehicleRegTag, TT.Description, St.Status As Status, " +
-	"(CASE WHEN NOT WN.Id IS NULL THEN 'Worked' WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN 'Planned' ELSE 'PlannedNext' END) AS Info, " +
-	"(CASE WHEN NOT WN.Id IS NULL THEN WN.Requestioner WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.Requestioner ELSE PNext.Requestioner END) AS Requestioner, " +
-	"(CASE WHEN NOT WN.Id IS NULL THEN WN.ConstructionObject WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.ConstructionObject ELSE PNext.ConstructionObject END) AS ConstructionObject, " +
-	"(CASE WHEN NOT WN.Id IS NULL THEN WN.Task WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.Task ELSE PNext.Task END) AS Task, " +
-	"(CASE WHEN NOT WN.Id IS NULL THEN WN.TaskString WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.TaskString ELSE PNext.TaskString END) AS TaskString, " +
-	"(CASE WHEN NOT WN.Id IS NULL THEN WN.StartTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StartTime ELSE PNext.StartTime END) AS StartTime, " +
-	"(CASE WHEN NOT WN.Id IS NULL THEN WN.StopTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StopTime ELSE PNext.StopTime END) StopTime, " +
-	"(CASE WHEN NOT WN.Id IS NULL THEN WN.StartTimeFact WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StartTimeFact ELSE PNext.StartTimeFact END) StartTimeFact, " +
-	"(CASE WHEN NOT WN.Id IS NULL THEN WN.StopTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StopTimeFact ELSE PNext.StopTimeFact END) StopTimeFact " +
-	"FROM Catalog_Technics TECH JOIN Catalog_TechnicsTypes TT ON TECH.TechnicsTypes = TT.Id LEFT JOIN " +
-	"(SELECT WBT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, WbT.StartTime, WbT.StopTime, " +
-	"WbT.StartTimeFact, WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb " +
-	"ON WbT.Ref = Wb.Id WHERE WbT.StartTime <= DATETIME('Now', 'localtime') AND WbT.StopTime >= DATETIME('Now', 'localtime') AND WbT.StopTimeFact = '0001-01-01 00:00:00' GROUP BY Wb.Technics) " +
-	"AS PN ON PN.Technics = TECH.ID LEFT JOIN " +
-	"(SELECT WBT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, WbT.StartTime, WbT.StopTime, " +
-	"WbT.StartTimeFact, WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id " +
-	"WHERE WbT.StartTimeFact > '0001-01-01 00:00:00' AND (IFNULL(WbT.StopTimeFact,'0001-01-01 00:00:00') = '0001-01-01 00:00:00' OR WbT.StopTimeFact > DATETIME('Now', 'localtime')) AND DATETIME(Wb.PlannedEndDate,'start of day', '+1 days') >= DATETIME('Now', 'localtime') GROUP BY Wb.Technics) AS WN ON WN.Technics = TECH.ID " +
-	"LEFT JOIN (SELECT WbT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, Min(WbT.StartTime) AS StartTime, WbT.StopTime, WbT.StartTimeFact, " +
-	"WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id WHERE WbT.StartTime >= DATETIME('Now', 'localtime') GROUP BY Wb.Technics) " +
-	"AS PNext ON TECH.Id = PNext.Technics LEFT JOIN Catalog_Technics_TechnicsStatus AS St ON St.Ref = TECH.Id) AS Q LEFT JOIN Catalog_SKU AS CS ON Q.Task = CS.Id " +
-	"LEFT JOIN Catalog_ConstructionObjects AS CO ON Q.ConstructionObject = CO.Id LEFT JOIN Catalog_Requesters AS Req ON Q.Requestioner = Req.Id";
+	if(bitmobileRoleCP == 1){
+		//forepersonCP
+		
+		var qtext = "SELECT Q.Id, Q.VehicleRegTag, Q.Description, Q.Status, Q.Info, Req.Description AS Requestioner, CO.Description AS ConstructionObject, CS.Description AS Task, Q.TaskString, " +
+		"strftime('%d.%m.%Y %H:%M', Q.StartTime) AS StartTime, strftime('%d.%m.%Y %H:%M', Q.StopTime) AS StopTime, Q.StartTimeFact, Q.StopTimeFact " +
+		"FROM (SELECT TECH.Id, TECH.VehicleRegTag, TT.Description, St.Status As Status, " +
+		"(CASE WHEN NOT WN.Id IS NULL THEN 'Worked' WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN 'Planned' ELSE 'PlannedNext' END) AS Info, " +
+		"(CASE WHEN NOT WN.Id IS NULL THEN WN.Requestioner WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.Requestioner ELSE PNext.Requestioner END) AS Requestioner, " +
+		"(CASE WHEN NOT WN.Id IS NULL THEN WN.ConstructionObject WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.ConstructionObject ELSE PNext.ConstructionObject END) AS ConstructionObject, " +
+		"(CASE WHEN NOT WN.Id IS NULL THEN WN.Task WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.Task ELSE PNext.Task END) AS Task, " +
+		"(CASE WHEN NOT WN.Id IS NULL THEN WN.TaskString WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.TaskString ELSE PNext.TaskString END) AS TaskString, " +
+		"(CASE WHEN NOT WN.Id IS NULL THEN WN.StartTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StartTime ELSE PNext.StartTime END) AS StartTime, " +
+		"(CASE WHEN NOT WN.Id IS NULL THEN WN.StopTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StopTime ELSE PNext.StopTime END) StopTime, " +
+		"(CASE WHEN NOT WN.Id IS NULL THEN WN.StartTimeFact WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StartTimeFact ELSE PNext.StartTimeFact END) StartTimeFact, " +
+		"(CASE WHEN NOT WN.Id IS NULL THEN WN.StopTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StopTimeFact ELSE PNext.StopTimeFact END) StopTimeFact " +
+		"FROM Catalog_Technics TECH JOIN Catalog_TechnicsTypes TT ON TECH.TechnicsTypes = TT.Id LEFT JOIN " +
+		"(SELECT WBT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, WbT.StartTime, WbT.StopTime, " +
+		"WbT.StartTimeFact, WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb " +
+		"ON WbT.Ref = Wb.Id WHERE WbT.StartTime <= DATETIME('Now', 'localtime') AND WbT.StopTime >= DATETIME('Now', 'localtime') AND WbT.StopTimeFact = '0001-01-01 00:00:00' GROUP BY Wb.Technics) " +
+		"AS PN ON PN.Technics = TECH.ID LEFT JOIN " +
+		"(SELECT WBT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, WbT.StartTime, WbT.StopTime, " +
+		"WbT.StartTimeFact, WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id " +
+		"WHERE WbT.StartTimeFact > '0001-01-01 00:00:00' AND (IFNULL(WbT.StopTimeFact,'0001-01-01 00:00:00') = '0001-01-01 00:00:00' OR WbT.StopTimeFact > DATETIME('Now', 'localtime')) AND DATETIME(Wb.PlannedEndDate,'start of day', '+1 days') >= DATETIME('Now', 'localtime') GROUP BY Wb.Technics) AS WN ON WN.Technics = TECH.ID " +
+		"LEFT JOIN (SELECT WbT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, Min(WbT.StartTime) AS StartTime, WbT.StopTime, WbT.StartTimeFact, " +
+		"WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id WHERE WbT.StartTime >= DATETIME('Now', 'localtime') GROUP BY Wb.Technics) " +
+		"AS PNext ON TECH.Id = PNext.Technics LEFT JOIN Catalog_Technics_TechnicsStatus AS St ON St.Ref = TECH.Id) AS Q LEFT JOIN Catalog_SKU AS CS ON Q.Task = CS.Id " +
+		"LEFT JOIN Catalog_ConstructionObjects AS CO ON Q.ConstructionObject = CO.Id LEFT JOIN Catalog_Requesters AS Req ON Q.Requestioner = Req.Id";		
+	}else{
+		//machinistCP
+		// добавлен отбор по не нуловому путевому листу.
+		var qtext = "SELECT Q.Id, Q.VehicleRegTag, Q.Description, Q.Status, Q.Info, Req.Description AS Requestioner, CO.Description AS ConstructionObject, CS.Description AS Task, Q.TaskString, " +
+				"strftime('%d.%m.%Y %H:%M', Q.StartTime) AS StartTime, strftime('%d.%m.%Y %H:%M', Q.StopTime) AS StopTime, Q.StartTimeFact, Q.StopTimeFact " +
+				"FROM (SELECT Wb.Id AS WbId, TECH.Id, TECH.VehicleRegTag, TT.Description, St.Status As Status, " +
+				"(CASE WHEN NOT WN.Id IS NULL THEN 'Worked' WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN 'Planned' ELSE 'PlannedNext' END) AS Info, " +
+				"(CASE WHEN NOT WN.Id IS NULL THEN WN.Requestioner WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.Requestioner ELSE PNext.Requestioner END) AS Requestioner, " +
+				"(CASE WHEN NOT WN.Id IS NULL THEN WN.ConstructionObject WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.ConstructionObject ELSE PNext.ConstructionObject END) AS ConstructionObject, " +
+				"(CASE WHEN NOT WN.Id IS NULL THEN WN.Task WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.Task ELSE PNext.Task END) AS Task, " +
+				"(CASE WHEN NOT WN.Id IS NULL THEN WN.TaskString WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.TaskString ELSE PNext.TaskString END) AS TaskString, " +
+				"(CASE WHEN NOT WN.Id IS NULL THEN WN.StartTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StartTime ELSE PNext.StartTime END) AS StartTime, " +
+				"(CASE WHEN NOT WN.Id IS NULL THEN WN.StopTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StopTime ELSE PNext.StopTime END) StopTime, " +
+				"(CASE WHEN NOT WN.Id IS NULL THEN WN.StartTimeFact WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StartTimeFact ELSE PNext.StartTimeFact END) StartTimeFact, " +
+				"(CASE WHEN NOT WN.Id IS NULL THEN WN.StopTime WHEN WN.Id IS NULL AND NOT PN.Id IS NULL THEN PN.StopTimeFact ELSE PNext.StopTimeFact END) StopTimeFact " +
+				"FROM Catalog_Technics TECH JOIN Catalog_TechnicsTypes TT ON TECH.TechnicsTypes = TT.Id LEFT JOIN " +
+				"(SELECT WBT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, WbT.StartTime, WbT.StopTime, " +
+				"WbT.StartTimeFact, WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb " +
+				"ON WbT.Ref = Wb.Id WHERE WbT.StartTime <= DATETIME('Now', 'localtime') AND WbT.StopTime >= DATETIME('Now', 'localtime') AND WbT.StopTimeFact = '0001-01-01 00:00:00' GROUP BY Wb.Technics) " +
+				"AS PN ON PN.Technics = TECH.ID LEFT JOIN " +
+				"(SELECT WBT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, WbT.StartTime, WbT.StopTime, " +
+				"WbT.StartTimeFact, WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id " +
+				"WHERE WbT.StartTimeFact > '0001-01-01 00:00:00' AND (IFNULL(WbT.StopTimeFact,'0001-01-01 00:00:00') = '0001-01-01 00:00:00' OR WbT.StopTimeFact > DATETIME('Now', 'localtime')) AND DATETIME(Wb.PlannedEndDate,'start of day', '+1 days') >= DATETIME('Now', 'localtime') GROUP BY Wb.Technics) AS WN ON WN.Technics = TECH.ID " +
+				"LEFT JOIN (SELECT WbT.Id, Wb.Technics, WbT.Requestioner, WbT.ConstructionObject, WbT.Task, WbT.TaskString, Min(WbT.StartTime) AS StartTime, WbT.StopTime, WbT.StartTimeFact, " +
+				"WbT.StopTimeFact FROM Document_Waybill_Tasks WbT LEFT JOIN Document_Waybill Wb ON WbT.Ref = Wb.Id WHERE WbT.StartTime >= DATETIME('Now', 'localtime') GROUP BY Wb.Technics) " +
+				"AS PNext ON TECH.Id = PNext.Technics " +
+				"LEFT JOIN Catalog_Technics_TechnicsStatus AS St ON St.Ref = TECH.Id " +
+				"LEFT JOIN Document_Waybill Wb ON DATE(WB.PlannedStartDate) <= DATE('now', 'localtime') AND DATE(WB.PlannedEndDate) >= DATE('now', 'localtime') AND WB.Technics = TECH.Id " +
+				"WHERE Wb.Id IS NOT NULL " +
+				") AS Q LEFT JOIN Catalog_SKU AS CS ON Q.Task = CS.Id " +
+				"LEFT JOIN Catalog_ConstructionObjects AS CO ON Q.ConstructionObject = CO.Id LEFT JOIN Catalog_Requesters AS Req ON Q.Requestioner = Req.Id";	
+	}
 		
 	if (searchText != "" && searchText != null) {
 		var plus = " WHERE (Contains(Q.VehicleRegTag, @st)) OR (Contains(Q.Description, @st))";
@@ -164,6 +198,7 @@ function GetParam3(param3){
 }
 
 function AddPeremAndDoAction(TechnicsID, TechDescription, TechVRT){
+	
 	TechnicsCP = TechnicsID; // запишем в переменную модуля ID
 	TechnicsDescriptionCP = TechDescription;
 	TechnicsVRTCP = TechVRT;
